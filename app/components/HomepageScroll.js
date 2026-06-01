@@ -905,6 +905,13 @@ export default function HomepageScroll() {
             </div>
           </div>
         </div>
+
+        {introReady && progress < 0.15 && (
+          <div className={s.scrollHint} style={{ opacity: 1 - progress / 0.15 }}>
+            <span className={s.scrollHintText}>Scroll</span>
+            <span className={s.scrollHintLine} />
+          </div>
+        )}
       </div>
     </div>
   );

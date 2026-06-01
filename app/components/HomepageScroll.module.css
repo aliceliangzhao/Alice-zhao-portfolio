@@ -503,7 +503,41 @@
   transition: opacity 400ms ease-out;
 }
 
+.scrollHint {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+.scrollHintText {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.scrollHintLine {
+  display: block;
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, var(--ink), transparent);
+  animation: scrollLineDrip 1.5s ease-in-out infinite;
+}
+@keyframes scrollLineDrip {
+  0% { clip-path: inset(0 0 100% 0); }
+  50% { clip-path: inset(0 0 0 0); }
+  100% { clip-path: inset(100% 0 0 0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .scrollHint {
+    animation: none;
+  }
   .runway {
     height: auto;
   }

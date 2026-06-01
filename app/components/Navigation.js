@@ -20,8 +20,10 @@ export default function Navigation({ title, isHome, sections }) {
   const [pickerOpen, setPickerOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [activeSection, setActiveSection] = useState(null);
+  const [sectionDropOpen, setSectionDropOpen] = useState(false);
   const navRef = useRef(null);
   const pickerRef = useRef(null);
+  const sectionDropRef = useRef(null);
 
   useEffect(() => {
     if (!bgInitialized.current) {
@@ -60,6 +62,9 @@ export default function Navigation({ title, isHome, sections }) {
       if (pickerRef.current && !pickerRef.current.contains(e.target)) {
         setPickerOpen(false);
       }
+      if (sectionDropRef.current && !sectionDropRef.current.contains(e.target)) {
+        setSectionDropOpen(false);
+      }
     };
     window.addEventListener("nav-visibility", onNavVisibility);
     window.addEventListener("toggle-drawer", onToggleDrawer);
@@ -88,7 +93,10 @@ export default function Navigation({ title, isHome, sections }) {
         const rect = el.getBoundingClientRect();
         if (rect.top <= vh * 0.4) current = id;
       }
-      setActiveSection(current);
+      setActiveSection((prev) => {
+        if (prev !== current) setSectionDropOpen(false);
+        return current;
+      });
       ticking = false;
     }
 
@@ -168,20 +176,44 @@ export default function Navigation({ title, isHome, sections }) {
           </div>
         )}
         {sections && sections.length > 0 && (
-          <div className={styles.sectionNav}>
-            {sections.map((sec, i) => (
-              <span key={sec.id}>
-                <button
-                  className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
-                  onClick={() => scrollToSection(sec.id)}
-                  data-cursor=""
-                >
-                  {sec.navLabel}
-                </button>
-                {i < sections.length - 1 && <span className={styles.sectionSep}>/</span>}
-              </span>
-            ))}
-          </div>
+          <>
+            <div className={styles.sectionNav}>
+              {sections.map((sec, i) => (
+                <span key={sec.id}>
+                  <button
+                    className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
+                    onClick={() => scrollToSection(sec.id)}
+                    data-cursor=""
+                  >
+                    {sec.navLabel}
+                  </button>
+                  {i < sections.length - 1 && <span className={styles.sectionSep}>/</span>}
+                </span>
+              ))}
+            </div>
+            <div className={styles.sectionDrop} ref={sectionDropRef}>
+              <button
+                className={styles.sectionDropTrigger}
+                onClick={() => setSectionDropOpen((o) => !o)}
+              >
+                <span>{(sections.find((s) => s.id === activeSection) || sections[0]).navLabel}</span>
+                <span className={`${styles.sectionDropArrow}${sectionDropOpen ? ` ${styles.sectionDropArrowOpen}` : ""}`}>▾</span>
+              </button>
+              {sectionDropOpen && (
+                <div className={styles.sectionDropList}>
+                  {sections.map((sec) => (
+                    <button
+                      key={sec.id}
+                      className={`${styles.sectionDropItem}${activeSection === sec.id ? ` ${styles.sectionDropItemActive}` : ""}`}
+                      onClick={() => { scrollToSection(sec.id); setSectionDropOpen(false); }}
+                    >
+                      {sec.navLabel}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          </>
         )}
       </nav>
 

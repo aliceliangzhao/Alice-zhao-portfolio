@@ -82,16 +82,16 @@
 }
 
 .experience-main {
-  grid-column: 3 / 7;
+  grid-column: 3 / 6;
   grid-row: 2;
   align-self: start;
 }
 
 .experience-title {
-  font-size: var(--t-h2);
-  font-weight: 400;
+  font-size: var(--t-h3);
+  font-weight: 600;
   line-height: 1.2;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.01em;
 }
 
 .experience-description {
@@ -105,7 +105,7 @@
 }
 
 .experience-work {
-  grid-column: 8 / 9;
+  grid-column: 7 / 9;
   grid-row: 2;
   align-self: start;
 }
@@ -115,17 +115,20 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .experience-work-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .experience-work-list li {
-  font-size: var(--t-p);
+  font-size: var(--t-label);
   line-height: 1.4;
   letter-spacing: -0.015em;
 }

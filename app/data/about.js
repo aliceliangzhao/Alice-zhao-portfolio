@@ -9,54 +9,56 @@ export const workExperience = [
     time: "Sep 2020 — present",
     title: "UX Designer",
     company: "Amazon Web Services",
-    description: "I design AI-native and agentic experiences for AWS S3, focusing on how users interact with data through intelligent workflows and large-scale systems. I’ve led end-to-end product design initiatives that transformed complex storage research into AI-powered experiences in just 10 weeks, contributing to a 10% week-over-week storage increase and over 500 TB of data stored. I’ve also partnered with researchers and ML engineers to deliver 29 AI-driven features and developed scalable AI design frameworks adopted across 15 AWS services, helping improve usability, trust, and consistency across emerging generative AI platforms.",
+    description: "Designing AI-native and agentic experiences for AWS S3. Launched 40+ products in 4 years, including initiatives that shipped in 10 weeks, driving a 10% week-over-week storage increase and over 500 TB of data stored. Partnered with researchers and ML engineers to develop scalable AI design frameworks adopted across 15 AWS services.",
     selectedWork: [
-      { name: "AWS S3 Tables", href: "#" },
-      { name: "Simplifying Data Access", href: "#" },
-      { name: "Agentic Experience", href: "#" },
+      { name: "AWS S3 Tables", href: "/projects/s3-tables" },
+      { name: "Simplifying data access", href: "/projects/simplifying-data-access" },
+      { name: "AWS agentic experience", href: "#" },
+      { name: "Multi-Region Access Point failover control", href: "https://aws.amazon.com/blogs/aws/new-failover-controls-for-amazon-s3-multi-region-access-points/"},
+      { name: "Support 1 million buckets per account", href: "https://aws.amazon.com/about-aws/whats-new/2024/11/amazon-s3-up-1-million-buckets-per-aws-account/"},
     ],
   },
   {
     time: "Jan 2020 — Sep 2020",
     title: "Sr. UX Designer",
     company: "Morgan Stanley",
-    description: "I led the design effort across 20+ large-scale wealth management projects, helping unify complex financial workflows into a more cohesive user experience. I managed large information architectures and scalable UX systems that contributed to a 14% increase in product adoption within three months. I also built and maintained design system documentation leveraged by 50+ designers across four global organizations, improving consistency and cross-functional collaboration.",
+    description: " Led design across 20+ wealth management projects, unifying complex financial workflows into a cohesive experience. Reimagined the wealth management product ecosystem serving ~300,000 users and $1.3T in assets under management. Built design systems used by 50+ designers across four global orgs, contributing to a 14% adoption increase in three months.",
     selectedWork: [
       { name: "E*Trade integration", href: "https://www.morganstanley.com/press-releases/morgan-stanley-closes-acquisition-of-e-trade" },
-      { name: "Wealth management tool kit", href: "https://www.morganstanley.com/press-releases/morgan-stanley-wealth-management-launches-racial-equity-investin" },
+      { name: "Wealth management toolkit", href: "https://www.morganstanley.com/press-releases/morgan-stanley-wealth-management-launches-racial-equity-investin" },
     ],
   },
   {
     time: "Feb 2017 — Dec 2019",
     title: "UX Designer",
     company: "Insperity",
-    description: "I led the UX optimization of a 600+ page marketing ecosystem using data-informed insights and behavioral patterns to improve usability and engagement. My work contributed to a 253% increase in customer engagement while also driving the development of a unified design system that reduced cross-functional development effort by three months through modular component design.",
+    description: "Established the Axure Pattern Library for the IT & Application department and launched 5 major products in the HR Suite in 3 years, generating ~$15M in revenue and ~140% increase in product adoption. Optimized a 600+ page marketing ecosystem using data-informed insights, driving a 253% increase in customer engagement and a unified design system that reduced cross-functional development effort by three months.",
     selectedWork: [
-      { name: "Selected work", href: "#" },
+      { name: "Insperity HR 360 Suite", href: "https://www.insperity.com/our-products/hr360/" },
     ],
   },
   {
     time: "Aug 2016 — Jan 2017",
     title: "UX Designer",
     company: "Siemens",
-    description: "I helped establish the design language for Active Workspace, creating centralized UX standards and scalable templates to improve cross-team alignment and product consistency. I focused on building structured design foundations for complex enterprise tools while supporting collaboration across multidisciplinary teams. My work helped streamline UX workflows and create a more unified experience across the platform.",
+    description: "Established the design language for Active Workspace, creating centralized UX standards and templates that unified the experience across multidisciplinary teams.",
     selectedWork: [
-      { name: "Selected work", href: "#" },
+      { name: "PLM softward-Active Workspace", href: "#" },
     ],
   },
   {
     time: "Sep 2014 — May 2016",
     title: "UX Designer",
     company: "Purdue University",
-    description: "I collaborated with the National Science Foundation to develop a nationwide research portal, creating high-fidelity interactive prototypes to validate complex research workflows and user needs. My work focused on translating technical and academic requirements into intuitive digital experiences, helping researchers navigate and interact with large-scale information systems more effectively.",
+    description: "Partnered with the National Science Foundation to design and prototype a nationwide research portal, translating complex academic workflows into intuitive digital experiences.",
     selectedWork: [
-      { name: "Selected work", href: "#" },
+      { name: "National Science Foundation research portal", href: "https://www.researchgate.net/publication/304360109_Designing_for_STEM_Faculty_The_Use_of_Personas_for_Evaluating_and_Improving_Design" },
     ],
   },
 ];
 
 export const designPhilosophy = {
-  heading: "My design philosophy is rooted in simplifying complexity into intuitive and meaningful experiences. With 12 years of experience in UX and product design, I follow an iterative and prototype-driven process that balances user needs, business goals, and technical constraints. Since 2024, I've fully integrated AI into my workflow to rapidly explore, prototype, test, and validate ideas with exceptional speed and efficiency.",
+  heading: "My design philosophy is rooted in simplifying complexity into intuitive and meaningful experiences. Since 2024, I've fully integrated AI into my workflow to rapidly explore, prototype, test, and validate ideas with exceptional speed and efficiency.",
 };
 
 export const processSteps = [

@@ -124,10 +124,22 @@
   will-change: clip-path;
 }
 
+.hero-image-expand::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.45));
+  z-index: 1;
+  pointer-events: none;
+}
 .hero-image-expand::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: 2;
   background: color-mix(in srgb, var(--ink) var(--hero-dim), transparent);
   pointer-events: none;
 }

@@ -209,8 +209,76 @@
   stroke-width: 1;
 }
 
+/* ── Mobile section dropdown ── */
+
+.sectionDrop {
+  display: none;
+  position: relative;
+  margin-left: auto;
+  margin-right: 1rem;
+}
+
+.sectionDropTrigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  padding: 6px 10px;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.sectionDropArrow {
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+.sectionDropArrowOpen {
+  transform: rotate(180deg);
+}
+
+.sectionDropList {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 4px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  z-index: 310;
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+}
+
+.sectionDropItem {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--muted);
+  padding: 10px 14px;
+  white-space: nowrap;
+  text-align: left;
+  transition: color 0.15s, background 0.15s;
+}
+.sectionDropItem:hover {
+  color: var(--ink);
+  background: var(--border);
+}
+.sectionDropItemActive {
+  color: var(--ink);
+}
+
 @media (max-width: 900px) {
   .separator { display: none; }
   .title { display: none; }
   .sectionNav { display: none; }
+  .sectionDrop { display: block; }
 }
