@@ -201,6 +201,7 @@
 .bottom a:hover { color: #fff; }
 
 .drawerWaves {
+  animation: none;
   opacity: 0.5;
 }
 
@@ -209,6 +210,7 @@
 }
 
 @media (max-width: 900px) {
+  .separator { display: none; }
   .title { display: none; }
   .sectionNav { display: none; }
 }

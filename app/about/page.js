@@ -91,8 +91,16 @@ export default function About() {
       }
     }
 
+    function scrollToHash() {
+      if (window.location.hash) {
+        const target = document.querySelector(window.location.hash);
+        if (target) target.scrollIntoView({ behavior: "instant" });
+      }
+    }
+
     if (total === 0) {
       alignColumns();
+      scrollToHash();
     } else {
       images.forEach(img => {
         if (img.complete) loaded++;
@@ -101,7 +109,10 @@ export default function About() {
           img.addEventListener("error", onImageReady);
         }
       });
-      if (loaded >= total) alignColumns();
+      if (loaded >= total) {
+        alignColumns();
+        scrollToHash();
+      }
     }
 
     window.addEventListener("resize", alignColumns);
@@ -156,7 +167,7 @@ export default function About() {
         <section className="about-section col-grid">
           <h2>Work experience</h2>
           <p className="about-resume-link">
-            <Link href="#">View my resume</Link>
+            <Link href="#">View my resume ↗</Link>
           </p>
           <div className="experience-list">
             {workExperience.map((entry, i) => (
