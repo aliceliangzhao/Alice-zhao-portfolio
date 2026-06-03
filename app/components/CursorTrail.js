@@ -10,7 +10,8 @@ const DAMPING = 0.5;
 function findCursorTarget(el) {
   while (el) {
     if (el.dataset && "cursor" in el.dataset) return el.dataset.cursor || null;
-    if (el.tagName === "A" || el.tagName === "BUTTON") return "View";
+    if (el.tagName === "BUTTON") return "View";
+    if (el.tagName === "A" && el.getAttribute("href")?.startsWith("/")) return "View";
     el = el.parentElement;
   }
   return null;
