@@ -27,3 +27,17 @@
   margin-top: 0.5rem;
   transition: color 0.2s;
 }
+
+@media (max-width: 900px) {
+  .card {
+    padding: 1.5rem;
+    gap: 2px;
+  }
+  .value {
+    font-size: clamp(2rem, 8vw, 8rem);
+  }
+  .label {
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    margin-top: 0.25rem;
+  }
+}

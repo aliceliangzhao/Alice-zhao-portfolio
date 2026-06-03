@@ -2,6 +2,11 @@ import "./globals.css";
 import "./project.css";
 import CursorTrail from "./components/CursorTrail";
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata = {
   title: "Alice Zhao | UX Designer",
   description: "UX Designer that reimagines digital experiences. Currently building AI products for AWS.",

@@ -204,5 +204,6 @@
   }
   .titleBlock {
     grid-column: 1;
+    padding-bottom: 4rem;
   }
 }
