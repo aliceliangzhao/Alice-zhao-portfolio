@@ -281,4 +281,14 @@
   .title { display: none; }
   .sectionNav { display: none; }
   .sectionDrop { display: block; }
+  .links a {
+    font-size: clamp(24px, 4.5vw, 36px);
+    padding: 6px 0;
+  }
+  .links {
+    gap: 8px;
+  }
+  .drawer {
+    padding: 24px var(--page-gutter, 40px) 32px;
+  }
 }
