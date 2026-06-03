@@ -94,6 +94,7 @@ const CARD_DEFS = [
   { id: "links",
     links: [
       { label: "LinkedIn", href: "https://www.linkedin.com/in/liangzhaoux/" },
+      { label: "Github", href: "https://github.com/aliceliangzhao" },
       { label: "Resume", href: "https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view" },
       { label: "Email", href: "mailto:liangzhao0801@gmail.com", cursor: "Let's chat :)" },
     ],
