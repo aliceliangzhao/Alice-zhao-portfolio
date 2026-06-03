@@ -12,11 +12,13 @@
   font-weight: 600;
   grid-column: 1 / 7;
   letter-spacing: -0.03em;
+  align-self: baseline;
 }
 
 @media (max-width: 900px) {
   .about h2 {
-    grid-column: 1 / 8;
+    grid-column: 1 / -1;
+    padding-bottom: 0.1rem;
   }
   .about-section {
     padding: 3rem 0;
@@ -38,8 +40,15 @@
 
 .about-resume-link {
   grid-column: 7 / 9;
-  align-self: end;
+  align-self: baseline;
   text-align: right;
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .about-resume-link {
+    grid-column: 1 / -1;
+    text-align: left;
+  }
 }
 .about-resume-link a {
   color: var(--ink);
@@ -252,5 +261,24 @@
   }
   .process-col {
     display: contents;
+  }
+  .process-card-content {
+    padding: 3rem 20px;
+  }
+  .process-card-title {
+    font-size: clamp(1.125rem, 6vw, 2rem);
+  }
+  .process-card-desc {
+    font-size: clamp(0.825rem, 6vw, 1rem);
+  }
+  .process-card-divider {
+    margin-left: -40px;
+    margin-right: -40px;
+  }
+  .process-card-tools {
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -3rem;
+    padding: 1.5rem 20px;
   }
 }

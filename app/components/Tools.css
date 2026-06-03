@@ -26,15 +26,25 @@
   transition: color 0.2s;
 }
 
+@media (max-width: 1200px) {
+  .tool-card-logo {
+    width: 28px;
+    height: 28px;
+  }
+}
+
 @media (max-width: 1000px) {
   .tools-strip {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 600px) {
+  .tools-strip {
+    grid-template-columns: 1fr;
+  }
   .tool-card-logo {
-    width: 28px;
-    height: 28px;
+    width: 56px;
+    height: 56px;
   }
 }
