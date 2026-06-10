@@ -12,7 +12,7 @@
 .value {
   font-family: var(--f-display);
   font-size: var(--t-metric);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   letter-spacing: -0.02em;
   line-height: 1;
 }

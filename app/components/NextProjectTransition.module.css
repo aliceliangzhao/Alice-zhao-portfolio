@@ -78,7 +78,7 @@
 .labelArrow {
   font-family: var(--f-display);
   font-size: var(--t-h1);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   line-height: 1.1;
 }
 
@@ -90,7 +90,7 @@
 .title {
   font-family: var(--f);
   font-size: var(--t-h1);
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   line-height: 1.1;
   letter-spacing: var(--t-h1-letter-spacing);
   margin-bottom: 4px;
@@ -101,7 +101,7 @@
   display: block;
   font-family: var(--f-display);
   font-size: clamp(1rem, 3vw, 1.5rem);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   line-height: 1.3;
   color: var(--muted);
   opacity: 0.8;

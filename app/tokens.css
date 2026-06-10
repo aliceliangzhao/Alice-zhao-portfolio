@@ -1,0 +1,149 @@
+/* ===========================================================================
+   tokens.css — design tokens (atomic values)
+   The single source of truth for color, type, spacing, grid, and motion.
+   Stylesheets should reference these variables, never hard-coded values.
+
+   MIGRATION NOTE — this site is mid-transition from the current ("legacy")
+   look to the new ("next", a.k.a. "Halftone Press") look. For type, spacing,
+   and grid we keep BOTH values and a single LIVE token that points at one of
+   them. To try a style, flip its one LIVE line; flip back to revert. The LIVE
+   block doubles as the record of what's decided vs still being compared.
+   =========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Color ------------------------------------------------------------- */
+  --bg: #ffffff;
+  --bg2: #ffffff;
+  --ink: #0A0D10;          /* primary text / ink */
+  --muted: #6F7F8A;        /* secondary / de-emphasized text */
+  --accent: #2936CF;       /* the one chromatic accent (kept from current) */
+  --border: #D0DBDF;
+  --card: #101316;
+  --card2: #181C1F;
+
+  --card-border: 1px solid #000;
+  --card-shadow: #000;
+
+  /* --- Font families ----------------------------------------------------- */
+  --f: 'Satoshi', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --f-display: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --f-mono: 'IBM Plex Mono', 'SF Mono', 'Fira Code', monospace;
+
+  /* --- Font weights ------------------------------------------------------ */
+  /* Satoshi is variable across 300–900; EB Garamond 400–800; IBM Plex Mono 400. */
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 800;
+
+  /* =======================================================================
+     TYPE SCALE
+     Size-named ladder (xxs … xxl). Each step keeps a -legacy value (today's
+     site) and a -next value (the new look). The LIVE token below picks one.
+     The old role names (--t-p, --t-h1 …) are kept as aliases at the bottom so
+     existing component CSS keeps working while we migrate.
+     ======================================================================= */
+
+  /* ---- LEGACY (current site) ---- */
+  --font-size-xxs-legacy: 0.5625rem;                             /* 9px — badge */
+  --font-size-xs-legacy:  clamp(0.5rem, 3vw, 1rem);              /* 8–16px — label */
+  --font-size-s-legacy:   clamp(0.875rem, 1.5vw + 0.5rem, 1.3rem); /* 14–21px — body */
+  --font-size-m-legacy:   clamp(1.125rem, 2vw, 1.5rem);          /* 18–24px — lead / h3 */
+  --font-size-l-legacy:   clamp(1.8rem, 3vw, 3rem);             /* 29–48px — subhead / h2 */
+  --font-size-xl-legacy:   clamp(2.5rem, 4vw, 4rem);           /* 40–64px — project title / h1 */
+  --font-size-xxl-legacy:  clamp(2.5rem, 4vw, 4rem);           /* 40–64px — large heading */
+  --font-size-xxxl-legacy: clamp(1.5rem, 2.5vw, 4rem);        /* 24–64px — hero text */
+
+  /* ---- NEXT ("Halftone Press") ---- */
+  --font-size-xxs-next: clamp(0.8125rem, 0.5vw + 0.6875rem, 1rem); /* 13–16px — nav */
+  --font-size-xs-next:  clamp(0.9375rem, 1.1vw + 0.5625rem, 1.3rem); /* 15–24px — label */
+  --font-size-s-next:   clamp(1.125rem, 1.0vw + 0.75rem, 1.5rem);  /* 18–24px — body */
+  --font-size-m-next:   clamp(1.375rem, 1.8vw + 0.5rem, 2rem);     /* 22–32px — body large */
+  --font-size-l-next:   clamp(1.75rem, 3.6vw, 3rem);              /* 28–48px — title */
+  --font-size-xl-next:   clamp(2.5rem, 4vw, 4rem);              /* 40–64px — project title (stays) */
+  --font-size-xxl-next:  clamp(2.5rem, 7vw, 6rem);             /* 40–96px — headline */
+  --font-size-xxxl-next: clamp(2.5rem, 8vw, 6.5rem);          /* 40–104px — display */
+
+  /* ---- LIVE · decision ledger (flip a line to adopt a tier) ---- */
+  --font-size-xxs: var(--font-size-xxs-legacy);   /* comparing */
+  --font-size-xs:  var(--font-size-xs-next);      /* ADOPTED — labels + small body */
+  --font-size-s:   var(--font-size-s-next);       /* ADOPTED — new body site-wide */
+  --font-size-m:   var(--font-size-m-legacy);     /* comparing */
+  --font-size-l:   var(--font-size-l-legacy);     /* comparing */
+  --font-size-xl:   var(--font-size-xl-legacy);    /* project title — stays 64px */
+  --font-size-xxl:  var(--font-size-xxl-legacy);   /* comparing */
+  --font-size-xxxl: var(--font-size-xxxl-legacy);  /* comparing */
+
+  /* ---- Line height (body flips with the new look) ---- */
+  --line-height-base-legacy: 1.5;
+  --line-height-base-next: 1.32;
+  --line-height-base: var(--line-height-base-next);  /* ADOPTED — with new body */
+  --line-height-tight: 1.08;   /* big titles */
+
+  /* ---- Legacy role aliases → live size tokens (TEMPORARY, migrate away) ---- */
+  --t-badge: var(--font-size-xxs);
+  --t-label: var(--font-size-xs);
+  --t-p: var(--font-size-s);
+  --t-h3: var(--font-size-m);
+  --t-h2: var(--font-size-l);
+  --t-metric: var(--font-size-l);
+  --t-h1: var(--font-size-xl);
+  --t-hero-text: var(--font-size-xxxl);
+  /* companions still referenced by project.css / NextProjectTransition */
+  --t-h1-letter-spacing: clamp(0.001rem, 0.2vw, 0.0025rem);
+  --t-hero-text-font-weight: var(--font-weight-regular);
+
+  /* =======================================================================
+     SPACING ( --space- naming adopted from the new tokens )
+     ======================================================================= */
+  --space-pad: 3.75rem;             /* page edge gutters / content padding */
+  --space-pad-mobile: 2.5rem;
+  --space-gap: 20px;                /* grid column gap */
+  --space-nav-height: 3.75rem;      /* main nav bar height */
+  --space-nav-height-mobile: 2.5rem;
+  --space-hero-top: 6.25rem;        /* gap above the hero */
+
+  /* ---- Legacy spacing aliases (TEMPORARY, migrate away) ---- */
+  --page-gutter: var(--space-pad);
+  --page-gutter-mobile: var(--space-pad-mobile);
+  --grid-gap: var(--space-gap);
+  --nav-height: var(--space-nav-height);
+  --nav-height-mobile: var(--space-nav-height-mobile);
+  --hero-top: var(--space-hero-top);
+
+  /* =======================================================================
+     GRID
+     --grid-cols is live: legacy 8-col today, next 12-col is the new system.
+     Flipping to 12 re-flows every .col-grid, so do the per-element layout
+     pass at the same time.
+     ======================================================================= */
+  --grid-cols-legacy: 8;
+  --grid-cols-next: 12;
+  --grid-cols: var(--grid-cols-legacy);   /* comparing — flip to next with layout pass */
+}
+
+/* --- Dark mode (parchment / vellum) --------------------------------------- */
+[data-dark] {
+  --bg: #110F0B;
+  --bg2: #1A1712;
+  --ink: #F0EADD;
+  --muted: #6B6358;
+  --border: #2A2620;
+  --card: #1A1712;
+  --card2: #211E18;
+
+  --card-border: 1px solid var(--ink);
+  --card-shadow: var(--ink);
+}
+
+/* --- Mobile token overrides ----------------------------------------------- */
+@media (max-width: 900px) {
+  :root {
+    --space-nav-height: var(--space-nav-height-mobile);
+    --space-pad: var(--space-pad-mobile);
+  }
+}

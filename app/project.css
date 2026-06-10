@@ -64,8 +64,8 @@
 
 .project-detail h1 {
   font-family: var(--f);
-  font-size: var(--t-h1);
-  font-weight: 700;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
   line-height: 1.1;
   letter-spacing: var(--t-h1-letter-spacing);
   color: var(--ink);
@@ -75,14 +75,14 @@
 .project-detail h2,
 .about h2 {
   font-family: var(--f);
-  font-size: var(--t-h2);
+  font-size: var(--font-size-l);
   color: var(--ink);
   transition: color 0.2s;
   grid-column: 1 / 6;
 }
 
 .project-detail h2 {
-  font-weight: 800;
+  font-weight: var(--font-weight-black);
   letter-spacing: -0.05em;
 }
 
@@ -94,8 +94,8 @@
 
 .project-detail h3 {
   font-family: var(--f);
-  font-size: var(--t-h3);
-  font-weight: 600;
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-semibold);
   margin-bottom: 8px;
 }
 /* ══════════════════════════════════════
@@ -170,8 +170,8 @@
 .project-hero-subtitle {
   display: block;
   font-family: var(--f-display);
-  font-size: clamp(1.2rem, 3vw, 1.5rem);
-  font-weight: 400;
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-regular);
   line-height: 1.3;
   color: var(--ink);
   opacity: 0.5;
@@ -185,7 +185,7 @@
   gap: 3rem;
 }
 .project-hero-text p {
-  font-size: var(--t-hero-text);
+  font-size: var(--font-size-l);
   font-weight: var(--t-hero-text-font-weight);
   line-height: 1.2;
   font-family: var(--f-display);
@@ -265,9 +265,9 @@
   grid-column: 1 / 2;
   grid-row: 2;
   align-self: start;
-  font-size: var(--t-label);
+  font-size: var(--font-size-xs);
   text-transform: uppercase;
-  font-weight: 800;
+  font-weight: var(--font-weight-black);
   letter-spacing: -0.01em;
   margin-bottom: 1.5rem;
 }
@@ -298,8 +298,8 @@
   grid-column: 7 / 9;
   grid-row: 2;
   align-self: start;
-  font-size: var(--t-p);
-  font-weight: 400;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
   line-height: 1.2;
   transition: opacity 0.2s;
   letter-spacing: -0.015em;

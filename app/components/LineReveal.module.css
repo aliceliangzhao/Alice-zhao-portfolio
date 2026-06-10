@@ -27,7 +27,7 @@
 
 .leadText {
   font-family: var(--f-display);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   letter-spacing: -0.03em;
 }
 

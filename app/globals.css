@@ -1,3 +1,8 @@
+/* ===========================================================================
+   globals.css — base / reset / element styles.
+   All atomic values live in tokens.css; this file only references tokens.
+   =========================================================================== */
+
 @font-face {
   font-family: 'Satoshi';
   src: url('/fonts/Satoshi-Variable.woff2') format('woff2');
@@ -20,58 +25,6 @@
   font-style: normal;
 }
 
-:root {
-  --bg: #ffffff;
-  --bg2: #ffffff;
-  --ink: #0A0D10;
-  --muted: #6F7F8A;
-  --accent: #2936CF;
-  --border: #D0DBDF;
-  --card: #101316;
-  --card2: #181C1F;
-
-  --card-border: 1px solid #000;
-  --card-shadow: #000;
-  --f: 'Satoshi', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  --f-display: 'EB Garamond', Georgia, 'Times New Roman', serif;
-  --f-mono: 'IBM Plex Mono', 'SF Mono', 'Fira Code', monospace;
-
-  --nav-height: 3.75rem;
-  --nav-height-mobile: 2.5rem;
-  --page-gutter: 3.75rem;
-  --page-gutter-mobile: 2.5rem;
-  --grid-gap: 20px;
-  --hero-top: 6.25rem;
-
-  --t-h1: clamp(2.5rem, 4vw, 4rem);
-  --t-h1-letter-spacing: clamp(0.001rem, 0.2vw, 0.0025rem);
-
-  --t-h2: clamp(1.8rem, 3vw, 3rem);
-
-  --t-h3: clamp(1.125rem, 2vw, 1.5rem);
-
-  --t-p: clamp(0.875rem, 1.5vw + 0.5rem, 1.3rem);
-
-
-  --t-hero-text: clamp(1.5rem, 2.5vw, 4rem);
-  --t-hero-text-font-weight: 400;
-  --t-metric: clamp(1.25rem, 3vw, 3rem);
-  --t-label: clamp(0.5rem, 3vw, 1rem);
-  --t-badge: 0.5625rem;
-}
-
-[data-dark] {
-  --bg: #110F0B;
-  --bg2: #1A1712;
-  --ink: #F0EADD;
-  --muted: #6B6358;
-  --border: #2A2620;
-  --card: #1A1712;
-  --card2: #211E18;
-
-  --card-border: 1px solid var(--ink);
-  --card-shadow: var(--ink);
-}
 .hover-card {
   transition: transform 0.3s cubic-bezier(0.25, 0, 0.3, 1),
               box-shadow 0.3s cubic-bezier(0.25, 0, 0.3, 1);
@@ -92,11 +45,13 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
 .col-grid {
   display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
   column-gap: var(--grid-gap);
 }
+
 html { scroll-behavior: auto; }
 body {
   background: var(--bg);
@@ -110,17 +65,10 @@ body {
   body { cursor: auto; }
 }
 
-@media (max-width: 900px) {
-  :root {
-    --nav-height: var(--nav-height-mobile);
-    --page-gutter: var(--page-gutter-mobile);
-  }
-}
-
 p {
   font-family: var(--f);
-  font-size: var(--t-p);
-  line-height: 1.5;
+  font-size: var(--font-size-s);
+  line-height: var(--line-height-base);
   color: var(--ink);
   transition: color 0.2s;
 }

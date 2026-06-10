@@ -71,7 +71,7 @@
 .linksItem {
   font-family: var(--f-display);
   font-size: clamp(1.125rem, 4vw, 3rem);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   line-height: 1;
   color: var(--ink);
   text-decoration: none;
@@ -130,7 +130,7 @@
   margin: 20px 0 10px 0;
   font-family: var(--f-display);
   font-size: clamp(1.125rem, 4vw, 3rem);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   line-height: 1;
   color: var(--ink);
 }
@@ -393,7 +393,7 @@
 .heroTitle {
   font-family: var(--f-display);
   font-size: clamp(2rem, 6vw, 2.5rem);
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   line-height: 1.2;
   color: var(--ink);
   transition: color 0.2s;

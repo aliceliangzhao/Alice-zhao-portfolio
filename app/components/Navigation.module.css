@@ -98,7 +98,7 @@
   text-decoration: none;
   color: var(--ink);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
   white-space: nowrap;
   transition: color 0.2s;
@@ -107,12 +107,12 @@
 .separator {
   color: var(--muted);
   font-size: 13px;
-  font-weight: 400;
+  font-weight: var(--font-weight-regular);
   flex-shrink: 0;
 }
 .title {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
@@ -139,7 +139,7 @@
   border: none;
   cursor: pointer;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
   color: var(--ink);
   opacity: 0.5;
@@ -179,7 +179,7 @@
 .drawer.open { clip-path: inset(0 0 0 0); }
 .links { display: flex; flex-direction: column; gap: 12px; }
 .links a {
-  font-size: clamp(36px, 5vw, 64px); font-weight: 600; letter-spacing: -0.03em;
+  font-size: clamp(36px, 5vw, 64px); font-weight: var(--font-weight-semibold); letter-spacing: -0.03em;
   color: rgba(255,255,255,0.85); text-decoration: none;
   padding: 8px 0;
   transition: color 0.15s;
@@ -192,7 +192,7 @@
   display: flex; gap: 24px;
 }
 .bottom a {
-  font-size: 12px; font-weight: 600;
+  font-size: 12px; font-weight: var(--font-weight-semibold);
   letter-spacing: 0.06em; text-transform: uppercase;
   color: rgba(255,255,255,0.6); text-decoration: none;
   padding: 8px 0;
@@ -226,7 +226,7 @@
   border: none;
   cursor: pointer;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
   color: var(--ink);
   padding: 6px 10px;
@@ -260,7 +260,7 @@
   border: none;
   cursor: pointer;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   letter-spacing: -0.01em;
   color: var(--muted);
   padding: 10px 14px;

@@ -1,0 +1,221 @@
+.typelab {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: calc(var(--space-nav-height) + 3rem) var(--space-pad) 6rem;
+}
+
+.typelab-intro {
+  margin-bottom: 2.5rem;
+}
+.typelab-intro h1 {
+  font-size: var(--font-size-l);
+  line-height: var(--line-height-tight);
+  color: var(--ink);
+}
+.typelab-note {
+  margin-top: 0.75rem;
+  max-width: 60ch;
+  color: var(--muted);
+}
+.typelab-note code {
+  font-family: var(--f-mono);
+  font-size: 0.85em;
+  color: var(--ink);
+}
+
+/* Column labels, sticky under the nav. */
+.tl-colhead {
+  position: sticky;
+  top: var(--space-nav-height);
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 40px;
+  padding: 12px 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.specimen-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+/* --- Size reference (left column): every NEW tier with a live sample + px --- */
+.size-ref {
+  position: sticky;
+  top: calc(var(--space-nav-height) + 52px);
+  align-self: start;
+  max-height: calc(100vh - var(--space-nav-height) - 72px);
+  overflow-y: auto;
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.ref-caption {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.ref-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ref-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--f-mono);
+}
+.ref-tier {
+  font-size: 13px;
+  color: var(--ink);
+}
+.ref-px {
+  font-size: 11px;
+  color: var(--muted);
+}
+.ref-sample {
+  font-family: var(--f);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  color: var(--ink);
+}
+
+/* --- Token scoping: each column overrides the size tokens for its subtree --- */
+.specimen-current {
+  --font-size-xxs: var(--font-size-xxs-legacy);
+  --font-size-xs:  var(--font-size-xs-legacy);
+  --font-size-s:   var(--font-size-s-legacy);
+  --font-size-m:   var(--font-size-m-legacy);
+  --font-size-l:   var(--font-size-l-legacy);
+  --font-size-xl:   var(--font-size-xl-legacy);
+  --font-size-xxl:  var(--font-size-xxl-legacy);
+  --font-size-xxxl: var(--font-size-xxxl-legacy);
+  --line-height-base: var(--line-height-base-legacy);
+}
+.specimen-next {
+  --font-size-xxs: var(--font-size-xxs-next);
+  --font-size-xs:  var(--font-size-xs-next);
+  --font-size-s:   var(--font-size-s-next);
+  --font-size-m:   var(--font-size-m-next);
+  --font-size-l:   var(--font-size-l-next);
+  --font-size-xl:   var(--font-size-xl-next);
+  --font-size-xxl:  var(--font-size-xxl-next);
+  --font-size-xxxl: var(--font-size-xxxl-next);
+  --line-height-base: var(--line-height-base-next);
+}
+
+.specimen {
+  border-top: 1px solid var(--border);
+  padding-top: 2rem;
+  min-width: 0;
+}
+
+/* Each element sits in a field that owns the spacing and the size readout. */
+.sp-field {
+  margin-bottom: 2.25rem;
+}
+.sp-field > :last-child {
+  margin: 0;
+}
+.sp-anno {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--muted);
+}
+
+/* --- Real project-detail treatments. Font / weight / tracking mirror
+       app/project.css; the SIZE comes from the `tier` prop (set inline in
+       page.js), so each class deliberately omits font-size. --- */
+
+/* Title — Satoshi 700 (.project-detail h1) */
+.sp-title {
+  font-family: var(--f);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  letter-spacing: var(--t-h1-letter-spacing);
+  color: var(--ink);
+}
+
+/* Subtitle — EB Garamond serif, 50% opacity (.project-hero-subtitle) */
+.sp-sub {
+  font-family: var(--f-display);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.3;
+  color: var(--ink);
+  opacity: 0.5;
+  margin-top: 0.5rem;
+}
+
+/* Problem statement — EB Garamond serif (.project-hero-text p) */
+.sp-problem {
+  font-family: var(--f-display);
+  font-weight: var(--t-hero-text-font-weight);
+  line-height: 1.2;
+  color: var(--ink);
+  margin: 3.5rem 0;
+}
+
+/* Section heading — Satoshi 800, tight (.project-detail h2) */
+.sp-h2 {
+  font-family: var(--f);
+  font-weight: var(--font-weight-black);
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  color: var(--ink);
+}
+
+/* Label — Satoshi 800, uppercase (.subsection-label) */
+.sp-label {
+  font-family: var(--f);
+  font-weight: var(--font-weight-black);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 1rem;
+}
+
+/* Body — Satoshi 400 (.subsection-text) */
+.sp-body {
+  font-family: var(--f);
+  font-weight: var(--font-weight-regular);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  max-width: 42ch;
+}
+
+/* The new look also tightens tracking on the title. */
+.specimen-next .sp-title { letter-spacing: -0.02em; }
+
+@media (max-width: 760px) {
+  .tl-colhead {
+    display: none;
+  }
+  .specimen-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .size-ref {
+    position: static;
+    max-height: none;
+    overflow: visible;
+  }
+}
