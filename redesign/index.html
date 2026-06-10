@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alice Zhao — Product Designer</title>
+<!-- Satoshi (Fontshare) — full weight range incl. Black (900) -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+<!-- Design tokens (atomic values) — single source of truth -->
+<link rel="stylesheet" href="tokens.css" />
+<script>
+  /* Add the preload flag as early as possible (before <body> paints), so the
+     page starts hidden ONLY when JS is on AND motion is allowed. No-JS visitors
+     and reduced-motion visitors never get the flag, so they see the full page
+     immediately with no blank flash. The main script removes it when the dot
+     intro finishes; a safety timeout removes it regardless (see bottom). */
+  (function () {
+    try {
+      var reduce = window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduce) document.documentElement.classList.add("preloading");
+    } catch (e) {}
+  })();
+</script>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    position: relative;
+    overflow-x: hidden;
+  }
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  /* the first screen: header + intro + hero, balanced to fill the viewport */
+  .landing {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* 12-column grid container with edge padding */
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    column-gap: var(--space-gap);
+    padding-left: var(--space-pad);
+    padding-right: var(--space-pad);
+    width: 100%;
+    max-width: 100%;
+  }
+  /* let 1fr tracks shrink below their content's min-content size, so a
+     nowrap label or a wide canvas can't force the grid past the viewport */
+  .grid12 > * { min-width: 0; }
+
+  header, .intro, .hero { position: relative; z-index: 1; }
+
+  /* paragraph scale utilities */
+  .p-l { font-size: var(--font-size-p-l); line-height: var(--line-height-base); }
+  .p-m { font-size: var(--font-size-p-m); line-height: var(--line-height-base); }
+  .p-s { font-size: var(--font-size-p-s); line-height: var(--line-height-base); }
+  .p-xs { font-size: var(--font-size-p-xs); line-height: var(--line-height-base); }
+
+
+  /* top bar — aligned to the 12-col grid */
+  header {
+    align-items: center;
+    padding-top: var(--space-header-y);
+    padding-bottom: var(--space-header-y);
+    font-size: var(--font-size-base);
+  }
+  /* brand line + nav links all use the p-xs scale; the brand is bolded to set
+     it apart while staying the same size. */
+  header .brand   { grid-column: 1 / 5;  white-space: nowrap; font-size: var(--font-size-p-xs); font-weight: var(--font-weight-bold); }
+  header .center,
+  header .links   { font-size: var(--font-size-p-xs); }
+  header .center  { grid-column: 7 / 9;  display: flex; gap: var(--space-nav-gap); justify-content: flex-start; }
+  header .links   { grid-column: 9 / 13; display: flex; gap: var(--space-nav-gap); justify-content: flex-end; }
+  header a { color: var(--color-link); text-decoration: none; }
+  header a:hover { text-decoration: underline; }
+
+  /* --- Contact dropdown (mobile only) ----------------------------------- */
+  /* On narrow screens the three social links collapse into one "Contact"
+     disclosure (a native <details>), so the nav row stays uncluttered. Hidden
+     on desktop (the inline links show instead); revealed at <=640px by the
+     mobile rules below. The panel is flat, sharp-cornered and bordered (no
+     shadow) per the Flat-Sheet + Sharp-Corner Rules. Used by both the page
+     header and the docked header. */
+  .contact { display: none; position: relative; }
+  .contact > summary {
+    list-style: none;            /* strip the default disclosure triangle */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    font-size: var(--font-size-p-xs);
+    color: var(--color-link);
+  }
+  .contact > summary::-webkit-details-marker { display: none; } /* Safari */
+  .contact > summary:hover { text-decoration: underline; }
+  /* a small caret that flips when the menu opens */
+  .contact > summary::after {
+    content: "";
+    width: 0.36em;
+    height: 0.36em;
+    border-right: 1.5px solid currentColor;
+    border-bottom: 1.5px solid currentColor;
+    transform: translateY(-0.12em) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  .contact[open] > summary::after { transform: translateY(0.04em) rotate(-135deg); }
+  /* the panel: drops below the summary, right-aligned to match the nav edge */
+  .contact__menu {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 9rem;
+    background: var(--color-bg);   /* solid, even under the dock's glass */
+    border: 1px solid var(--color-fg);
+  }
+  .contact__menu a {
+    padding: 0.6rem 0.9rem;
+    font-size: var(--font-size-p-xs);
+    color: var(--color-link);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .contact__menu a + a { border-top: 1px solid var(--color-fg); }
+  .contact__menu a:hover { text-decoration: underline; }
+  @media (prefers-reduced-motion: reduce) {
+    .contact > summary::after { transition: none; }
+  }
+
+  /* intro paragraph — first 6 columns */
+  .intro {
+    /* auto top-margin here + on .hero splits the free space equally, giving
+       an equal gap above the intro (nav -> intro) and below it (intro -> hero) */
+    margin-top: auto;
+    font-size: var(--font-size-p-l);
+    line-height: var(--line-height-base);
+  }
+  .intro p { grid-column: 1 / 7; margin: 0; }
+  .intro b { font-weight: var(--font-weight-bold); }
+  .intro .muted { color: var(--color-muted); font-weight: var(--font-weight-medium); }
+  /* Focus clause: the third sentence of the intro, the thesis about the work.
+     It flows INLINE as part of the single intro paragraph (not a separate
+     block), in ink at regular weight so it lands as the paragraph's payoff
+     after the muted middle clause. Hidden by default so normal-size and mobile
+     screens get the SHORTER two-sentence version; revealed only on wide / 4K
+     displays via the min-width rule in the responsive section below. */
+  .intro .focus {
+    display: none;
+    color: var(--color-fg);
+    font-weight: var(--font-weight-regular);
+  }
+
+  /* hero — the one element too big for the grid. Every other block obeys the
+     --space-pad gutters; the name escapes them and prints full-bleed,
+     edge to edge. (The canvas JS reserves a ~16px internal margin for the
+     dilating dots, so the letters never actually clip the viewport.) */
+  .hero {
+    margin-top: auto;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: var(--space-hero-bottom);
+  }
+  .hero .well { grid-column: 1 / 13; }
+  #hero-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ===================================================================== */
+  /* Preload intro: dots light up one-per-letter, the name resolves, then  */
+  /* the page reveals. Only active when JS is on AND motion is allowed      */
+  /* (the .preloading flag is set inline in <head>). Boxes keep their       */
+  /* layout while hidden (opacity/visibility, never display), so there is   */
+  /* no layout shift when content reveals.                                  */
+  /* ===================================================================== */
+  .preloading header,
+  .preloading .intro,
+  .preloading .scroll-cue,
+  .preloading .projects {
+    opacity: 0;
+    visibility: hidden;
+  }
+  /* The reveal: a gentle, slightly staggered fade-and-rise once the name is
+     resolved. Driven by the .revealed flag the script adds after the intro. */
+  .revealed header,
+  .revealed .intro,
+  .revealed .scroll-cue,
+  .revealed .projects {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* Pre-reveal resting offset (only while still preloading, so the very first
+     paint already has them nudged down, ready to rise). */
+  .preloading header   { transform: translateY(-8px); }
+  .preloading .intro   { transform: translateY(12px); }
+  .preloading .projects{ transform: translateY(16px); }
+  /* Stagger: header first, then intro, then the work. */
+  .revealed header    { transition-delay: 0s; }
+  .revealed .intro    { transition-delay: 0.08s; }
+  .revealed .scroll-cue { transition-delay: 0.18s; }
+  .revealed .projects { transition-delay: 0.16s; }
+  /* If motion is reduced, never hide anything and never offset it, even if the
+     flag somehow lands. Belt-and-suspenders with the inline guard. */
+  @media (prefers-reduced-motion: reduce) {
+    .preloading header,
+    .preloading .intro,
+    .preloading .scroll-cue,
+    .preloading .projects {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+  }
+
+  /* ===================================================================== */
+  /* Resurfacing header (dock) — a compact fixed copy of the top nav that    */
+  /* hides while reading and slides back in on scroll-up so navigation is    */
+  /* always one gesture away. It is a SEPARATE element from the in-flow      */
+  /* <header>, so the page-load reveal choreography above is untouched. The  */
+  /* dock floats on a frosted-glass panel: a translucent fill + backdrop blur   */
+  /* soften the ink scrolling beneath it (no hairline rule). JS toggles         */
+  /* .dock-show; default is hidden (translated up) until the user scrolls back  */
+  /* up past the threshold. The glass is a documented exception to the          */
+  /* Flat-Sheet Rule, scoped to this one transient overlay.                     */
+  /* ===================================================================== */
+  .dock {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-header);
+    /* frosted glass: translucent paper over a blurred backdrop */
+    background: var(--dock-glass-bg);
+    -webkit-backdrop-filter: blur(var(--dock-glass-blur));
+    backdrop-filter: blur(var(--dock-glass-blur));
+    /* hidden by default: lifted fully out of view above the top edge */
+    transform: translateY(-100%);
+    transition: transform 0.42s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: transform;
+  }
+  /* Fallback for engines without backdrop-filter (older Firefox w/o the flag):
+     fall back to a more opaque paper fill so the dock stays legible without the
+     blur, rather than showing text bleeding through a 60% panel. */
+  @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+    .dock { background: rgba(255, 255, 255, 0.94); }
+  }
+  /* the dock's inner row reuses the same 12-col grid + edge gutters + cap as
+     every other block, so its items line up with the page header exactly. */
+  .dock__inner {
+    align-items: center;
+    padding-top: var(--space-dock-y);
+    padding-bottom: var(--space-dock-y);
+  }
+  .dock .brand { grid-column: 1 / 5;  white-space: nowrap; font-size: var(--font-size-p-xs); font-weight: var(--font-weight-bold); }
+  .dock .center,
+  .dock .links { font-size: var(--font-size-p-xs); }
+  .dock .center { grid-column: 7 / 9;  display: flex; gap: var(--space-nav-gap); justify-content: flex-start; }
+  .dock .links  { grid-column: 9 / 13; display: flex; gap: var(--space-nav-gap); justify-content: flex-end; }
+  .dock a { color: var(--color-link); text-decoration: none; }
+  .dock a:hover { text-decoration: underline; }
+  /* shown: slid down into view (set by JS on scroll-up). */
+  .dock.dock-show { transform: translateY(0); }
+  /* Reduced motion: the dock still resurfaces (it's navigation, not decoration)
+     but snaps instead of sliding, and never animates a transform transition. */
+  @media (prefers-reduced-motion: reduce) {
+    .dock { transition: none; }
+  }
+  /* Mobile parity with the page header: drop the brand line, split the two
+     nav groups across the row. */
+  @media (max-width: 640px) {
+    .dock .brand  { display: none; }
+    .dock .center { grid-column: 1 / 7;  justify-content: flex-start; }
+    .dock .links  { grid-column: 7 / 13; justify-content: flex-end; }
+  }
+  @media (max-width: 380px) {
+    .dock .center, .dock .links { flex-wrap: wrap; }
+  }
+
+  /* ===================================================================== */
+  /* Footer — the closing broadsheet panel: the name set huge as a second    */
+  /* halftone specimen (echoing the hero), bracketed by hairline rules, with */
+  /* a legal line + utility links beneath. Sentence case per the DESIGN.md   */
+  /* Sentence-Case Rule. The name reuses the hero's dot engine (breathe-only,*/
+  /* starts when scrolled into view).                                        */
+  /* ===================================================================== */
+  /* Zero the footer's gutters so its hairline rules (and the name they bracket)
+     run full-bleed, edge to edge, like the hero. The colophon below re-applies
+     the gutters so the legal text isn't jammed against the screen edge. */
+  .footer {
+    margin-top: var(--space-footer-top);
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
+    row-gap: 0;
+  }
+  /* the name well spans the full bleed (footer padding is zeroed above),
+     bracketed top and bottom by a hairline rule that now touches both edges. */
+  .footer .well {
+    grid-column: 1 / 13;
+    border-top: 1px solid var(--color-fg);
+    border-bottom: 1px solid var(--color-fg);
+    padding: clamp(8px, 1.2vw, 16px) 0;
+  }
+  #footer-canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  /* legal row beneath the rule: copyright left, utility links right. Re-applies
+     the page gutters (the footer zeroed them) so the text keeps its margin. */
+  .footer .colophon {
+    grid-column: 1 / 13;
+    padding-left: var(--space-pad);
+    padding-right: var(--space-pad);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: clamp(8px, 2vw, 24px);
+    padding-top: var(--space-footer-y);
+    padding-bottom: var(--space-footer-y);
+    font-size: var(--font-size-p-xs);
+  }
+  .footer .colophon .copy { color: var(--color-muted); margin: 0; }
+  .footer .colophon .legal { display: flex; flex-wrap: wrap; gap: clamp(14px, 1.6vw, 28px); }
+  .footer .colophon a { color: var(--color-link); text-decoration: none; }
+  .footer .colophon a:hover { text-decoration: underline; }
+  @media (max-width: 640px) {
+    .footer .colophon { flex-direction: column; gap: 12px; }
+  }
+
+  /* ===================================================================== */
+  /* Cursor lens — a wavy gradient disc that follows the pointer and recolors */
+  /* the ink beneath it. mix-blend-mode: lighten => max(layer, gradient):     */
+  /* near-black ink (#111) becomes the gradient colour, white paper stays     */
+  /* white. The colour is a mesh of soft elliptical BLOBS spread across three  */
+  /* layers; each blob drifts and squashes on its own timing, so their curved  */
+  /* edges flow and morph — organic and wavy, no straight lines and no solid   */
+  /* centre. Hard circular edge (border-radius + overflow), no feather.        */
+  /* ===================================================================== */
+  .lens {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--lens-size);
+    height: var(--lens-size);
+    /* centre the box on the pointer: JS sets --mx/--my (viewport px), we
+       offset by half the size. translate3d keeps it on the compositor. */
+    transform: translate3d(
+      calc(var(--mx, -9999px) - var(--lens-size) / 2),
+      calc(var(--my, -9999px) - var(--lens-size) / 2),
+      0);
+    border-radius: 50%;            /* crisp circular edge, no masked feather */
+    overflow: hidden;              /* clip the drifting blobs to the disc */
+    isolation: isolate;            /* layers screen-blend among themselves */
+    mix-blend-mode: lighten;       /* ...then the disc lightens over the page */
+    pointer-events: none;          /* never intercept clicks/hover */
+    z-index: var(--z-lens);
+    opacity: 0;                    /* hidden until the pointer enters */
+    transition: opacity 0.4s ease-out;
+    will-change: transform;
+    /* deep base so the disc is never empty behind the blurred blobs */
+    background: var(--lens-violet);
+  }
+  /* Blur wrapper: holds the moving colour blobs and blurs them as a group, so
+     the hues melt into one another with soft wavy boundaries. The blur spills
+     past the disc but .lens overflow:hidden clips it to a crisp circle — liquid
+     inside, hard edge at the rim. Oversized + inset so the blur never thins the
+     colour at the rim. */
+  .lens__flow {
+    position: absolute;
+    inset: -25%;
+    filter: blur(32px);
+    will-change: transform;
+  }
+  /* Two blob layers inside the blur wrapper, drifting wide, fast, opposite
+     paths so the colours sweep across and remix continuously. NORMAL blend +
+     fully opaque saturated hues — no light/white blob. */
+  .lens__flow::before,
+  .lens__flow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-repeat: no-repeat;
+  }
+  .lens__flow::before {
+    background:
+      radial-gradient(46% 44% at 60% 32%, var(--lens-ember) 0%, transparent 60%),
+      radial-gradient(50% 48% at 28% 70%, var(--lens-violet) 0%, transparent 62%);
+    animation: lens-flow-a 4.5s ease-in-out infinite;
+  }
+  .lens__flow::after {
+    background:
+      radial-gradient(48% 46% at 74% 72%, var(--lens-magenta) 0%, transparent 60%),
+      radial-gradient(44% 42% at 36% 28%, var(--lens-ember) 0%, transparent 58%);
+    animation: lens-flow-b 6s ease-in-out infinite;
+  }
+  /* JS adds .lens-on while the pointer is over the document. */
+  .lens.lens-on { opacity: 1; }
+
+  /* Flow keyframes: WIDE translate + non-uniform scale + rotate, so the blobs
+     sweep right across the disc and the blurred mesh visibly churns. The two
+     layers run different speeds/paths so the mesh never settles. */
+  @keyframes lens-flow-a {
+    0%   { transform: translate(-32%, -24%) scale(1.3, 1.0)  rotate(0deg); }
+    33%  { transform: translate(28%, -16%)  scale(1.0, 1.4)  rotate(22deg); }
+    66%  { transform: translate(18%, 30%)   scale(1.4, 1.1)  rotate(-16deg); }
+    100% { transform: translate(-32%, -24%) scale(1.3, 1.0)  rotate(0deg); }
+  }
+  @keyframes lens-flow-b {
+    0%   { transform: translate(30%, 22%)   scale(1.1, 1.4)  rotate(0deg); }
+    33%  { transform: translate(-26%, 26%)  scale(1.4, 1.0)  rotate(-24deg); }
+    66%  { transform: translate(-18%, -28%) scale(1.05, 1.4) rotate(18deg); }
+    100% { transform: translate(30%, 22%)   scale(1.1, 1.4)  rotate(0deg); }
+  }
+
+  /* Only fine-pointer devices that can hover get the lens at all. Coarse      */
+  /* (touch) pointers have no persistent cursor, so it would be meaningless.   */
+  @media (hover: none), (pointer: coarse) {
+    .lens { display: none; }
+  }
+  /* A large colour field chasing the cursor is exactly what reduced-motion    */
+  /* guards against; disable entirely and keep the page pure monochrome.       */
+  @media (prefers-reduced-motion: reduce) {
+    .lens { display: none; }
+  }
+
+  /* --- project list: editorial column ---------------------------------- */
+  /* A two-column card grid; each project is stacked image-on-top with tag
+     chips, title, and statement left-aligned beneath it. */
+  .projects {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: var(--space-section-top);
+    row-gap: 0;
+    align-items: start;
+    /* when "Work" jumps here, leave room above so the cards land clear of the
+       fixed dock that may be showing at the top. */
+    scroll-margin-top: clamp(72px, 10vw, 110px);
+  }
+
+  /* the project list spans all 12 columns as a TWO-COLUMN card grid with a
+     fixed 20px gap between columns (and a generous row gap between pairs). */
+  .project-list {
+    grid-column: 1 / 13;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: var(--space-project-col-gap);
+    row-gap: clamp(48px, 6vw, 88px);
+  }
+
+  /* each project card: image on top, then tag chips, title, description,
+     all left-aligned and stacked. min-width:0 lets the card shrink below its
+     image's intrinsic width (grid/flex items default to min-width:auto, which
+     would otherwise let the large thumbnails blow the column past the viewport
+     — the .grid12>* guard only covers direct grid children, not these). */
+  .project { margin: 0; display: flex; flex-direction: column; min-width: 0; }
+  .project .pthumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: var(--project-image-aspect);
+    object-fit: cover;
+    object-position: left top;
+    background: var(--color-card-placeholder);
+    /* 10px rounded corners on project images — a deliberate exception to the
+       DESIGN.md Sharp-Corner Rule, scoped to the thumbnails only. */
+    border-radius: var(--radius-image);
+  }
+  /* tag chips: a wrapping row of sharp-cornered, hairline-outlined chips
+     (no fill, no radius) — on-brand with the Sharp-Corner + Flat-Sheet Rules. */
+  .project .ptags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: clamp(14px, 1.6vw, 20px) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .project .ptags li {
+    border: 1px solid var(--color-fg);
+    padding: 0.3rem 0.7rem;
+    font-size: var(--font-size-p-xs);
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .project .ptitle {
+    margin: clamp(12px, 1.4vw, 18px) 0 0;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    /* long unbroken tokens (e.g. "0 → 1") must wrap, never clip the card edge */
+    overflow-wrap: break-word;
+  }
+  .project .pstatement {
+    margin: clamp(8px, 1vw, 12px) 0 0;
+    font-size: var(--font-size-p-m);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-base);
+    color: var(--color-muted);
+    max-width: 60ch;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    right: var(--space-pad);
+    bottom: var(--space-cue-bottom);
+    z-index: 2;
+    width: var(--scroll-cue-width);
+    height: var(--scroll-cue-height);
+  }
+  .scroll-cue .runner,
+  .scroll-cue .trail {
+    position: absolute;
+    left: 0; right: 0;
+    margin: 0 auto;
+    top: 0;
+    width: var(--scroll-cue-thickness);
+  }
+  /* back layer: a taller streak that trails the runner and fades upward,
+     mimicking a motion afterimage. Sits behind the solid runner. */
+  .scroll-cue .trail {
+    height: var(--scroll-cue-trail);
+    /* solid at the bottom (where the runner is), fading to nothing upward */
+    background: linear-gradient(to top, var(--color-fg), transparent);
+    /* offset up so its bottom edge meets the runner's bottom edge */
+    transform: translateY(calc(var(--scroll-cue-runner) - var(--scroll-cue-trail)));
+    animation: scroll-run var(--scroll-cue-duration) cubic-bezier(0.7, 0, 0.3, 1) infinite;
+    opacity: 0.5;
+  }
+  /* solid segment that travels down, implying "keep scrolling" */
+  .scroll-cue .runner {
+    height: var(--scroll-cue-runner);
+    background: var(--color-fg);
+    animation: scroll-run var(--scroll-cue-duration) cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  }
+  /* the segment slides from top to bottom, fading as it reaches the end.
+     The trail shares the same travel (its own transform offset is applied
+     via its base transform + this translateY through the keyframes). */
+  @keyframes scroll-run {
+    0%   { opacity: 0; }
+    15%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+  }
+  .scroll-cue .runner { animation-name: scroll-run-runner; }
+  .scroll-cue .trail  { animation-name: scroll-run-trail; }
+  @keyframes scroll-run-runner {
+    0%   { transform: translateY(0); opacity: 0; }
+    15%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { transform: translateY(calc(var(--scroll-cue-height) - var(--scroll-cue-runner))); opacity: 0; }
+  }
+  @keyframes scroll-run-trail {
+    0%   { transform: translateY(calc(var(--scroll-cue-runner) - var(--scroll-cue-trail))); opacity: 0; }
+    15%  { opacity: 0.5; }
+    80%  { opacity: 0.5; }
+    100% { transform: translateY(calc(var(--scroll-cue-height) - var(--scroll-cue-trail))); opacity: 0; }
+  }
+  /* respect users who prefer reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-cue .runner { animation: none; opacity: 1; }
+    .scroll-cue .trail  { animation: none; opacity: 0; }
+  }
+
+  /* ===================================================================== */
+  /* Responsive — reflow the grid at tablet and mobile widths.             */
+  /* ===================================================================== */
+
+  /* Wide / 4K: reveal the third intro clause so the paragraph runs long on  */
+  /* big displays, while normal-size and mobile screens keep the shorter     */
+  /* two-sentence version. 2000px sits above 1920px/1440px monitors so only  */
+  /* genuine 4K / ultrawide gets the long copy. Tune this one value to shift */
+  /* where the long version kicks in. The leading space keeps it flowing as  */
+  /* one paragraph (the inline whitespace before the span collapses to it).  */
+  @media (min-width: 2000px) {
+    .intro .focus { display: inline; }
+  }
+
+  /* Tablet: relax the header nav columns and intro width; project cards    */
+  /* still 2-up but a little wider.                                         */
+  @media (max-width: 900px) {
+    header .brand  { grid-column: 1 / 6; }
+    header .center { grid-column: 6 / 9; }
+    header .links  { grid-column: 9 / 13; }
+    .intro p { grid-column: 1 / 10; }   /* wider so it doesn't get too narrow */
+    .project .caption { max-width: none; }
+  }
+
+  /* Mobile: single column. Header wraps to its own rows, projects stack,   */
+  /* and big type relies on the fluid clamp()s to stay in bounds.           */
+  @media (max-width: 640px) {
+    /* header: hide the brand tagline on mobile; the two navs share one row.
+       Lift the header above the intro/hero (all z-index:1 siblings, so the
+       later-in-source intro would otherwise paint over the open dropdown). */
+    header { row-gap: 10px; z-index: 3; }
+    header .brand  { display: none; }
+    header .center { grid-column: 1 / 7;  justify-content: flex-start; }
+    /* the inline social links collapse into the Contact disclosure */
+    header .links  { display: none; }
+    header .contact,
+    .dock .contact { display: block; grid-column: 7 / 13; justify-self: end; }
+    /* the dock also needs to sit above the page so its dropdown isn't clipped */
+    .dock { z-index: var(--z-header); }
+
+    .intro p { grid-column: 1 / 13; }
+
+    /* projects on mobile: the two-column card grid collapses to a single
+       column so each card keeps a usable width. */
+    .project-list { grid-template-columns: 1fr; row-gap: clamp(40px, 10vw, 64px); }
+    /* trim the title a step so long ones wrap inside the card instead of
+       running to the edge (the clamp max is desktop-scaled). */
+    .project .ptitle { font-size: clamp(1.5rem, 6.5vw, 1.875rem); }
+  }
+
+  /* Very narrow: let nav links wrap rather than overflow */
+  @media (max-width: 380px) {
+    header .center, header .links { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Resurfacing header (dock): a compact fixed copy of the top nav. Hidden by
+       default; JS slides it in on scroll-up so navigation is always reachable,
+       and retracts it on scroll-down / at the very top (where the real header
+       already shows). Its links mirror the page header. Marked as a banner
+       landmark for AT; the in-flow <header> remains the primary one. -->
+  <div class="dock" aria-hidden="true">
+    <div class="dock__inner grid12">
+      <div class="brand">Alice Zhao is a product designer.</div>
+      <nav class="center" aria-label="Primary (docked)">
+        <a href="#">Home</a>
+        <a href="#work">Work</a>
+        <a href="#">About</a>
+        <a href="#">Lab</a>
+      </nav>
+      <nav class="links" aria-label="Social (docked)">
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <a href="#">Resume</a>
+      </nav>
+      <!-- Mobile: the three links above collapse into this Contact disclosure
+           (shown <=640px; the inline .links are hidden there). Native <details>
+           so it works without JS and is keyboard-accessible. -->
+      <details class="contact">
+        <summary aria-label="Contact menu">Contact</summary>
+        <div class="contact__menu">
+          <a href="#">LinkedIn</a>
+          <a href="#">Email</a>
+          <a href="#">Resume</a>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- Cursor lens: a gradient disc that tracks the pointer and recolors the ink
+       beneath it via mix-blend-mode. Decorative; hidden from AT and pointer
+       events. JS positions .lens; the inner .lens__flow holds the blurred,
+       drifting colour blobs (clipped to the circle by .lens). -->
+  <div class="lens" aria-hidden="true"><div class="lens__flow"></div></div>
+
+  <div class="landing">
+    <header class="grid12">
+      <div class="brand">Alice Zhao is a product designer.</div>
+      <nav class="center">
+        <a href="#">Home</a>
+        <a href="#work">Work</a>
+        <a href="#">About</a>
+        <a href="#">Lab</a>
+      </nav>
+      <nav class="links">
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+        <a href="#">Resume</a>
+      </nav>
+      <!-- Mobile: the three links above collapse into this Contact disclosure
+           (shown <=640px; the inline .links are hidden there). -->
+      <details class="contact">
+        <summary aria-label="Contact menu">Contact</summary>
+        <div class="contact__menu">
+          <a href="#">LinkedIn</a>
+          <a href="#">Email</a>
+          <a href="#">Resume</a>
+        </div>
+      </details>
+    </header>
+
+    <section class="intro grid12">
+      <p>
+        <b>Currently designing agentic experience at Amazon AWS.</b>
+        <span class="muted">Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and Insperity.</span>
+        <span class="focus">My work lives in consoles, data tools, and design systems: the dense surfaces teams use all day.</span>
+      </p>
+    </section>
+
+    <section class="hero grid12">
+      <div class="well">
+        <!-- The H1 is rendered on a canvas so we can run the halftone dot animation.
+             Kept as real text for accessibility/SEO. -->
+        <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);margin:-1px;">Alice Zhao</h1>
+        <canvas id="hero-canvas" role="img" aria-label="Alice Zhao"></canvas>
+      </div>
+    </section>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="trail"></span>
+      <span class="runner"></span>
+    </div>
+  </div>
+
+  <!-- Project list: a two-column card grid. Each project stacks its thumbnail
+       image, tag chips, title, and a one-line statement. -->
+  <section class="projects grid12" id="work">
+    <div class="project-list">
+      <article class="project">
+        <img class="pthumb" src="img/tb-thumbnail.png" alt="AWS S3 Table buckets console: a list of table buckets with size, region, and status" loading="lazy" />
+        <ul class="ptags">
+          <li>Design lead</li>
+          <li>From concept to launch</li>
+        </ul>
+        <h3 class="ptitle">AWS S3 Tables: 0 &rarr; 1 in 8 weeks</h3>
+        <p class="pstatement">A seamless console experience that turns big data into insights in seconds.</p>
+      </article>
+
+      <article class="project">
+        <img class="pthumb" src="img/agentic-thumbnail.png" alt="AWS console screen the agentic experience builds on" onerror="this.src='img/tb-thumbnail.png'" loading="lazy" />
+        <ul class="ptags">
+          <li>Design lead</li>
+          <li>0 to 1</li>
+        </ul>
+        <h3 class="ptitle">AWS agentic experience: Let agents do the heavy lifting</h3>
+        <p class="pstatement">Transforming AWS console interactions from manual workflows to agent-driven experiences.</p>
+      </article>
+
+      <article class="project">
+        <img class="pthumb" src="img/data-thumbnail.png" alt="AWS console showing unified data access across table buckets" onerror="this.src='img/tb-thumbnail.png'" loading="lazy" />
+        <ul class="ptags">
+          <li>Design lead</li>
+          <li>Systems &amp; standards</li>
+        </ul>
+        <h3 class="ptitle">Simplifying data access: Unifying 3 endpoints in 1</h3>
+        <p class="pstatement">A seamless console experience that turns big data into insights in seconds.</p>
+      </article>
+
+      <article class="project">
+        <img class="pthumb" src="img/perf-thumbnail.png" alt="AWS console dashboard visualizing query performance across table buckets" onerror="this.src='img/tb-thumbnail.png'" loading="lazy" />
+        <ul class="ptags">
+          <li>Product designer</li>
+          <li>Research to ship</li>
+        </ul>
+        <h3 class="ptitle">Query insights: Making performance legible</h3>
+        <p class="pstatement">Turning raw query telemetry into a view teams can act on at a glance.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer: the closing broadsheet panel. The name returns as a second
+       halftone specimen (same dot engine as the hero, breathe-only, starts when
+       scrolled into view), bracketed by hairline rules, with the colophon
+       beneath. The real <h2> stays in the DOM for AT/SEO; the canvas carries the
+       accessible name, mirroring the hero treatment. -->
+  <footer class="footer grid12">
+    <div class="well">
+      <h2 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);margin:-1px;">Alice Zhao</h2>
+      <canvas id="footer-canvas" role="img" aria-label="Alice Zhao"></canvas>
+    </div>
+    <div class="colophon">
+      <p class="copy">&copy; 2026 Alice Zhao &amp; LLMs &amp; Figma</p>
+      <nav class="legal" aria-label="Footer">
+        <a href="#">Terms and conditions</a>
+        <a href="#">Privacy policy</a>
+        <a href="#">LinkedIn</a>
+        <a href="#">Email</a>
+      </nav>
+    </div>
+  </footer>
+
+<script>
+/* Cursor lens: track the pointer and feed its position to the .lens element as
+   CSS custom props. One DOM write per animation frame (pointermove can fire far
+   more often than 60Hz), positioned via transform so it stays on the compositor.
+   Bails out entirely on coarse pointers and under reduced motion, matching the
+   CSS media guards, so no listeners are attached where the lens is hidden. */
+(() => {
+  const lens = document.querySelector(".lens");
+  if (!lens) return;
+  const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!finePointer || reduce) return;   // lens is display:none here anyway
+
+  const root = document.documentElement;
+  let x = 0, y = 0, queued = false, on = false;
+
+  function setHover(state) {
+    if (on === state) return;
+    on = state;
+    lens.classList.toggle("lens-on", state);
+  }
+
+  function apply() {
+    queued = false;
+    root.style.setProperty("--mx", x + "px");
+    root.style.setProperty("--my", y + "px");
+  }
+  window.addEventListener("pointermove", (e) => {
+    x = e.clientX; y = e.clientY;
+    setHover(true);
+    if (!queued) { queued = true; requestAnimationFrame(apply); }
+  }, { passive: true });
+
+  // Fade the lens out when the pointer leaves the window, back in on return.
+  document.addEventListener("pointerleave", () => setHover(false));
+  window.addEventListener("blur", () => setHover(false));
+})();
+</script>
+
+<script>
+/* ======================================================================= */
+/* createDotName(canvas, opts) — the halftone dot-morph engine.            */
+/*                                                                          */
+/* Samples the rendered Satoshi Black glyphs of opts.text into a dot        */
+/* lattice, then animates them between an airy open field and solid         */
+/* letterforms. Used twice: the HERO (full load intro: seed -> fill ->      */
+/* merge, then a breathing idle loop, revealing page content mid-intro) and */
+/* the FOOTER (breathe-only: rests solid, breathes while on-screen, no      */
+/* intro). One engine, two configs — the page's signature motion travels    */
+/* instead of being copy-pasted.                                            */
+/*                                                                          */
+/* opts:                                                                    */
+/*   text       string drawn (default "Alice Zhao")                         */
+/*   playIntro  true  -> seed/fill/merge load choreography (hero)           */
+/*              false -> rest solid + breathe when visible (footer)         */
+/*   onReveal   callback fired when the name is legible (hero reveals the   */
+/*              hidden page content here); optional.                        */
+/* Returns { build } so the caller can force a re-fit if needed.            */
+/* ======================================================================= */
+function createDotName(canvas, opts) {
+  opts = opts || {};
+  const TEXT = opts.text || "Alice Zhao";
+  const PLAY_INTRO = opts.playIntro !== false;   // default: full hero intro
+  const onReveal = typeof opts.onReveal === "function" ? opts.onReveal : null;
+
+  const ctx = canvas.getContext("2d");
+  const off = document.createElement("canvas");
+  const offCtx = off.getContext("2d", { willReadFrequently: true });
+
+  // Animation params come from tokens.css (single source of truth), with
+  // fallbacks in case the stylesheet hasn't applied.
+  const cssVars = getComputedStyle(document.documentElement);
+  const tok = (name, fallback) => (cssVars.getPropertyValue(name).trim() || fallback);
+  // Numeric tokens must be finite or the dot-grid loops below NaN-out and the
+  // hero ships blank. parseFloat of a malformed value ("auto", "calc(...)", an
+  // unresolved var()) is NaN, which tok()'s `|| fallback` does NOT catch (the
+  // string is non-empty), so guard the number explicitly here.
+  const num = (name, fallback) => {
+    const v = parseFloat(cssVars.getPropertyValue(name));
+    return Number.isFinite(v) && v > 0 ? v : fallback;
+  };
+  const CELL = num("--hero-cell", 12);                           // dot density (px)
+  const TRACKING = tok("--tracking-display", "-0.08em");         // letter-spacing
+  const DPR = Math.min(window.devicePixelRatio || 1, 2);
+
+  // progress: 0 = open dots (airy), 1 = solid letters (dots merged)
+  // Rest state is SOLID, so we ease toward 1, dip to dots, and back — a loop.
+  let dots = [];
+  let seedCount = 0;  // how many letters got a representative "seed" dot
+  let cssW = 0, cssH = 0;
+  let baseFontSize = 0;
+  let glyph = null;   // {font, x, y} so the mask can be re-rendered each frame
+  const OPEN_DILATE_K = 1.25;   // mask grows by CELL*this when dots are airy
+
+  // ---- lifecycle flags (declared up-front so every handler shares them) ----
+  let started = false;      // build() + boot has run once
+  let revealed = false;     // page content has been un-hidden
+  let finished = false;     // intro completed (or failsafe forced completion)
+  let idleRunning = false;  // the breathing idle loop is active (run at most once)
+  // Is the canvas on-screen? The hero is visible at load; the footer is below
+  // the fold, so it starts false and the IntersectionObserver flips it true
+  // when scrolled into view (which is also what starts its breathing loop).
+  let idleVisible = PLAY_INTRO;
+  let idleRAF = 0;          // rAF id for the idle loop, so it can be paused/resumed
+  let introStart = null;    // rAF timestamp when the intro began
+  const prefersReduce = window.matchMedia &&
+    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // per-frame mask canvas (crisp, optionally dilated by a stroke)
+  const mask = document.createElement("canvas");
+  const maskCtx = mask.getContext("2d");
+
+  // ---- build the dot lattice by sampling rendered glyphs ----
+  function build() {
+    cssW = canvas.clientWidth;
+
+    const weight = tok("--font-weight-black", "900");
+    const family = tok("--font-display", '"Satoshi", "Arial Black", Arial, sans-serif');
+
+    // Mid-animation the dots/clip-mask bulge OUTWARD past the glyph by up to
+    // `dilate = (1-e) * CELL * 1.25` (see draw()). Reserve that as a margin on
+    // every side so the expanded letters never clip; +1px safety.
+    const MARGIN = Math.ceil(CELL * 1.25) + 1;
+
+    // Scale the type to FILL the width INSIDE the margins: measure at a reference
+    // size, then scale so the rendered ink width equals (cssW - 2*MARGIN).
+    if ("letterSpacing" in offCtx) offCtx.letterSpacing = TRACKING;
+    const REF = 200;
+    offCtx.font = `${weight} ${REF}px ${family}`;
+    const m = offCtx.measureText(TEXT);
+    // actual ink width: advance width plus any right-side bearing of the last
+    // glyph (the "o" overhangs its advance, so measuring advance alone clips it).
+    const refW = (m.actualBoundingBoxRight !== undefined)
+      ? Math.max(m.width, m.actualBoundingBoxRight)
+      : m.width;
+    const availW = cssW - 2 * MARGIN;
+    let size = REF * (availW / refW);
+    baseFontSize = size;
+
+    // Measure the TRUE top extent of the ink at the real size, rather than
+    // guessing a cap-height fraction. The "i" tittle and ascenders rise above
+    // the cap line, so a fixed 0.72*size underestimated the top and clipped the
+    // tittle once the dots dilated outward. actualBoundingBoxAscent captures the
+    // tallest point of any glyph in the string; fall back generously if the
+    // metric is unavailable. "Alice Zhao" has no descenders, but reserve any
+    // measured descent too for safety.
+    offCtx.font = `${weight} ${size}px ${family}`;
+    const mm = offCtx.measureText(TEXT);
+    const ascent = (mm.actualBoundingBoxAscent > 0)
+      ? mm.actualBoundingBoxAscent : size * 0.80;
+    const descent = (mm.actualBoundingBoxDescent > 0)
+      ? mm.actualBoundingBoxDescent : 0;
+
+    // Band = top margin + measured ink height + bottom margin. The margins leave
+    // room for the dots to dilate above the tallest ink and below the feet so
+    // nothing clips, and the resting baseline still reads flat.
+    const capH = ascent + descent;
+    cssH = Math.round(MARGIN + capH + MARGIN);
+
+    // size the visible canvas (retina-aware)
+    canvas.width = cssW * DPR;
+    canvas.height = cssH * DPR;
+    canvas.style.height = cssH + "px";
+
+    // offscreen at same device resolution
+    off.width = canvas.width;
+    off.height = canvas.height;
+
+    offCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    offCtx.clearRect(0, 0, cssW, cssH);
+    offCtx.fillStyle = "#000";
+    offCtx.textBaseline = "alphabetic";
+    offCtx.textAlign = "left";
+    if ("letterSpacing" in offCtx) offCtx.letterSpacing = TRACKING;
+    offCtx.font = `${weight} ${size}px ${family}`;
+
+    const x = MARGIN;                 // left edge inset by the margin
+    const y = cssH - MARGIN;          // baseline sits above the bottom margin
+    offCtx.fillText(TEXT, x, y);
+    glyph = { font: offCtx.font, x, y };
+
+    mask.width = off.width;
+    mask.height = off.height;
+
+    // sample alpha into a grid
+    const img = offCtx.getImageData(0, 0, off.width, off.height).data;
+    const W = off.width;
+    dots = [];
+    // full radius is generous so neighbours overlap and completely fill the
+    // letter interior (no diagonal gaps); the glyph clip trims the overflow.
+    const maxR = CELL * 0.95;
+
+    for (let gy = CELL / 2; gy < cssH; gy += CELL) {
+      for (let gx = CELL / 2; gx < cssW; gx += CELL) {
+        let cover = 0, n = 0;
+        const px0 = Math.floor((gx - CELL / 2) * DPR);
+        const py0 = Math.floor((gy - CELL / 2) * DPR);
+        const span = Math.max(1, Math.floor(CELL * DPR));
+        for (let yy = 0; yy < span; yy += 2) {
+          for (let xx = 0; xx < span; xx += 2) {
+            const px = px0 + xx, py = py0 + yy;
+            if (px < 0 || py < 0 || px >= W || py >= off.height) continue;
+            cover += img[(py * W + px) * 4 + 3] / 255;
+            n++;
+          }
+        }
+        if (!n) continue;
+        const c = cover / n;
+        if (c < 0.05) continue;
+        // Open (airy) dot size is quantized into THREE discrete sizes so the
+        // halftone reads as diverse — small / medium / large — instead of one
+        // uniform interior dot. Coverage drives it (faint edges -> small), but
+        // a deterministic per-cell jitter spreads the dense interior cells
+        // across all three sizes too (they'd otherwise all be c≈1 -> identical).
+        // base < CELL/2 keeps even the largest open dot smaller than half the
+        // grid spacing, so neighbouring dots stay separated with a clear gap.
+        const base = (CELL / 2) * 0.9;
+        const sizes = [base * 0.5, base * 0.75, base * 1.0];   // S / M / L
+        // stable hash of the grid position -> 0..1 (no Math.random; consistent)
+        const h = ((Math.imul(gx | 0, 73856093) ^ Math.imul(gy | 0, 19349663)) >>> 0) / 4294967295;
+        const t = Math.min(1, c * (0.7 + 0.6 * h));            // coverage + jitter
+        const idx = t < 0.5 ? 0 : t < 0.82 ? 1 : 2;
+        const open = sizes[idx];
+        // full = large enough that neighbours overlap and fill the glyph solid.
+        dots.push({ x: gx, y: gy, open: open, full: maxR, seed: false, order: 0 });
+      }
+    }
+
+    assignLetterSeeds();
+  }
+
+  // Flag ONE representative "seed" dot per letter, ordered left-to-right. The
+  // load intro lights these up one by one.
+  //
+  // Letter x-centres are derived deterministically from the font itself with
+  // measureText on the cumulative substrings (e.g. "A", "Al", "Ali", ...), so
+  // each glyph's advance gives an exact centre. This is far more robust than
+  // pixel scanning: it can't split a two-leg "A" into two columns or merge a
+  // tight pair, and it skips the real space automatically (a space advances
+  // the pen but is not a letter). Each dot is then bucketed to its nearest
+  // letter centre, and the seed is the dot closest to that bucket's own 2D
+  // centroid, so the chosen dot sits in the body of the letter, not on a
+  // shared baseline row.
+  function assignLetterSeeds() {
+    seedCount = 0;
+    for (const d of dots) { d.seed = false; d.order = 0; }
+    if (!dots.length) return;
+
+    // Per-letter centre x in CSS px, in glyph space (offCtx still holds the
+    // build() font + letterSpacing). Skip whitespace characters.
+    const chars = TEXT.split("");
+    const centres = [];   // { x, ci } left-to-right, letters only
+    let prevW = 0;
+    for (let i = 0; i < chars.length; i++) {
+      const upto = offCtx.measureText(TEXT.slice(0, i + 1)).width;
+      if (chars[i].trim() !== "") {
+        // centre of this glyph = midpoint of its advance band, offset by the
+        // left inset the text was drawn at.
+        centres.push({ x: glyph.x + (prevW + upto) / 2, order: centres.length });
+      }
+      prevW = upto;
+    }
+    if (!centres.length) return;
+
+    // Bucket each dot to the nearest letter centre by x.
+    const buckets = centres.map(() => []);
+    for (const d of dots) {
+      let bi = 0, bd = Infinity;
+      for (let k = 0; k < centres.length; k++) {
+        const dx = Math.abs(d.x - centres[k].x);
+        if (dx < bd) { bd = dx; bi = k; }
+      }
+      buckets[bi].push(d);
+    }
+
+    // For each non-empty bucket, seed the dot nearest the bucket's 2D centroid.
+    buckets.forEach((bucket, k) => {
+      if (!bucket.length) return;
+      let mx = 0, my = 0;
+      for (const d of bucket) { mx += d.x; my += d.y; }
+      mx /= bucket.length; my /= bucket.length;
+      let best = null, bestD = Infinity;
+      for (const d of bucket) {
+        const dist = (d.x - mx) * (d.x - mx) + (d.y - my) * (d.y - my);
+        if (dist < bestD) { bestD = dist; best = d; }
+      }
+      if (best) { best.seed = true; best.order = k; seedCount++; }
+    });
+  }
+
+  function easeInOut(t){ return t < .5 ? 2*t*t : 1 - Math.pow(-2*t+2,2)/2; }
+  function easeOut(t){ return 1 - Math.pow(1 - t, 3); }   // cubic ease-out
+
+  // Clip whatever is already drawn on `ctx` to the letter outline with a CRISP
+  // mask. `dilate` grows the glyph outward (stroked) so small edge dots survive
+  // whole and round; pass 0 for the exact, razor-clean letter edge. Shared by
+  // the morph (draw) and the load intro so they mask identically.
+  function clipToGlyph(dilate) {
+    maskCtx.setTransform(1, 0, 0, 1, 0, 0);
+    maskCtx.clearRect(0, 0, mask.width, mask.height);
+    maskCtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    maskCtx.fillStyle = "#000";
+    maskCtx.strokeStyle = "#000";
+    maskCtx.lineJoin = "round";
+    maskCtx.font = glyph.font;
+    maskCtx.textAlign = "left";
+    maskCtx.textBaseline = "alphabetic";
+    if ("letterSpacing" in maskCtx) maskCtx.letterSpacing = TRACKING;
+    maskCtx.fillText(TEXT, glyph.x, glyph.y);
+    if (dilate > 0.1) {
+      // stroking the text grows the filled region outward by lineWidth/2
+      maskCtx.lineWidth = dilate * 2;
+      maskCtx.strokeText(TEXT, glyph.x, glyph.y);
+    }
+    ctx.save();
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.setTransform(1, 0, 0, 1, 0, 0);          // mask is device-res already
+    ctx.drawImage(mask, 0, 0);
+    ctx.restore();
+  }
+
+  // p is RAW 0..1 progress; `eased` is the easing to apply (default easeInOut
+  // for the breathing loop's symmetric feel). The load merge passes easeOut so
+  // the dots start merging immediately instead of crawling out of an ease-in.
+  function draw(p, eased) {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.fillStyle = "#111";
+    const e = (eased || easeInOut)(p);
+
+    // Purely geometric morph: every dot grows from its open (airy) radius to a
+    // full radius that overlaps its neighbours. No alpha fading, no separate
+    // glyph layer — the letters appear because the dots merge.
+    ctx.beginPath();
+    for (const d of dots) {
+      const r = d.open + (d.full - d.open) * e;
+      if (r <= 0.15) continue;
+      ctx.moveTo(d.x + r, d.y);
+      ctx.arc(d.x, d.y, r, 0, Math.PI * 2);
+    }
+    ctx.fill();
+
+    // open -> dilated mask; solid -> exact edge. Dots stay sharp circles; only
+    // the clip boundary moves.
+    clipToGlyph((1 - e) * CELL * OPEN_DILATE_K);
+  }
+
+  // Paint the dot field in its AIRY state (dilated glyph mask, round dots),
+  // with a per-dot radius from getR. Used by the load intro's seed + fill
+  // phases; the merge phase hands off to draw(p). Keeping the airy dilation
+  // here means a single seed dot renders as a whole, round dot.
+  function paintOpenField(getR) {
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    ctx.fillStyle = "#111";
+    ctx.beginPath();
+    for (let i = 0; i < dots.length; i++) {
+      const r = getR(dots[i]);
+      if (r <= 0.15) continue;
+      ctx.moveTo(dots[i].x + r, dots[i].y);
+      ctx.arc(dots[i].x, dots[i].y, r, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    clipToGlyph(CELL * OPEN_DILATE_K);
+  }
+
+  // ---- idle loop: rest solid, breathe to dots and back ----
+  // We hold on solid, drop to dots, hold briefly, return to solid.
+  let t0 = null;
+  let lastNow = 0;        // last frame's timestamp, to detect a paused tab
+  const PERIOD = 1800;    // ms for the solid -> dots -> solid morph
+  const HOLD_SOLID = 900; // ms resting as solid letters at the start of each loop
+
+  function frame(now) {
+    // After a backgrounded tab (rAF paused), `now` jumps far ahead of t0; the
+    // modulo would then land on an arbitrary phase and snap. Re-anchor on any
+    // gap larger than a couple of frames so the breath resumes from solid.
+    if (t0 === null || now - lastNow > 250) t0 = now;
+    lastNow = now;
+    // Skip the opening hold on the FIRST cycle: the load intro just resolved the
+    // name, so holding solid again for 900ms reads as the animation freezing.
+    // Start mid-PERIOD so the breath flows straight out of the resolve, then let
+    // every later cycle use the full hold-then-breathe rhythm.
+    const elapsedRaw = now - t0;
+    const elapsed = (elapsedRaw + HOLD_SOLID) % (HOLD_SOLID + PERIOD);
+
+    let p;
+    if (elapsed < HOLD_SOLID) {
+      p = 1;                       // rest solid (letters) — start of loop
+    } else {
+      const t = (elapsed - HOLD_SOLID) / PERIOD; // 0..1
+      p = Math.abs(1 - 2 * t);     // 1 -> 0 -> 1 (solid -> dots -> solid)
+    }
+    draw(p);
+    if (idleVisible) idleRAF = requestAnimationFrame(frame);
+    else idleRAF = 0;              // pause when the hero is off-screen
+  }
+  function startIdleLoop() {
+    if (idleRunning) return;       // never spawn a second breathing loop
+    idleRunning = true;
+    t0 = null;
+    if (idleVisible) idleRAF = requestAnimationFrame(frame);
+  }
+
+  // ---- load intro: one dot per letter, then fill, then merge to solid ----
+  // Phases (timeline in ms):
+  //   SEED : each letter's representative dot pops in, one by one, L->R.
+  //   FILL : the rest of the dots fade in to complete the airy halftone.
+  //   MERGE: the existing geometric morph runs once (dots -> solid name).
+  // The page content reveals at the start of MERGE (the name is legible by
+  // then), and the idle breathing loop takes over when MERGE completes.
+  const SEED_STAGGER = 150;   // ms between each letter's seed dot
+  const SEED_POP = 260;       // ms for one seed dot to grow in
+  const FILL_DUR = 460;       // ms for the remaining dots to arrive
+  const MERGE_DUR = 760;      // ms for dots -> solid
+
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    if (onReveal) onReveal();   // hero un-hides the page; footer passes nothing
+  }
+
+  function intro(now) {
+    // If the failsafe already finished us (e.g. tab was backgrounded, rAF
+    // paused, the 4s timer fired), don't resurrect the animation on resume.
+    if (finished) return;
+    if (introStart === null) introStart = now;
+    const t = now - introStart;
+
+    const seedTotal = Math.max(1, seedCount) * SEED_STAGGER + SEED_POP;
+    const fillStart = seedTotal;
+    const mergeStart = fillStart + FILL_DUR;
+    const mergeEnd = mergeStart + MERGE_DUR;
+
+    if (t < mergeStart) {
+      // SEED + FILL: draw the airy field. Seeds grow on their own stagger;
+      // non-seed dots stay at 0 until FILL, then ease in together.
+      const fillP = t < fillStart
+        ? 0
+        : easeOut(Math.min(1, (t - fillStart) / FILL_DUR));
+      paintOpenField((d) => {
+        if (d.seed) {
+          const local = (t - d.order * SEED_STAGGER) / SEED_POP;
+          if (local <= 0) return 0;
+          return d.open * easeOut(Math.min(1, local));
+        }
+        return d.open * fillP;
+      });
+      // Reveal the page content partway through fill, under the cover of the
+      // still-arriving dots, so the content fade-in isn't visually tied to the
+      // merge. reveal() self-guards to run once.
+      if (t > fillStart + FILL_DUR * 0.35) reveal();
+      requestAnimationFrame(intro);
+      return;
+    }
+
+    if (t < mergeEnd) {
+      // MERGE: reuse the geometric morph, 0 (airy) -> 1 (solid). Content is
+      // already revealed by now, so the merge runs uninterrupted.
+      reveal();                    // safety: ensure revealed even if fill was skipped
+      // raw progress + easeOut: fast, immediate merge out of the formed dots
+      // (the old easeInOut, double-applied via draw(), made the first ~130ms
+      // nearly motionless — the "pause" after the letters formed).
+      draw((t - mergeStart) / MERGE_DUR, easeOut);
+      requestAnimationFrame(intro);
+      return;
+    }
+
+    // settle on solid, then hand off to the breathing idle loop
+    draw(1);
+    finished = true;             // intro completed; the 4s backstop is now a no-op
+    startIdleLoop();
+  }
+
+  // Reduced motion / failsafe: no choreography, just the solid name + full page.
+  function showSolidImmediately() {
+    if (dots.length) draw(1);
+    reveal();
+  }
+
+  // Last-resort finish: if the intro never completes (backgrounded tab, a font
+  // that never resolves, a stalled rAF clock), don't just reveal the page with
+  // a half-drawn hero — force the solid name and hand off to the idle loop so
+  // the name is always legible once content is shown.
+  function forceFinish() {
+    if (finished) return;
+    finished = true;
+    if (!started) start();        // make sure the field was built at least once
+    if (dots.length) draw(1);     // solid resting name
+    reveal();
+    // Only breathe if motion is allowed; reduced-motion rests on the solid name.
+    if (!prefersReduce) startIdleLoop();
+  }
+
+  // ---- boot ----
+  function start() {
+    if (started) return;
+    started = true;
+    build();
+    if (!PLAY_INTRO) {
+      // Footer mode: no load choreography. Rest on the solid name and breathe
+      // only while on-screen (the IntersectionObserver gates the actual loop).
+      // Reduced motion rests on the solid name and never breathes.
+      if (dots.length) draw(1);
+      finished = true;             // no intro to run; the 4s backstop is a no-op
+      if (!prefersReduce && dots.length) startIdleLoop();
+      return;
+    }
+    if (prefersReduce || !dots.length) {
+      showSolidImmediately();      // honor reduced motion; never animate
+    } else {
+      requestAnimationFrame(intro);
+    }
+  }
+
+  // Start once fonts are ready so the glyph metrics are correct; but never wait
+  // forever — a font that never resolves (or a backgrounded tab) must not leave
+  // the page blank. Fall back to start() after a short timeout, and force the
+  // reveal as a last resort even if the rAF loop never runs.
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(start);
+  }
+  setTimeout(start, 700);          // fonts-ready usually wins; this is a backstop
+  setTimeout(forceFinish, 4000);   // never leave the page hidden or the hero half-drawn
+
+  let rt;
+  window.addEventListener("resize", () => {
+    clearTimeout(rt);
+    rt = setTimeout(() => {
+      build();                       // re-fit the lattice to the new width
+      // If a resize lands mid-intro, build() just swapped dots[] and may have
+      // changed seedCount; re-anchor the intro clock so the freshly seeded
+      // field plays its seed/fill from the top instead of phase-jumping under
+      // the stale elapsed time.
+      if (started && !finished) introStart = null;
+    }, 120);
+  });
+
+  // Pause the breathing idle loop when the canvas scrolls off-screen — rAF
+  // keeps firing for off-screen elements in a foreground tab, so without this
+  // the full-canvas redraw would burn CPU/battery for the life of the page.
+  // This is ALSO what kicks the footer name to life: it starts off-screen
+  // (idleVisible=false), and the first intersection flips it on and runs the
+  // breathing loop. The footer marks itself finished in start(), so the loop
+  // is already armed (idleRunning) and just needs a frame requested here.
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver((entries) => {
+      idleVisible = entries[0].isIntersecting;
+      if (idleVisible && idleRunning && !idleRAF) {
+        t0 = null;                   // resume cleanly from a solid rest
+        idleRAF = requestAnimationFrame(frame);
+      }
+    }, { threshold: 0 });
+    io.observe(canvas);
+  }
+
+  return { build };
+}
+
+/* ---- Instantiate the two halftone names ------------------------------- */
+(() => {
+  // HERO: full load intro (seed -> fill -> merge), and it owns the page reveal.
+  const hero = document.getElementById("hero-canvas");
+  if (hero) {
+    createDotName(hero, {
+      text: "Alice Zhao",
+      playIntro: true,
+      onReveal: () => {
+        const de = document.documentElement;
+        de.classList.remove("preloading");
+        de.classList.add("revealed");
+      },
+    });
+  }
+
+  // FOOTER: same engine, breathe-only. No intro, no page-reveal; it rests solid
+  // and breathes once scrolled into view (gated by its IntersectionObserver).
+  const footer = document.getElementById("footer-canvas");
+  if (footer) {
+    createDotName(footer, { text: "Alice Zhao", playIntro: false });
+  }
+})();
+</script>
+
+<script>
+/* Resurfacing header (dock): show the compact fixed nav when the user scrolls
+   UP, hide it when scrolling DOWN or when near the very top (where the in-flow
+   page header is already on screen). Scroll work is coalesced to one read per
+   animation frame so the listener stays cheap. Respects reduced motion via CSS
+   (the dock snaps instead of sliding); the JS logic is identical either way. */
+(() => {
+  const dock = document.querySelector(".dock");
+  if (!dock) return;
+
+  // Below this scroll position the real header is still visible, so the dock
+  // stays hidden no matter the direction. Roughly one viewport-header height.
+  const TOP_GUARD = 240;
+  // Ignore sub-pixel / jittery deltas so a trackpad's tiny reversals don't
+  // flicker the dock open and shut.
+  const DELTA = 6;
+
+  let lastY = window.pageYOffset || 0;
+  let shown = false;
+  let queued = false;
+
+  function setShown(next) {
+    if (shown === next) return;
+    shown = next;
+    dock.classList.toggle("dock-show", next);
+    // expose to AT only while it's actually on screen
+    dock.setAttribute("aria-hidden", next ? "false" : "true");
+  }
+
+  function update() {
+    queued = false;
+    const y = window.pageYOffset || 0;
+    const dy = y - lastY;
+
+    if (y <= TOP_GUARD) {
+      setShown(false);              // real header territory — never dock here
+    } else if (dy < -DELTA) {
+      setShown(true);               // scrolling up — resurface the nav
+    } else if (dy > DELTA) {
+      setShown(false);              // scrolling down — get out of the way
+    }
+    // tiny deltas: leave the current state untouched
+    lastY = y;
+  }
+
+  window.addEventListener("scroll", () => {
+    if (!queued) { queued = true; requestAnimationFrame(update); }
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
