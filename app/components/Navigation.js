@@ -1,20 +1,21 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
 
 const CENTER_LINKS = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/#work" },
   { label: "About", href: "/about" },
-  { label: "Lab", href: "/lab", hideMobile: true },
+  { label: "Lab", href: "/lab" },
 ];
 
 const SOCIAL_LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/liangzhaoux/", external: true },
-  { label: "Email", href: "mailto:liangzhao0801@gmail.com" },
   { label: "Resume", href: "https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view", external: true },
+  { label: "Email", href: "mailto:liangzhao0801@gmail.com" },
 ];
 
 function SocialLinks() {
@@ -27,14 +28,21 @@ function SocialLinks() {
   );
 }
 
-export default function Navigation({ sections }) {
+export default function Navigation({ title, sections }) {
+  const pathname = usePathname();
   const hasSections = sections && sections.length > 0;
 
   const [activeSection, setActiveSection] = useState(null);
-  const [sectionDropOpen, setSectionDropOpen] = useState(false);
-  const [hidden, setHidden] = useState(false);     // resurfacing: retract on scroll-down
-  const [floating, setFloating] = useState(false); // frosted panel once scrolled off the top
-  const sectionDropRef = useRef(null);
+  const [sectionOpen, setSectionOpen] = useState(false); // mobile project panel
+  const [menuOpen, setMenuOpen] = useState(false);       // mobile menu panel
+  const [hidden, setHidden] = useState(false);
+  const [floating, setFloating] = useState(false);
+
+  const navName = CENTER_LINKS.find((l) => l.href === pathname)?.label;
+  const pageName = navName || title || "";
+  // Which center link is "active" in the Menu panel: projects live under Work.
+  const activeNav = hasSections ? "Work" : navName || null;
+  const anyOpen = sectionOpen || menuOpen;
 
   // Scroll-spy for the project section nav.
   useEffect(() => {
@@ -48,10 +56,7 @@ export default function Navigation({ sections }) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= vh * 0.4) current = id;
       }
-      setActiveSection((prev) => {
-        if (prev !== current) setSectionDropOpen(false);
-        return current;
-      });
+      setActiveSection(current);
       ticking = false;
     }
     function onScroll() {
@@ -62,8 +67,7 @@ export default function Navigation({ sections }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasSections, sections]);
 
-  // Resurfacing header: solid at the very top, hide on scroll-down,
-  // reappear (frosted) on scroll-up.
+  // Resurfacing header: solid at top, hide on scroll-down, reappear on scroll-up.
   useEffect(() => {
     const TOP_GUARD = 80;
     const DELTA = 6;
@@ -86,15 +90,19 @@ export default function Navigation({ sections }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the mobile section dropdown on outside click.
+  // Lock body scroll while the full-viewport menu is open.
   useEffect(() => {
-    function onClick(e) {
-      if (sectionDropRef.current && !sectionDropRef.current.contains(e.target)) {
-        setSectionDropOpen(false);
-      }
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
+  // Close both panels when resizing up to desktop.
+  useEffect(() => {
+    function onResize() {
+      if (window.innerWidth > 900) { setSectionOpen(false); setMenuOpen(false); }
     }
-    document.addEventListener("mousedown", onClick);
-    return () => document.removeEventListener("mousedown", onClick);
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
   }, []);
 
   function scrollToSection(id) {
@@ -108,83 +116,108 @@ export default function Navigation({ sections }) {
     window.scrollTo({ top: window.scrollY + rect.top - navH, behavior: "smooth" });
   }
 
+  const toggleSection = () => { setMenuOpen(false); setSectionOpen((o) => !o); };
+  const toggleMenu = () => { setSectionOpen(false); setMenuOpen((o) => !o); };
+
   const activeLabel = hasSections
     ? (sections.find((s) => s.id === activeSection) || sections[0]).navLabel
     : null;
 
-  const navClass = `${styles.nav}${hidden ? ` ${styles.hidden}` : ""}${floating ? ` ${styles.floating}` : ""}`;
+  const navClass = `${styles.nav}${hidden && !anyOpen ? ` ${styles.hidden}` : ""}${floating ? ` ${styles.floating}` : ""}`;
 
   return (
-    <header className={navClass}>
-      {/* Left slot: project section nav, or the brand line on every other page. */}
-      {hasSections ? (
-        <div className={styles.sectionNav}>
-          {sections.map((sec, i) => (
-            <span key={sec.id} className={styles.sectionItem}>
-              <button
-                className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
-                onClick={() => scrollToSection(sec.id)}
-              >
-                {sec.navLabel}
-              </button>
-              {i < sections.length - 1 && <span className={styles.sectionSep}>/</span>}
-            </span>
-          ))}
-        </div>
-      ) : (
-        <div className={styles.brand}>Alice Zhao is a product designer.</div>
-      )}
-
-      <nav className={styles.center} aria-label="Primary">
-        {CENTER_LINKS.map((l) => (
-          <Link
-            key={l.label}
-            href={l.href}
-            className={l.hideMobile ? styles.hideMobile : undefined}
-          >
-            {l.label}
-          </Link>
-        ))}
-      </nav>
-
-      {/* Mobile-only: the section nav collapses to a dropdown, between the
-          center nav and Contact. */}
-      {hasSections && (
-        <div className={styles.sectionDrop} ref={sectionDropRef}>
-          <button
-            className={styles.sectionDropTrigger}
-            onClick={() => setSectionDropOpen((o) => !o)}
-          >
-            <span>{activeLabel}</span>
-            <span className={`${styles.sectionDropArrow}${sectionDropOpen ? ` ${styles.sectionDropArrowOpen}` : ""}`}>▾</span>
-          </button>
-          {sectionDropOpen && (
-            <div className={styles.sectionDropList}>
-              {sections.map((sec) => (
+    <>
+      <header className={navClass}>
+        {/* DESKTOP left: section nav (project pages) or brand line. */}
+        {hasSections ? (
+          <div className={styles.sectionNav}>
+            {sections.map((sec, i) => (
+              <span key={sec.id} className={styles.sectionItem}>
                 <button
-                  key={sec.id}
-                  className={`${styles.sectionDropItem}${activeSection === sec.id ? ` ${styles.sectionDropItemActive}` : ""}`}
-                  onClick={() => { scrollToSection(sec.id); setSectionDropOpen(false); }}
+                  className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
+                  onClick={() => scrollToSection(sec.id)}
                 >
                   {sec.navLabel}
                 </button>
-              ))}
-            </div>
+                {i < sections.length - 1 && <span className={styles.sectionSep}>/</span>}
+              </span>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.brand}>Alice Zhao is a product designer.</div>
+        )}
+
+        <nav className={styles.center} aria-label="Primary">
+          {CENTER_LINKS.map((l) => (
+            <Link key={l.label} href={l.href}>{l.label}</Link>
+          ))}
+        </nav>
+
+        <nav className={styles.links} aria-label="Social">
+          <SocialLinks />
+        </nav>
+
+        {/* MOBILE bar: left = project-nav trigger or page name; right = Menu. */}
+        <div className={styles.mobileLeft}>
+          {hasSections ? (
+            <button className={styles.mTrigger} onClick={toggleSection}>
+              <span>{activeLabel}</span>
+              <span className={`${styles.caret}${sectionOpen ? ` ${styles.caretOpen}` : ""}`}>▾</span>
+            </button>
+          ) : (
+            <span className={styles.mPageName}>{pageName}</span>
           )}
+        </div>
+        <button className={styles.menuTrigger} onClick={toggleMenu}>
+          {menuOpen ? "Close" : "Menu"}
+        </button>
+      </header>
+
+      {/* MOBILE project panel — slides down from behind the header. */}
+      {hasSections && (
+        <div
+          className={`${styles.sectionPanel}${sectionOpen ? ` ${styles.open}` : ""}`}
+          inert={!sectionOpen}
+        >
+          {sections.map((sec) => (
+            <button
+              key={sec.id}
+              className={`${styles.panelItem}${activeSection === sec.id ? ` ${styles.panelItemActive}` : ""}`}
+              onClick={() => { scrollToSection(sec.id); setSectionOpen(false); }}
+            >
+              {sec.navLabel}
+            </button>
+          ))}
         </div>
       )}
 
-      <nav className={styles.links} aria-label="Social">
-        <SocialLinks />
-      </nav>
-
-      {/* Mobile-only: the three social links collapse into a Contact disclosure. */}
-      <details className={styles.contact}>
-        <summary aria-label="Contact menu">Contact</summary>
-        <div className={styles.contactMenu}>
-          <SocialLinks />
+      {/* MOBILE menu panel — slides down, full viewport. */}
+      <div
+        className={`${styles.menuPanel}${menuOpen ? ` ${styles.open}` : ""}`}
+        inert={!menuOpen}
+      >
+        <nav className={styles.menuNav} aria-label="Primary">
+            {CENTER_LINKS.map((l) => (
+              <Link
+                key={l.label}
+                href={l.href}
+                className={`${styles.menuItem}${activeNav === l.label ? ` ${styles.menuItemActive}` : ""}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+          <div className={styles.menuContacts}>
+            {SOCIAL_LINKS.map((l) =>
+              l.external ? (
+                <a key={l.label} href={l.href} target="_blank" rel="noreferrer">{l.label} →</a>
+              ) : (
+                <a key={l.label} href={l.href}>{l.label} →</a>
+              )
+            )}
+          </div>
         </div>
-      </details>
-    </header>
+    </>
   );
 }

@@ -1,9 +1,11 @@
 /* ===========================================================================
    Navigation — new-style site-wide header.
-   A single fixed header (--nav-height tall): solid at the top, hides on
-   scroll-down, resurfaces on a frosted-glass panel on scroll-up. 12-column
-   row: left slot (brand line, or section nav on project pages) · center nav ·
-   social links. Mobile collapses to: center nav · section dropdown · Contact.
+   Desktop: a single fixed 12-col header (--nav-height tall) — left slot
+   (brand line, or section nav on project pages) · center nav · social links.
+   It hides on scroll-down and resurfaces on scroll-up. Background is solid
+   white (no glass).
+   Mobile (<=900px): two triggers — left (project-nav dropdown, or page name)
+   and right (Menu) — opening full-width panels.
    =========================================================================== */
 
 .nav {
@@ -20,21 +22,18 @@
   padding: 0 var(--space-pad);
   background: var(--bg);
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              background 0.2s, border-color 0.2s;
+              border-color 0.2s;
 }
 
-.nav.hidden {
-  transform: translateY(-100%);
-}
+.nav.hidden { transform: translateY(-100%); }
 
-.nav.floating {
-  background: var(--dock-glass-bg);
-  -webkit-backdrop-filter: blur(var(--dock-glass-blur));
-  backdrop-filter: blur(var(--dock-glass-blur));
-}
+/* Subtle separation once scrolled off the top (no glass).
+.nav.floating { border-bottom: 1px solid var(--border); } */
 
 @media (prefers-reduced-motion: reduce) {
-  .nav { transition: none; }
+  .nav,
+  .sectionPanel,
+  .menuPanel { transition: none; }
 }
 
 /* --- Shared link styling -------------------------------------------------- */
@@ -45,14 +44,14 @@
   font-weight: var(--font-weight-regular);
   transition: color 0.2s;
 }
+.nav button { font-family: inherit; }   /* buttons don't inherit the page font */
 .center a:hover,
-.links a:hover,
-.contactMenu a:hover {
+.links a:hover {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
 
-/* --- Brand line (non-project pages) --------------------------------------- */
+/* --- Brand line (non-project desktop) ------------------------------------- */
 .brand {
   grid-column: 1 / 6;
   font-size: var(--font-size-xxs-next);
@@ -76,7 +75,7 @@
   gap: var(--space-nav-gap);
 }
 
-/* --- Section nav (project pages, in the left slot) ------------------------ */
+/* --- Section nav (project pages, desktop, in the left slot) --------------- */
 .sectionNav {
   grid-column: 1 / 7;
   display: flex;
@@ -114,87 +113,129 @@
   font-size: var(--font-size-xxs-next);
 }
 
-/* --- Mobile section dropdown (hidden on desktop) -------------------------- */
-.sectionDrop { display: none; position: relative; }
-.sectionDropTrigger {
+/* --- Mobile triggers (hidden on desktop) --------------------------------- */
+.mobileLeft,
+.menuTrigger { display: none; }
+
+.mTrigger {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
   color: var(--ink);
-  font-size: var(--font-size-xxs-next);
-  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
   white-space: nowrap;
 }
-.sectionDropArrow { transition: transform 0.2s; }
-.sectionDropArrowOpen { transform: rotate(180deg); }
-.sectionDropList {
-  position: absolute;
-  top: calc(100% + 6px);
-  left: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  min-width: 180px;
-  z-index: 1;
+.mPageName {
+  color: var(--ink);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-bold);
 }
-.sectionDropItem {
+.menuTrigger {
   background: none;
   border: none;
   cursor: pointer;
-  text-align: left;
-  padding: 10px 14px;
-  color: var(--muted);
-  font-size: var(--font-size-xxs-next);
-  white-space: nowrap;
-  transition: color 0.15s, background 0.15s;
-}
-.sectionDropItem:hover {
+  padding: 0;
   color: var(--ink);
-  background: var(--border);
-}
-.sectionDropItemActive { color: var(--ink); }
-
-/* --- Mobile Contact disclosure (hidden on desktop) ------------------------ */
-.contact { display: none; position: relative; }
-.contact summary {
-  list-style: none;
-  cursor: pointer;
-  color: var(--ink);
-  font-size: var(--font-size-xxs-next);
+  font-size: var(--font-size-m);
   font-weight: var(--font-weight-regular);
 }
-.contact summary::-webkit-details-marker { display: none; }
-.contactMenu {
-  position: absolute;
-  top: calc(100% + 6px);
-  right: 0;
-  background: var(--bg);
-  border: 1px solid var(--border);
+.caret { font-size: 0.55em; transition: transform 0.2s; }
+.caretOpen { transform: rotate(180deg); }
+
+/* --- Mobile panels (hidden on desktop) ----------------------------------- */
+.sectionPanel,
+.menuPanel { display: none; }
+
+.panelItem,
+.menuItem {
   display: flex;
-  flex-direction: column;
-  min-width: 150px;
-  z-index: 1;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: var(--ink);
+  font-size: var(--font-size-m);
+  font-weight: var(--font-weight-light);
+  text-decoration: none;
+  white-space: nowrap;
 }
-.contactMenu a { padding: 10px 14px; }
-.contactMenu a + a { border-top: 1px solid var(--border); }
+/* Filled square marks the active item (no slot reserved on the others). */
+.panelItemActive::before,
+.menuItemActive::before {
+  content: "";
+  flex: none;
+  width: 9px;
+  height: 9px;
+  background: var(--ink);
+}
+
+.menuContacts a {
+  color: var(--ink);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  text-decoration: none;
+}
+.menuContacts a:hover { text-decoration: underline; text-underline-offset: 3px; }
 
 /* --- Mobile layout -------------------------------------------------------- */
 @media (max-width: 900px) {
   .nav {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    align-items: center;
   }
+  .sectionNav,
   .brand,
-  .links,
-  .sectionNav { display: none; }
-  .sectionDrop,
-  .contact { display: block; }
-  /* Lab drops off the center nav on mobile; Home / Work / About remain. */
-  .hideMobile { display: none; }
+  .center,
+  .links { display: none; }
+  .mobileLeft { display: flex; }
+  .menuTrigger { display: block; }
+
+  .sectionPanel,
+  .menuPanel {
+    display: flex;
+    position: fixed;
+    top: var(--nav-height);
+    left: 0;
+    right: 0;
+    z-index: calc(var(--z-header) - 1);   /* slides out from behind the header */
+    background: var(--bg);
+    padding: 1.5rem var(--space-pad);
+    transform: translateY(-100%);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .sectionPanel.open,
+  .menuPanel.open { transform: translateY(0); }
+
+  /* Project panel: auto height, list left-aligned. */
+  .sectionPanel {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.1rem;
+  }
+
+  /* Menu panel: full viewport, nav at top (right), contacts pinned bottom. */
+  .menuPanel {
+    bottom: 0;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .menuNav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.9rem;
+  }
+  .menuContacts {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1.25rem;
+  }
 }

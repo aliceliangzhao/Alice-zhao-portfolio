@@ -104,7 +104,7 @@
   --space-pad-mobile: 2.5rem;
   --space-gap: 20px;                /* grid column gap */
   --space-nav-height: 3.75rem;      /* main nav bar height */
-  --space-nav-height-mobile: 2.5rem;
+  --space-nav-height-mobile: 3rem;
   --space-hero-top: 6.25rem;        /* gap above the hero */
 
   /* ---- Legacy spacing aliases (TEMPORARY, migrate away) ---- */
