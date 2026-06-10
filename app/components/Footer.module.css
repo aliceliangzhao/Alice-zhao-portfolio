@@ -1,15 +1,56 @@
+/* Footer — the closing panel: the name set huge as a halftone specimen,
+   bracketed by hairline rules (full-bleed), with a meta row beneath. */
+
 .footer {
-  border-top: 1px solid var(--ink);
-  padding: 12px var(--page-gutter);
-  display: flex;
-  justify-content: space-between;
-  font-size: var(--t-label);
-  color: var(--ink);
-  transition: border-color 0.2s, color 0.2s;
+  margin-top: var(--space-footer-top);
 }
 
+/* Name band: full-bleed, bracketed top and bottom by a hairline rule. */
+.nameBand {
+  border-top: 1px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  padding: clamp(8px, 1.2vw, 16px) 0;
+}
+.nameCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Meta row: copyright left (muted), links right. Re-applies the page gutters. */
+.metaRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: clamp(8px, 2vw, 24px);
+  padding: var(--space-footer-y) var(--space-pad);
+  font-size: var(--font-size-xxs-next);
+}
+.copy {
+  margin: 0;
+  font-size: inherit;   /* else the global `p` rule forces it to body size */
+  color: var(--ink);
+}
+.legal {
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(14px, 1.6vw, 28px);
+}
+.metaRow a {
+  color: var(--ink);
+  text-decoration: none;
+}
+.metaRow a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Mobile: copyright on top, links beneath, both left-aligned. */
 @media (max-width: 900px) {
-  .footer {
-    padding: 20px 24px;
+  .metaRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }

@@ -24,6 +24,32 @@ Restore point tag: **`v1-cartography`** → commit `8943d67`.
 After checking out `main` or the tag, return to the redesign with
 `git checkout style-v2`.
 
+### Card-motion homepage (before the structured-homepage rework)
+
+The current scroll/hover-motion homepage is preserved at the tag
+**`homepage-card-v1`** (commit `4428e6b`) — the card homepage *in the current
+codebase* (new nav + tokens, original `HomepageScroll`). Use this to revisit the
+motion after the homepage is reworked.
+
+- **See it live:** `git checkout homepage-card-v1` then `npm run dev`.
+- The files that make up the card motion: `app/components/HomepageScroll.js` and
+  `.module.css`, `app/components/WaveBackground.js/.css`, the `.hover-card` rule
+  in `app/globals.css`, and the card content in `app/data/projects.js`.
+
+### ⚠️ These tags are LOCAL — back them up to GitHub
+
+`v1-cartography` and `homepage-card-v1` exist only on this machine until pushed.
+A lost/reformatted laptop would lose them. To back them up to the remote:
+
+```sh
+git push origin v1-cartography
+git push origin homepage-card-v1
+# or push every tag at once:
+git push origin --tags
+```
+
+Verify they're on the remote with `git ls-remote --tags origin`.
+
 ---
 
 ## What "card-style" means (the old / v1 design)
