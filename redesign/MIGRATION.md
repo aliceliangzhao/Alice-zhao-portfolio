@@ -82,13 +82,35 @@ Committed on `style-v2`:
 2. **`app/globals.css`** slimmed to base styles that reference tokens.
 3. **Project detail pages + components** migrated onto the new size and weight
    tokens.
-4. **`/type`** — a dev-only comparison lab for judging tiers in context.
+4. A dev-only `/type` comparison lab was used to judge tiers in context, then
+   removed once the scale was settled.
 5. **New homepage source** moved out of the build-output folder
    (`docs/new` → `redesign/`) so a `next build` can't wipe it.
+6. **Site-wide Navigation** rebuilt in the new style (single fixed resurfacing
+   header; brand line, or the project section nav on project pages; center nav;
+   social links; mobile Contact disclosure). Color picker and hamburger drawer
+   retired.
 
 ### Tiers currently adopted (LIVE = next)
 - Body (`s`), labels/small text (`xs`) — adopted.
 - Everything else is still LIVE = legacy and can be flipped in `app/tokens.css`.
+
+---
+
+## Breakpoints
+
+The codebase has a scattered set of width breakpoints (900 / 768 / 767 / 760 /
+640, plus `Tools.css` at 1200 / 1000 / 600).
+
+**Standard going forward: `900px`.** It's already what the token system uses
+(`--nav-height` and `--space-pad` switch to their mobile values at 900px) and
+the most common breakpoint in the codebase.
+
+- **Done:** Navigation switches to its mobile layout at 900px (and drops the
+  `Lab` link there — `Home / Work / About` remain).
+- **TODO (revisit):** migrate the stragglers onto 900px (or a defined ladder) —
+  `lab` (768px), `HomepageScroll` (767px), and consolidate `Tools.css`
+  (1200 / 1000 / 600). Do this as one dedicated responsive pass, not piecemeal.
 
 ---
 

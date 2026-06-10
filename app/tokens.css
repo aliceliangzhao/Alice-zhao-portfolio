@@ -115,6 +115,15 @@
   --nav-height-mobile: var(--space-nav-height-mobile);
   --hero-top: var(--space-hero-top);
 
+  /* --- Header / nav (new style) ----------------------------------------- */
+  --space-nav-gap: clamp(0.875rem, 1.6vw, 1.375rem);  /* gap between nav links */
+  --space-header-y: clamp(1rem, 1.8vw, 1.375rem);     /* header vertical padding */
+  /* Frosted panel shown when the header resurfaces over content. References
+     --bg so it adapts when dark mode is added. */
+  --dock-glass-bg: color-mix(in srgb, var(--bg) 72%, transparent);
+  --dock-glass-blur: 16px;
+  --z-header: 50;
+
   /* =======================================================================
      GRID
      --grid-cols is live: legacy 8-col today, next 12-col is the new system.
