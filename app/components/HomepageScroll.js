@@ -202,7 +202,7 @@ function lerp(a, b, t) {
 const INTRO_BREAKPOINTS = [
   {
     maxProgress: 0.15,
-    text: "Currently designing agentic experience at Amazon AWS. Previoulsy built design systems and enterprise applications at Morgan Stanley, Siemens, and Insperity.",
+    text: "Currently designing agentic experience at Amazon AWS. Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and Insperity.",
   },
   {
     maxProgress: 0.35,
