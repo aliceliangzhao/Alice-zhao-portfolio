@@ -28,7 +28,7 @@ function SocialLinks() {
   );
 }
 
-export default function Navigation({ title, sections }) {
+export default function Navigation({ title, sections, hiddenForIntro = false }) {
   const pathname = usePathname();
   const hasSections = sections && sections.length > 0;
 
@@ -123,7 +123,7 @@ export default function Navigation({ title, sections }) {
     ? (sections.find((s) => s.id === activeSection) || sections[0]).navLabel
     : null;
 
-  const navClass = `${styles.nav}${hidden && !anyOpen ? ` ${styles.hidden}` : ""}${floating ? ` ${styles.floating}` : ""}`;
+  const navClass = `${styles.nav}${hidden && !anyOpen ? ` ${styles.hidden}` : ""}${floating ? ` ${styles.floating}` : ""}${hiddenForIntro ? ` ${styles.preIntro}` : ""}`;
 
   return (
     <>
@@ -144,7 +144,7 @@ export default function Navigation({ title, sections }) {
             ))}
           </div>
         ) : (
-          <div className={styles.brand}>Alice Zhao is a product designer.</div>
+          <Link href="/" className={styles.brand}>Alice Zhao is a product designer.</Link>
         )}
 
         <nav className={styles.center} aria-label="Primary">

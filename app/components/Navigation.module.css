@@ -21,11 +21,15 @@
   align-items: center;
   padding: 0 var(--space-pad);
   background: var(--bg);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-              border-color 0.2s;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+              opacity 0.45s ease, border-color 0.2s;
 }
 
 .nav.hidden { transform: translateY(-100%); }
+
+/* Intro: the nav starts above the top edge and drops in once the homepage
+   reveals (the loading animation finishes). */
+.nav.preIntro { transform: translateY(-100%); opacity: 0; }
 
 /* Subtle separation once scrolled off the top (no glass).
 .nav.floating { border-bottom: 1px solid var(--border); } */
@@ -52,7 +56,9 @@
 }
 
 /* --- Brand line (non-project desktop) ------------------------------------- */
-.brand {
+/* .nav .brand (not just .brand) so it keeps bold weight over the .nav a rule
+   now that the brand is a link. No underline/hover — visually unchanged. */
+.nav .brand {
   grid-column: 1 / 6;
   font-size: var(--font-size-xxs-next);
   font-weight: var(--font-weight-bold);

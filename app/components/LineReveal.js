@@ -4,8 +4,21 @@ import { useLayoutEffect, useEffect, useRef, useState, useMemo } from "react";
 import InlineImageLoop from "./InlineImageLoop";
 import styles from "./LineReveal.module.css";
 
-function buildTokens(heading, lead, insertBreak) {
+function buildTokens(heading, lead, insertBreak, segments) {
   const tokens = [];
+
+  // Generic path: arbitrary styled clauses (e.g. the homepage intro). Each
+  // word carries its segment's className so clauses keep their own styling.
+  if (segments) {
+    segments.forEach((seg, si) => {
+      for (const w of seg.text.split(/( )/)) {
+        if (w === " ") tokens.push({ type: "space" });
+        else if (w) tokens.push({ type: "seg", text: w, cls: seg.className });
+      }
+      if (si < segments.length - 1) tokens.push({ type: "space" });
+    });
+    return tokens;
+  }
 
   const numMatch = heading.match(/^(\d+[_.]?\s*)/);
   if (numMatch) {
@@ -30,8 +43,8 @@ function buildTokens(heading, lead, insertBreak) {
     tokens.push({ type: "space" });
   }
 
-  const segments = lead.split(/(\{img(?::[^}]*)?\})/g);
-  for (const seg of segments) {
+  const leadParts = lead.split(/(\{img(?::[^}]*)?\})/g);
+  for (const seg of leadParts) {
     const imgMatch = seg.match(/^\{img:([^}]+)\}$/);
     if (imgMatch) {
       tokens.push({ type: "img", srcs: imgMatch[1].split(",") });
@@ -52,13 +65,13 @@ function buildTokens(heading, lead, insertBreak) {
   return tokens;
 }
 
-export default function LineReveal({ heading, lead, align, plain, stagger = 130 }) {
+export default function LineReveal({ heading, lead, segments, align, plain, play, stagger = 130 }) {
   const ref = useRef(null);
   const [lines, setLines] = useState(null);
   const centered = align === "center";
   const tokens = useMemo(
-    () => buildTokens(heading, lead, centered),
-    [heading, lead, centered]
+    () => buildTokens(heading, lead, centered, segments),
+    [heading, lead, centered, segments]
   );
   const headingCls = plain ? undefined : styles.headingText;
   const leadCls = plain ? styles.headingText : styles.leadText;
@@ -118,6 +131,9 @@ export default function LineReveal({ heading, lead, align, plain, stagger = 130 
         {tokens.map((t, i) => {
           if (t.type === "space") return " ";
           if (t.type === "break") return <br key={i} />;
+          if (t.type === "seg") return (
+            <span key={i} data-i={i} className={t.cls}>{t.text}</span>
+          );
           if (t.type === "heading-num") return (
             <span key={i} data-i={i} className={headingCls} style={{ whiteSpace: "pre" }}>{t.text}</span>
           );
@@ -139,7 +155,7 @@ export default function LineReveal({ heading, lead, align, plain, stagger = 130 
   }
 
   return (
-    <span ref={ref} className={`${styles.wrapper}${centered ? ` ${styles.centered}` : ""}`}>
+    <span ref={ref} className={`${styles.wrapper}${centered ? ` ${styles.centered}` : ""}${play ? ` ${styles.play}` : ""}`}>
       {lines.map(([start, end], li) => (
         <span key={li} className={styles.lineClip}>
           <span
@@ -149,6 +165,9 @@ export default function LineReveal({ heading, lead, align, plain, stagger = 130 
             {tokens.slice(start, end).map((t, j) => {
               if (t.type === "space") return " ";
               if (t.type === "break") return null;
+              if (t.type === "seg") return (
+                <span key={j} className={t.cls}>{t.text}</span>
+              );
               if (t.type === "heading-num") return (
                 <span key={j} className={headingCls} style={{ whiteSpace: "pre" }}>{t.text}</span>
               );

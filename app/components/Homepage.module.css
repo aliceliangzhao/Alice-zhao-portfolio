@@ -1,0 +1,208 @@
+/* ===========================================================================
+   Homepage — the new "Halftone Press" layout, ported from the mockup.
+   Hardcodes a 12-column grid (the site token --grid-cols is still 8 until the
+   per-element layout pass; the homepage is committed to the new 12-col system).
+   =========================================================================== */
+
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  column-gap: var(--space-gap);
+  padding-left: var(--space-pad);
+  padding-right: var(--space-pad);
+  width: 100%;
+  max-width: 100%;
+}
+.grid12 > * { min-width: 0; }
+
+/* First screen: intro + hero, balanced to fill the viewport below the nav. */
+.landing {
+  position: relative;
+  min-height: 100vh;
+  padding-top: var(--nav-height);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Intro paragraph — first 6 columns, equal gaps above and below via auto margins. */
+.intro {
+  margin-top: auto;
+  font-size: var(--font-size-m-next);   /* large intro scale (p-l) */
+  line-height: var(--line-height-base);
+}
+.intro p { grid-column: 1 / 7; margin: 0; font-size: var(--font-size-m-next); }
+.bold { font-weight: var(--font-weight-bold); }
+.muted { color: var(--muted); font-weight: var(--font-weight-medium); }
+/* Third clause: shown only on very wide displays (see responsive). */
+.focus {
+  display: none;
+  color: var(--ink);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Hero — the name escapes the gutters and prints full-bleed. */
+.hero {
+  margin-top: auto;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: var(--space-hero-bottom);
+}
+.well { grid-column: 1 / 13; }
+.heroCanvas {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* --- Reveal choreography (content hidden until the name resolves) ---------
+   The intro is excluded here — LineReveal owns its line-by-line reveal,
+   driven by the same `revealed` phase. */
+.preloading .scrollCue,
+.preloading .projects {
+  opacity: 0;
+  visibility: hidden;
+}
+.preloading .projects { transform: translateY(16px); }
+
+.revealed .scrollCue,
+.revealed .projects {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.revealed .scrollCue { transition-delay: 0.18s; }
+.revealed .projects { transition-delay: 0.16s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .preloading .scrollCue,
+  .preloading .projects {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+}
+
+/* --- Scroll cue: a runner segment with a fading trail, bottom-right -------- */
+.scrollCue {
+  position: absolute;
+  right: var(--space-pad);
+  bottom: var(--space-cue-bottom);
+  z-index: 2;
+  width: var(--scroll-cue-width);
+  height: var(--scroll-cue-height);
+}
+.scrollCue .runner,
+.scrollCue .trail {
+  position: absolute;
+  left: 0; right: 0;
+  margin: 0 auto;
+  top: 0;
+  width: var(--scroll-cue-thickness);
+}
+.scrollCue .trail {
+  height: var(--scroll-cue-trail);
+  background: linear-gradient(to top, var(--ink), transparent);
+  transform: translateY(calc(var(--scroll-cue-runner) - var(--scroll-cue-trail)));
+  animation: scroll-run-trail var(--scroll-cue-duration) cubic-bezier(0.7, 0, 0.3, 1) infinite;
+  opacity: 0.5;
+}
+.scrollCue .runner {
+  height: var(--scroll-cue-runner);
+  background: var(--ink);
+  animation: scroll-run-runner var(--scroll-cue-duration) cubic-bezier(0.7, 0, 0.3, 1) infinite;
+}
+@keyframes scroll-run-runner {
+  0%   { transform: translateY(0); opacity: 0; }
+  15%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(calc(var(--scroll-cue-height) - var(--scroll-cue-runner))); opacity: 0; }
+}
+@keyframes scroll-run-trail {
+  0%   { transform: translateY(calc(var(--scroll-cue-runner) - var(--scroll-cue-trail))); opacity: 0; }
+  15%  { opacity: 0.5; }
+  80%  { opacity: 0.5; }
+  100% { transform: translateY(calc(var(--scroll-cue-height) - var(--scroll-cue-trail))); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scrollCue .runner { animation: none; opacity: 1; }
+  .scrollCue .trail { animation: none; opacity: 0; }
+}
+
+/* --- Project list: two-column card grid ----------------------------------- */
+.projects {
+  padding-top: clamp(40px, 6vw, 72px);
+  padding-bottom: var(--space-section-top);
+  align-items: start;
+  scroll-margin-top: clamp(72px, 10vw, 110px);
+}
+.projectList {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--space-project-col-gap);
+  row-gap: clamp(48px, 6vw, 88px);
+}
+.project {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-decoration: none;
+  color: var(--ink);
+}
+.pthumbWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: var(--project-image-aspect);
+  background: var(--color-card-placeholder);
+  border-radius: var(--radius-image);
+  overflow: hidden;
+}
+.pthumb {
+  object-fit: cover;
+  object-position: left top;
+}
+.ptags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: clamp(14px, 1.6vw, 20px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.ptags li {
+  border: 1px solid var(--ink);
+  padding: 0.3rem 0.7rem;
+  font-size: var(--font-size-xxs-next);
+  line-height: 1;
+  white-space: nowrap;
+}
+.ptitle {
+  margin: clamp(12px, 1.4vw, 18px) 0 0;
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+.project:hover .ptitle { text-decoration: underline; text-underline-offset: 4px; }
+.pstatement {
+  margin: clamp(8px, 1vw, 12px) 0 0;
+  font-size: var(--font-size-s);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-base);
+  color: var(--muted);
+  max-width: 60ch;
+}
+
+/* --- Responsive ----------------------------------------------------------- */
+@media (min-width: 2000px) {
+  .focus { display: inline; }
+}
+@media (max-width: 900px) {
+  .intro p { grid-column: 1 / 13; }
+  .projectList { grid-template-columns: 1fr; row-gap: clamp(40px, 10vw, 64px); }
+  .ptitle { font-size: clamp(1.5rem, 6.5vw, 1.875rem); }
+}

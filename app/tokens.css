@@ -130,6 +130,30 @@
   --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer */
   --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);   /* footer meta-row padding */
 
+  /* --- Homepage: cursor lens (the one sanctioned colour) ---------------- */
+  --lens-ember: #ff6a3d;
+  --lens-magenta: #e0218a;
+  --lens-violet: #8a2be2;
+  --lens-size: clamp(240px, 30vw, 460px);
+  --z-lens: 100;
+
+  /* --- Homepage: scroll cue -------------------------------------------- */
+  --scroll-cue-height: 64px;
+  --scroll-cue-width: 16px;
+  --scroll-cue-thickness: 2px;
+  --scroll-cue-runner: 24px;
+  --scroll-cue-trail: 44px;
+  --scroll-cue-duration: 1.8s;
+
+  /* --- Homepage: layout + cards ---------------------------------------- */
+  --space-section-top: clamp(4rem, 9vw, 7.5rem);
+  --space-project-col-gap: 1.25rem;
+  --space-hero-bottom: 0.625rem;
+  --space-cue-bottom: clamp(1rem, 2vw, 1.625rem);
+  --project-image-aspect: 1 / 0.82;
+  --color-card-placeholder: #d9d9d9;
+  --radius-image: 10px;
+
   /* =======================================================================
      GRID
      --grid-cols is live: legacy 8-col today, next 12-col is the new system.

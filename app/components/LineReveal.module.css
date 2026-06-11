@@ -20,6 +20,11 @@
 :global(.section-heading-reveal.revealed) .lineInner {
   transform: translateY(0);
 }
+/* Direct trigger: a caller can drive the reveal with the `play` prop instead
+   of the ancestor .section-heading-reveal.revealed class. */
+.play .lineInner {
+  transform: translateY(0);
+}
 
 .headingText {
   opacity: 0.6;

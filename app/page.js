@@ -1,5 +1,5 @@
-import HomepageScroll from "./components/HomepageScroll";
+import Homepage from "./components/Homepage";
 
 export default function Home() {
-  return <HomepageScroll />;
+  return <Homepage />;
 }

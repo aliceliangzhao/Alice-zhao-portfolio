@@ -1,0 +1,71 @@
+/* Cursor lens — a wavy gradient disc following the pointer, recoloring the ink
+   beneath it via mix-blend-mode: lighten. Ported from the redesign mockup. */
+.lens {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--lens-size);
+  height: var(--lens-size);
+  transform: translate3d(
+    calc(var(--mx, -9999px) - var(--lens-size) / 2),
+    calc(var(--my, -9999px) - var(--lens-size) / 2),
+    0);
+  border-radius: 50%;
+  overflow: hidden;
+  isolation: isolate;
+  mix-blend-mode: lighten;
+  pointer-events: none;
+  z-index: var(--z-lens);
+  opacity: 0;
+  transition: opacity 0.4s ease-out;
+  will-change: transform;
+  background: var(--lens-violet);
+}
+
+.flow {
+  position: absolute;
+  inset: -25%;
+  filter: blur(32px);
+  will-change: transform;
+}
+.flow::before,
+.flow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+}
+.flow::before {
+  background:
+    radial-gradient(46% 44% at 60% 32%, var(--lens-ember) 0%, transparent 60%),
+    radial-gradient(50% 48% at 28% 70%, var(--lens-violet) 0%, transparent 62%);
+  animation: lens-flow-a 4.5s ease-in-out infinite;
+}
+.flow::after {
+  background:
+    radial-gradient(48% 46% at 74% 72%, var(--lens-magenta) 0%, transparent 60%),
+    radial-gradient(44% 42% at 36% 28%, var(--lens-ember) 0%, transparent 58%);
+  animation: lens-flow-b 6s ease-in-out infinite;
+}
+
+.lensOn { opacity: 1; }
+
+@keyframes lens-flow-a {
+  0%   { transform: translate(-32%, -24%) scale(1.3, 1.0)  rotate(0deg); }
+  33%  { transform: translate(28%, -16%)  scale(1.0, 1.4)  rotate(22deg); }
+  66%  { transform: translate(18%, 30%)   scale(1.4, 1.1)  rotate(-16deg); }
+  100% { transform: translate(-32%, -24%) scale(1.3, 1.0)  rotate(0deg); }
+}
+@keyframes lens-flow-b {
+  0%   { transform: translate(30%, 22%)   scale(1.1, 1.4)  rotate(0deg); }
+  33%  { transform: translate(-26%, 26%)  scale(1.4, 1.0)  rotate(-24deg); }
+  66%  { transform: translate(-18%, -28%) scale(1.05, 1.4) rotate(18deg); }
+  100% { transform: translate(30%, 22%)   scale(1.1, 1.4)  rotate(0deg); }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .lens { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lens { display: none; }
+}
