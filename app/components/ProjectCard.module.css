@@ -1,0 +1,106 @@
+.project {
+  display: grid;
+  grid-template-columns: 1fr 1fr;   /* each half = 50vw; no gap between them */
+  align-items: stretch;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+/* --- Left: text (left padding clears the page edge) ----------------------- */
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(12px, 1.4vw, 20px);
+  padding: clamp(24px, 3vw, 56px) clamp(20px, 2.4vw, 40px) clamp(24px, 3vw, 56px) var(--space-padding);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+.content:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-xxs-next);
+  color: var(--muted);
+}
+.content:hover .tags { color: rgba(255, 255, 255, 0.75); }
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.statement {
+  margin: 0;
+  font-size: var(--font-size-s);
+  line-height: var(--line-height-base);
+  color: var(--muted);
+  max-width: 42ch;
+}
+.content:hover .statement { color: rgba(255, 255, 255, 0.8); }
+
+/* --- Right: split image with the cursor tilt ------------------------------ */
+.thumb {
+  position: relative;
+  aspect-ratio: 1 / 1;          /* square, full half-width (≈50vw) */
+  overflow: hidden;             /* clips the parallax drift + zoom */
+}
+/* The parallax target: zoomed + drifted by JS (lerped). */
+.inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  will-change: transform;
+}
+.half {
+  position: relative;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+}
+.half img {
+  position: absolute;
+  top: 0;
+  width: 200%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;   /* anchor the crop to the top-left, not centered */
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Each half windows its slice of the full image; the right half is shifted so
+   the two halves form one seamless picture at rest. */
+.left img  { left: 0;     transform: translateY(-100%); }  /* slides down from top */
+.right img { left: -100%; transform: translateY(100%); }   /* slides up from bottom */
+
+.project.inview .left img,
+.project.inview .right img { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .half img { transition: none; }
+  .left img, .right img { transform: none; }
+}
+
+/* --- Mobile: image on top, content beneath -------------------------------- */
+@media (max-width: 900px) {
+  .project {
+    grid-template-columns: 1fr;
+  }
+  .thumb { order: -1; }   /* image first (top), full-bleed square */
+  .content {
+    padding: clamp(16px, 4vw, 28px) var(--space-padding) 0;
+  }
+  .content:hover { background: none; color: var(--ink); }  /* no hover fill on touch */
+  .content:hover .tags { color: var(--muted); }
+  .content:hover .statement { color: var(--muted); }
+}

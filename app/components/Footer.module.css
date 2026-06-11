@@ -24,7 +24,7 @@
   align-items: baseline;
   justify-content: space-between;
   gap: clamp(8px, 2vw, 24px);
-  padding: var(--space-footer-y) var(--space-pad);
+  padding: var(--space-footer-y) var(--space-padding);
   font-size: var(--font-size-xxs-next);
 }
 .copy {

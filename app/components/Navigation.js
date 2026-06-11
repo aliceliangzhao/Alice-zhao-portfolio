@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import styles from "./Navigation.module.css";
@@ -14,7 +14,7 @@ const CENTER_LINKS = [
 
 const SOCIAL_LINKS = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/liangzhaoux/", external: true },
-  { label: "Resume", href: "https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view", external: true },
+  { label: "Resume", href: "/alice-zhao-ux-designer-resume.pdf", external: true },
   { label: "Email", href: "mailto:liangzhao0801@gmail.com" },
 ];
 
@@ -37,6 +37,8 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
   const [menuOpen, setMenuOpen] = useState(false);       // mobile menu panel
   const [hidden, setHidden] = useState(false);
   const [floating, setFloating] = useState(false);
+  const navLockRef = useRef(false);   // keep the nav shown during a Work-click scroll
+  const lockTimerRef = useRef(null);
 
   const navName = CENTER_LINKS.find((l) => l.href === pathname)?.label;
   const pageName = navName || title || "";
@@ -76,6 +78,7 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
     function update() {
       queued = false;
       const y = window.pageYOffset || 0;
+      if (navLockRef.current) { setHidden(false); lastY = y; return; }
       const dy = y - lastY;
       if (y <= TOP_GUARD) { setHidden(false); setFloating(false); }
       else if (dy < -DELTA) { setHidden(false); setFloating(true); }
@@ -116,6 +119,22 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
     window.scrollTo({ top: window.scrollY + rect.top - navH, behavior: "smooth" });
   }
 
+  // Always scroll to the top of the work section (even if already there), and
+  // keep the nav shown through the scroll.
+  function scrollToWork() {
+    const el = document.getElementById("work");
+    if (!el) return;
+    document.body.style.overflow = "";   // release the mobile-menu scroll lock if set
+    navLockRef.current = true;
+    setHidden(false);
+    const navH =
+      parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) *
+      parseFloat(getComputedStyle(document.documentElement).fontSize);
+    window.scrollTo({ top: window.scrollY + el.getBoundingClientRect().top - navH, behavior: "smooth" });
+    clearTimeout(lockTimerRef.current);
+    lockTimerRef.current = setTimeout(() => { navLockRef.current = false; }, 1000);
+  }
+
   const toggleSection = () => { setMenuOpen(false); setSectionOpen((o) => !o); };
   const toggleMenu = () => { setSectionOpen(false); setMenuOpen((o) => !o); };
 
@@ -149,7 +168,17 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
 
         <nav className={styles.center} aria-label="Primary">
           {CENTER_LINKS.map((l) => (
-            <Link key={l.label} href={l.href}>{l.label}</Link>
+            <Link
+              key={l.label}
+              href={l.href}
+              onClick={
+                l.href === "/#work" && pathname === "/"
+                  ? (e) => { e.preventDefault(); scrollToWork(); }
+                  : undefined
+              }
+            >
+              {l.label}
+            </Link>
           ))}
         </nav>
 
@@ -202,7 +231,10 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
                 key={l.label}
                 href={l.href}
                 className={`${styles.menuItem}${activeNav === l.label ? ` ${styles.menuItemActive}` : ""}`}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                  if (l.href === "/#work" && pathname === "/") { e.preventDefault(); scrollToWork(); }
+                  setMenuOpen(false);
+                }}
               >
                 {l.label}
               </Link>

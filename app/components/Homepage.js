@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect, useLayoutEffect, useCallback } from "react";
-import Link from "next/link";
-import Image from "next/image";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import HalftoneName from "./HalftoneName";
 import CursorLens from "./CursorLens";
 import LineReveal from "./LineReveal";
+import ProjectCard from "./ProjectCard";
 import { projects, projectOrder } from "../data/projects";
 import styles from "./Homepage.module.css";
 
@@ -28,9 +27,6 @@ export default function Homepage() {
 
   const handleReveal = useCallback(() => setPhase("revealed"), []);
 
-  const phaseClass =
-    phase === "preloading" ? styles.preloading : phase === "revealed" ? styles.revealed : "";
-
   const cards = projectOrder
     .map((slug) => ({ slug, ...projects[slug] }))
     .filter((p) => p && !p.comingSoon);
@@ -40,8 +36,7 @@ export default function Homepage() {
       <CursorLens />
       <Navigation hiddenForIntro={phase === "preloading"} />
 
-      <div className={`${styles.page} ${phaseClass}`}>
-        <div className={styles.landing}>
+      <div className={styles.landing}>
           <section className={`${styles.intro} ${styles.grid12}`}>
             <p>
               <LineReveal
@@ -67,39 +62,22 @@ export default function Homepage() {
             </div>
           </section>
 
-          <div className={styles.scrollCue} aria-hidden="true">
-            <span className={styles.trail} />
-            <span className={styles.runner} />
-          </div>
         </div>
 
-        <section className={`${styles.projects} ${styles.grid12}`} id="work">
-          <div className={styles.projectList}>
+        <section className={styles.projects}>
+          <div className={styles.projectList} id="work">
             {cards.map((p) => (
-              <Link key={p.slug} href={`/projects/${p.slug}`} className={styles.project}>
-                <div className={styles.pthumbWrap}>
-                  <Image
-                    className={styles.pthumb}
-                    src={p.heroImage}
-                    alt={p.navTitle || p.projectTitle?.main || "Project"}
-                    fill
-                    sizes="(max-width: 900px) 100vw, 50vw"
-                  />
-                </div>
-                <ul className={styles.ptags}>
-                  {(p.tags || []).map((t) => (
-                    <li key={t}>{t}</li>
-                  ))}
-                </ul>
-                <h3 className={styles.ptitle}>{p.navTitle || p.projectTitle?.main}</h3>
-                <p className={styles.pstatement}>
-                  {typeof p.impact === "object" ? p.impact?.card : p.impact}
-                </p>
-              </Link>
+              <ProjectCard
+                key={p.slug}
+                slug={p.slug}
+                title={p.navTitle || p.projectTitle?.main}
+                tags={p.tags || []}
+                statement={typeof p.impact === "object" ? p.impact?.card : p.impact}
+                image={p.heroImage}
+              />
             ))}
           </div>
         </section>
-      </div>
 
       <Footer />
     </>

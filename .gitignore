@@ -52,6 +52,9 @@ yarn-error.log*
 /design-process/
 /app/data/project-context.md
 
+# local-only inspiration / references (never pushed)
+/inspiration/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

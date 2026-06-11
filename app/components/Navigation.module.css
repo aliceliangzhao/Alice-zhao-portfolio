@@ -19,7 +19,7 @@
   grid-template-columns: repeat(12, 1fr);
   column-gap: var(--space-gap);
   align-items: center;
-  padding: 0 var(--space-pad);
+  padding: 0 var(--space-padding);
   background: var(--bg);
   transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
               opacity 0.45s ease, border-color 0.2s;
@@ -213,7 +213,7 @@
     right: 0;
     z-index: calc(var(--z-header) - 1);   /* slides out from behind the header */
     background: var(--bg);
-    padding: 1.5rem var(--space-pad);
+    padding: 1.5rem var(--space-padding);
     transform: translateY(-100%);
     transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
   }
