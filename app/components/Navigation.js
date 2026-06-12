@@ -223,7 +223,6 @@ export default function Navigation({ title, isHome, sections }) {
           <Link href="/" onClick={closeDrawer}>Back to home</Link>
           <Link href="/projects/s3-tables" onClick={closeDrawer}>AWS S3 Tables</Link>
           <Link href="/projects/simplifying-data-access" onClick={closeDrawer}>Simplifying data access</Link>
-          <Link href="/projects/agent-opportunities" onClick={closeDrawer}>AWS agentic experience</Link>
           <Link href="/about" onClick={closeDrawer}>About me</Link>
           <Link href="/about#design-process" onClick={closeDrawer}>My design process</Link>
           <Link href="/about#ai-toolkit" onClick={closeDrawer}>My design toolkit</Link>
