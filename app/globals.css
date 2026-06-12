@@ -25,25 +25,6 @@
   font-style: normal;
 }
 
-.hover-card {
-  transition: transform 0.3s cubic-bezier(0.25, 0, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.25, 0, 0.3, 1);
-}
-.hover-card:hover {
-  transform: translate(8px, -8px);
-  box-shadow: -8px 8px 0 #000;
-}
-@media (hover: none) {
-  .hover-card:active {
-    transform: translate(4px, -4px);
-    box-shadow: -4px 4px 0 #000;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hover-card { transition: none; }
-  .hover-card:hover { transform: none; box-shadow: none; }
-}
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .col-grid {
@@ -67,4 +48,16 @@ p {
   line-height: var(--line-height-base);
   color: var(--ink);
   transition: color 0.2s;
+}
+
+/* Unified statement-heading style: the about-me intro, design philosophy, and
+   project-detail section headings all share this (size/weight/tracking via
+   tokens). Per-element rules only handle layout (grid placement). */
+h2 {
+  font-family: var(--f);
+  font-size: var(--font-size-l);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-base);
+  letter-spacing: var(--tracking-tight);
+  color: var(--ink);
 }

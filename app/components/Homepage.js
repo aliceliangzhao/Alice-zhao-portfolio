@@ -7,6 +7,8 @@ import HalftoneName from "./HalftoneName";
 import CursorLens from "./CursorLens";
 import LineReveal from "./LineReveal";
 import ProjectCard from "./ProjectCard";
+import AboutCollage from "./AboutCollage";
+import AboutDetails from "./AboutDetails";
 import { projects, projectOrder } from "../data/projects";
 import styles from "./Homepage.module.css";
 
@@ -70,14 +72,23 @@ export default function Homepage() {
               <ProjectCard
                 key={p.slug}
                 slug={p.slug}
-                title={p.navTitle || p.projectTitle?.main}
-                tags={p.tags || []}
-                statement={typeof p.impact === "object" ? p.impact?.card : p.impact}
                 image={p.heroImage}
+                role={p.role}
+                company={p.type}
+                year={p.year}
+                tags={p.tags || []}
+                title={p.navTitle || p.projectTitle?.main}
+                statement={typeof p.impact === "object" ? p.impact?.card : p.impact}
               />
             ))}
           </div>
         </section>
+
+      <AboutCollage />
+
+      <div className="about">
+        <AboutDetails />
+      </div>
 
       <Footer />
     </>

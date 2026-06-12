@@ -59,18 +59,24 @@
    instead of waiting for the hero load animation. */
 
 /* --- Project list --------------------------------------------------------- */
-/* Full-bleed (no horizontal padding) so the image columns can run to the edge. */
+/* Extra top space separates the work section from the hero; the sides and
+   bottom keep the uniform --space-gap so the cards sit the same distance from
+   the section edges as they are from each other. */
 .projects {
-  padding-top: clamp(40px, 6vw, 72px);
-  padding-bottom: var(--space-section-top);
+  padding: var(--space-section-top) var(--space-gap) var(--space-gap);
 }
-/* Rows stack with no gap. The #work jump target lands the first card's top just
-   below the fixed nav (scroll-margin-top = nav height). */
+/* Two-column card grid; cards size to their content (align-items: start), with a
+   uniform gap between them and to the section edges (= --space-gap). The #work
+   jump target lands the first row just below the nav, with the same gap. */
 .projectList {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  scroll-margin-top: var(--nav-height);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-gap);
+  align-items: start;
+  scroll-margin-top: calc(var(--nav-height) + var(--space-gap));
+}
+@media (max-width: 900px) {
+  .projectList { grid-template-columns: 1fr; }
 }
 
 /* --- Responsive ----------------------------------------------------------- */

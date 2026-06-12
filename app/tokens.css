@@ -125,6 +125,7 @@
   /* --- Halftone name (footer + hero dot engine) ------------------------- */
   --hero-cell: 12px;            /* dot grid spacing (density) */
   --tracking-display: -0.08em;  /* letter-spacing for the big name */
+  --tracking-tight: -0.03em;    /* headings + statement text */
   --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer */
   --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);   /* footer meta-row padding */
 
@@ -141,6 +142,7 @@
   --space-hero-bottom: 0.625rem;
   --project-image-aspect: 1 / 0.82;
   --color-card-placeholder: #d9d9d9;
+  --color-card-surface: #f4f4f4;          /* light-grey project card background */
   --radius-image: 10px;
 
   /* =======================================================================

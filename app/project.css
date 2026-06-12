@@ -72,18 +72,11 @@
   white-space: pre-line;
 }
 
+/* Type comes from the base h2 in globals.css; this only handles layout. */
 .project-detail h2,
 .about h2 {
-  font-family: var(--f);
-  font-size: var(--font-size-l);
-  color: var(--ink);
   transition: color 0.2s;
   grid-column: 1 / 6;
-}
-
-.project-detail h2 {
-  font-weight: var(--font-weight-black);
-  letter-spacing: -0.05em;
 }
 
 .project-detail h2.heading-center {

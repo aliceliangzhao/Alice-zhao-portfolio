@@ -49,10 +49,40 @@
   transition: color 0.2s;
 }
 .nav button { font-family: inherit; }   /* buttons don't inherit the page font */
-.center a:hover,
-.links a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* Text rollover on the center nav + social links: two stacked copies of the
+   label inside an overflow-hidden mask. On hover the first slides up and out
+   while the duplicate rolls up into its place. Desktop only (both navs are
+   hidden on mobile, where there's no hover). */
+.roll {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+}
+.rollInner {
+  position: relative;
+  display: block;
+  transition: transform 0.45s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.rollInner > span {
+  display: block;
+}
+.rollInner > span:nth-child(2) {
+  position: absolute;
+  top: 100%;
+  left: 0;
+}
+.center a:hover .rollInner,
+.center a:focus-visible .rollInner,
+.links a:hover .rollInner,
+.links a:focus-visible .rollInner {
+  transform: translateY(-100%);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rollInner { transition: none; }
+  .center a:hover .rollInner,
+  .center a:focus-visible .rollInner,
+  .links a:hover .rollInner,
+  .links a:focus-visible .rollInner { transform: none; }
 }
 
 /* --- Brand line (non-project desktop) ------------------------------------- */

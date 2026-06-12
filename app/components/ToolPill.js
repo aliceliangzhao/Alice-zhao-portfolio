@@ -1,5 +1,5 @@
 import { MCP, Bedrock, Nova, Claude, ClaudeCode, Figma, Github, Codex, Adobe, OpenAI, LobeHub, Kiro } from "@lobehub/icons";
-import "./ToolPill.css";
+// .tool-pill is defined in about-content.css (loaded by AboutDetails, the only consumer).
 
 const iconMap = { MCP, Bedrock, Nova, Claude, ClaudeCode, Figma, Github, Codex, Adobe, OpenAI, LobeHub, Kiro };
 

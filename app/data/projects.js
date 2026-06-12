@@ -1,7 +1,7 @@
 export const projects = {
   "simplifying-data-access": {
     slug: "simplifying-data-access",
-    heroImage: "/img/sda/hero2.jpg",
+    heroImage: "/img/project-list/sda.png",
     projectTitle: { main: "Simplifying data\naccess", sub: "Unifying 3 products into 1" },
     navTitle: "Simplifying data access: Unifying 3 endpoint products into 1",
     heroProblem: "Customers were managing storage infrastructure across three separate consoles by repeating the same setup tasks, with no unified way to access data stored in different storages. I led a cross-functional team of 10 to design a cohesive console experience that unified setup and access across all three services.",
@@ -12,6 +12,7 @@ export const projects = {
     impact: "A unified console experience for infrastructure setup and data access across 3 storage services",
     type: "AWS",
     year: "2024",
+    role: "Design lead",
     tags: ["Cloud infrastructure", "0 → 1"],
     metrics: [
       { value: 34, suffix: "%", label: "Customers adoption" },
@@ -90,7 +91,7 @@ export const projects = {
 
   "s3-tables": {
     slug: "s3-tables",
-    heroImage: "/img/s3tables/s3table-heroimg.jpg",
+    heroImage: "/img/project-list/s3t.png",
     projectTitle: { main: "AWS S3 Tables", sub: "0→1 in 8 weeks" },
     navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
@@ -98,7 +99,8 @@ export const projects = {
     impact: "A seamless console experience that turns big data into insights in seconds",
     type: "AWS",
     year: "2024",
-    tags: ["0 → 1", "AI", "keynote launch"],
+    role: "UX lead",
+    tags: ["From concept to launch", "keynote launch"],
     externalLink: {
       url: "https://www.youtube.com/watch?v=eztA5VYH2nM",
       cursor: "BIGGGGG launch of the year",

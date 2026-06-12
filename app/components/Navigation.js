@@ -8,7 +8,7 @@ import styles from "./Navigation.module.css";
 const CENTER_LINKS = [
   { label: "Home", href: "/" },
   { label: "Work", href: "/#work" },
-  { label: "About", href: "/about" },
+  { label: "About", href: "/#about" },
   { label: "Lab", href: "/lab" },
 ];
 
@@ -18,14 +18,32 @@ const SOCIAL_LINKS = [
   { label: "Email", href: "mailto:liangzhao0801@gmail.com" },
 ];
 
-function SocialLinks() {
-  return SOCIAL_LINKS.map((l) =>
-    l.external ? (
-      <a key={l.label} href={l.href} target="_blank" rel="noreferrer">{l.label}</a>
-    ) : (
-      <a key={l.label} href={l.href}>{l.label}</a>
-    )
+// Two stacked copies of the label in an overflow-hidden mask for the text
+// rollover hover (the second copy is decorative). Shared by the center nav and
+// social links.
+function RollLabel({ children }) {
+  return (
+    <span className={styles.roll}>
+      <span className={styles.rollInner}>
+        <span>{children}</span>
+        <span aria-hidden="true">{children}</span>
+      </span>
+    </span>
   );
+}
+
+function SocialLinks() {
+  return SOCIAL_LINKS.map((l) => (
+    <a
+      key={l.label}
+      href={l.href}
+      {...(l.external ? { target: "_blank", rel: "noreferrer" } : {})}
+    >
+      <RollLabel>
+        {l.label} <span aria-hidden="true">↗</span>
+      </RollLabel>
+    </a>
+  ));
 }
 
 export default function Navigation({ title, sections, hiddenForIntro = false }) {
@@ -119,10 +137,10 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
     window.scrollTo({ top: window.scrollY + rect.top - navH, behavior: "smooth" });
   }
 
-  // Always scroll to the top of the work section (even if already there), and
+  // Scroll to a homepage anchor (#work, #about, …) even if already there, and
   // keep the nav shown through the scroll.
-  function scrollToWork() {
-    const el = document.getElementById("work");
+  function scrollToAnchor(id) {
+    const el = document.getElementById(id);
     if (!el) return;
     document.body.style.overflow = "";   // release the mobile-menu scroll lock if set
     navLockRef.current = true;
@@ -172,12 +190,12 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
               key={l.label}
               href={l.href}
               onClick={
-                l.href === "/#work" && pathname === "/"
-                  ? (e) => { e.preventDefault(); scrollToWork(); }
+                l.href.startsWith("/#") && pathname === "/"
+                  ? (e) => { e.preventDefault(); scrollToAnchor(l.href.slice(2)); }
                   : undefined
               }
             >
-              {l.label}
+              <RollLabel>{l.label}</RollLabel>
             </Link>
           ))}
         </nav>
@@ -232,7 +250,7 @@ export default function Navigation({ title, sections, hiddenForIntro = false }) 
                 href={l.href}
                 className={`${styles.menuItem}${activeNav === l.label ? ` ${styles.menuItemActive}` : ""}`}
                 onClick={(e) => {
-                  if (l.href === "/#work" && pathname === "/") { e.preventDefault(); scrollToWork(); }
+                  if (l.href.startsWith("/#") && pathname === "/") { e.preventDefault(); scrollToAnchor(l.href.slice(2)); }
                   setMenuOpen(false);
                 }}
               >
