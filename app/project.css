@@ -279,6 +279,10 @@
   border: 1px solid color-mix(in srgb, var(--muted) 30%, transparent);
   transition: border-color 0.2s;
 }
+/* Opt out of the border per-image via `noBorder: true` in projects.js. */
+.subsection-img-bare {
+  border: none;
+}
 .subsection-img-full {
   grid-column: 2 / 6;
 }

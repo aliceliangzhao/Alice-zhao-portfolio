@@ -295,12 +295,12 @@ function BlockSection({ section }) {
             <div key={i} className="subsection-item col-grid">
               <p className="subsection-label">{sub.label}</p>
               {sub.images?.length === 1 && (
-                <img className="subsection-img subsection-img-full" src={sub.images[0].src} alt={sub.images[0].alt} />
+                <img className={`subsection-img subsection-img-full${sub.images[0].noBorder ? " subsection-img-bare" : ""}`} src={sub.images[0].src} alt={sub.images[0].alt} />
               )}
               {sub.images?.length >= 2 && (
                 <div className="subsection-img-pair">
-                  <img className="subsection-img subsection-img-left" src={sub.images[0].src} alt={sub.images[0].alt} />
-                  <img className="subsection-img subsection-img-right" src={sub.images[1].src} alt={sub.images[1].alt} />
+                  <img className={`subsection-img subsection-img-left${sub.images[0].noBorder ? " subsection-img-bare" : ""}`} src={sub.images[0].src} alt={sub.images[0].alt} />
+                  <img className={`subsection-img subsection-img-right${sub.images[1].noBorder ? " subsection-img-bare" : ""}`} src={sub.images[1].src} alt={sub.images[1].alt} />
                 </div>
               )}
               <p className="subsection-text">{sub.text}</p>

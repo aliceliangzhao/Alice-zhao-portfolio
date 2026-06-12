@@ -1,7 +1,7 @@
 export const projects = {
   "simplifying-data-access": {
     slug: "simplifying-data-access",
-    heroImage: "/img/sda/hero2.jpg",
+    heroImage: "/img/sda/final-visual/newUI/title-thumbnail.jpg",
     projectTitle: { main: "Simplifying data\naccess", sub: "Unifying 3 products into 1" },
     navTitle: "Simplifying data access: Unifying 3 endpoint products into 1",
     heroProblem: "Customers were managing storage infrastructure across three separate consoles by repeating the same setup tasks, with no unified way to access data stored in different storages. I led a cross-functional team of 10 to design a cohesive console experience that unified setup and access across all three services.",
@@ -90,7 +90,7 @@ export const projects = {
 
   "s3-tables": {
     slug: "s3-tables",
-    heroImage: "/img/s3tables/s3table-heroimg.jpg",
+    heroImage: "/img/s3tables/final-visual/newUI/title-thumbnail.png",
     projectTitle: { main: "AWS S3 Tables", sub: "0→1 in 8 weeks" },
     navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
@@ -115,11 +115,11 @@ export const projects = {
         navLabel: "01  Who and why",
         heading: "01  Who and why.",
         content: {
-          lead: "Customers {img:/img/s3tables/customers-inline-img/netflix.jpg,/img/s3tables/customers-inline-img/bmw.jpg,/img/s3tables/customers-inline-img/mcdonlad.jpg,/img/s3tables/customers-inline-img/nasdaq.jpg,/img/s3tables/customers-inline-img/siemens.jpg,/img/s3tables/customers-inline-img/3m.jpg} don't want to store structured data in unstructured storage while maintaining custom infrastructure. They need a solution to streamline storage operations so teams can focus on data querying.",
+          lead: "20+ interviews revealed that customers {img:/img/s3tables/customers-inline-img/netflix.jpg,/img/s3tables/customers-inline-img/bmw.jpg,/img/s3tables/customers-inline-img/mcdonlad.jpg,/img/s3tables/customers-inline-img/nasdaq.jpg,/img/s3tables/customers-inline-img/siemens.jpg,/img/s3tables/customers-inline-img/3m.jpg} don't want to store structured data in unstructured storage while maintaining custom infrastructure. They need a solution to streamline storage operations so teams can focus on data querying.",
           subsections: [
-            { label: "Research", text: "I used internal AI tools to synthesize transcripts from 20+ enterprise customer interviews. The synthesis surfaced two target personas and their core pain points.", images: [{ src: "/img/s3tables/problem/research.jpg", alt: "Customer research synthesis" }] },
-            { label: "Target personas", text: "Data engineers maintain storage systems daily. Strategic leads evaluate infrastructure costs and reliability.", images: [{ src: "/img/s3tables/problem/data-engineer.jpg", alt: "Data engineer persona" }, { src: "/img/s3tables/problem/strategic-lead.png", alt: "Strategic lead persona" }] },
-            { label: "Pain points", text: "Millions wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/painpoint-graph.jpg", alt: "Pain points analysis" }] },
+            { label: "Target personas", text: "Data engineers maintain storage systems daily. Strategic leads evaluate infrastructure costs and reliability.", images: [{ src: "/img/s3tables/problem/p-data-engineer.png", alt: "Data engineer persona", noBorder: true }, { src: "/img/s3tables/problem/p-strategic-lead.png", alt: "Strategic lead persona", noBorder: true }] },
+            { label: "Pain points", text: "Millions wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/problem-1.png", alt: "Problem 1", noBorder: true }, { src: "/img/s3tables/problem/problem-2.png", alt: "Problem 2", noBorder: true }] },
+            { label: "User journey", text: "I mapped the user journey into phases to surface the highest-friction tasks, guiding the team to align on priorities to act on.", images: [{ src: "/img/s3tables/problem/user-journey.png", alt: "User journey", noBorder: true }] },
           ],
         },
       },
@@ -130,8 +130,8 @@ export const projects = {
         content: {
           lead: "I adapted the AWS JTBD framework to give the team a shared language for strategic scope trade-offs. We categorized every user action and API details into 6 workflows and aligned on a launch plan in one week.",
           subsections: [
-            { label: "JTBD Framework", text: "I first worked with the team to identify all user stories based on the JTBD framework, then mapped each story with its console steps, preconditions, and APIs to six groups: Create, List, View, Manage, Audit, and Delete.", images: [{ src: "/img/s3tables/scoping/JTBDframework.jpg", alt: "JTBD framework" }] },
-            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap.", images: [{ src: "/img/s3tables/scoping/scoping-graph.jpg", alt: "Action plan" }] },
+            { label: "JTBD Framework", text: "I first worked with the team to identify all user stories based on the JTBD framework, then mapped each story with its console steps, preconditions, and APIs to six groups: Create, List, View, Manage, Audit, and Delete.", images: [{ src: "/img/s3tables/scoping/JTBDframework.jpg", alt: "JTBD framework", noBorder: true }] },
+            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap.", images: [{ src: "/img/s3tables/scoping/scoping-graph.jpg", alt: "Action plan", noBorder: true }] },
           ],
         },
       },
@@ -144,7 +144,7 @@ export const projects = {
           subsections: [
             { label: "Exploration", text: "I tested three integration models: a multi-step wizard that walked through each service, a fragmented approach with separate configuration pages, and a single-page create flow with integration built in.", images: [{ src: "/img/s3tables/design-iteration/s3table-iteration.jpg", alt: "Exploration" }] },
             { label: "Trade-offs", text: "The wizard added friction to what should feel instant. The fragmented model scattered a single decision across multiple pages. Customer research showed most users' end goal was querying, so bundling integration into table bucket creation matched their mental model.", images: [{ src: "/img/s3tables/design-iteration/s3table-iteration-tradeoffs.jpg", alt: "Trade-offs" }] },
-            { label: "Decision", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/create-bucket.jpg", alt: "Decision" }] },
+            { label: "Decision", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/decision-new.png", alt: "Decision", noBorder: true }] },
           ],
         },
       },
@@ -159,23 +159,24 @@ export const projects = {
             subheading: "Unified data storage for AI/ML workloads",
             text: "The S3 Tables console enables customers to create, manage, and query structured data for analytics and AI/ML workloads in a few clicks, drastically simplifies the way customers manage their storage.",
             images: [
-              { src: "/img/s3tables/final-visual/tablebucketlist.png", alt: "S3 Tables bucket overview" },
-              { src: "/img/s3tables/final-visual/tablebucketdetail.png", alt: "S3 Table bucket detail page" },
+              { src: "/img/s3tables/final-visual/newUI/tb-list.png", alt: "S3 Tables bucket overview" },
+              { src: "/img/s3tables/final-visual/newUI/tb-detail-l.png", alt: "S3 Table bucket detail page" },
             ],
           },
           {
             subheading: "Seamless Integration",
             text: "What previously required custom-built infrastructure is now handled automatically. Integration across multiple AWS services is reduced to a single click during table bucket creation.",
             images: [
-              { src: "/img/s3tables/final-visual/createtablebucket.png", alt: "Integration configuration" },
-              { src: "/img/s3tables/final-visual/integratepage.png", alt: "Single-click integration" },
+              { src: "/img/s3tables/final-visual/newUI/create-l.png", alt: "Integration configuration" },
+              { src: "/img/s3tables/final-visual/newUI/enable-l.png", alt: "Single-click integration" },
             ],
           },
           {
             subheading: "One click from data to insights",
             text: "Once created, customers manage their tables from a single console. Table bucket details, permission controls, and storage settings are all accessible without switching between services.",
             images: [
-              { src: "/img/s3tables/final-visual/oneclick.png", alt: "Table management console" },
+              { src: "/img/s3tables/final-visual/newUI/t-detail-l.png", alt: "Table management console" },
+              { src: "/img/s3tables/final-visual/newUI/athena.png", alt: "Athena console" },
             ],
           },
           {
@@ -183,7 +184,7 @@ export const projects = {
             text: "S3 Tables launched at AWS re:Invent 2024, featured as the top announcement in AWS CEO's keynote.",
             images: [
               { src: "/img/s3tables/final-visual/ceo.png", alt: "re:Invent 2024 keynote" },
-              { src: "/img/s3tables/final-visual/reinvent-image.jpg", alt: "S3 Tables announcement" },
+              { src: "/img/s3tables/final-visual/newUI/s3t-glam-shot.png", alt: "S3 Tables glam shot" },
             ],
           },
         ],
