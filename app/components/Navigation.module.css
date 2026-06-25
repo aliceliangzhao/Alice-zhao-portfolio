@@ -153,11 +153,13 @@
 
 /* Appearance of the compact controls. Defined unconditionally (harmless while
    the controls are display:none); the .compact rules below just reveal them. */
+/* match the desktop bar: same size (--nav-text-size) and weights, so the text
+   doesn't jump when the bar collapses to compact */
 .mBrand {
   color: var(--color-fg);
   text-decoration: none;
-  font-size: var(--font-size-p-s);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--nav-text-size);
+  font-weight: var(--font-weight-medium);
   white-space: nowrap;
 }
 .mSectionsToggle, .mMenuToggle {
@@ -166,10 +168,10 @@
   cursor: pointer;
   font-family: inherit;
   color: var(--color-fg);
-  font-size: var(--font-size-p-s);
+  font-size: var(--nav-text-size);
   padding: 0;
 }
-.mSectionsToggle { font-weight: var(--font-weight-bold); display: inline-flex; align-items: center; gap: 0.45em; }
+.mSectionsToggle { font-weight: var(--font-weight-medium); display: inline-flex; align-items: center; gap: 0.45em; }
 .mMenuToggle { font-weight: var(--font-weight-regular); }
 .mSectionsToggle:focus-visible,
 .mMenuToggle:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
