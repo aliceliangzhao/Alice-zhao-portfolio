@@ -14,7 +14,10 @@
   gap: var(--space-nav-gap);
   padding: var(--space-header-y) var(--space-pad);
   font-family: var(--font-sans);
-  font-size: var(--font-size-p-xs);
+  /* one size for all three regions (brand · phase labels · menu) so the bar
+     reads as a single row. Change this one value to retune them together. */
+  --nav-text-size: var(--font-size-p-xs);
+  font-size: var(--nav-text-size);
   color: var(--color-fg);
   /* glass: ink scrolling beneath the bar softens rather than reads through */
   background: var(--dock-glass-bg);
@@ -55,7 +58,7 @@
   border: none;
   cursor: pointer;
   font-family: inherit;
-  font-size: var(--font-size-p-xs);
+  font-size: var(--nav-text-size);
   font-weight: var(--font-weight-regular);
   color: var(--color-muted);
   padding: 0;
@@ -72,9 +75,7 @@
   align-items: baseline;
   gap: var(--space-nav-gap);
   flex-shrink: 0;
-  /* p-m is fluid (24px desktop / 18px phone); pin to its floor so the desktop
-     links match the mobile-rendered size */
-  font-size: 1.125rem;
+  font-size: var(--nav-text-size);
 }
 .menu a {
   color: var(--color-link);
