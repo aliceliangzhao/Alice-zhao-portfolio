@@ -20,7 +20,12 @@
   background: var(--dock-glass-bg);
   -webkit-backdrop-filter: blur(var(--dock-glass-blur));
   backdrop-filter: blur(var(--dock-glass-blur));
+  /* auto-hide: slide up out of view on scroll-down, back in on scroll-up */
+  will-change: transform;
+  transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              background 0.25s ease, backdrop-filter 0.25s ease;
 }
+.header:global(.is-hidden) { transform: translateY(-100%); }
 
 /* --- brand ---------------------------------------------------------------- */
 .brand {
@@ -157,11 +162,7 @@
     background: var(--color-bg);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    will-change: transform;
-    transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-                background 0.25s ease, backdrop-filter 0.25s ease;
   }
-  .header:global(.is-hidden) { transform: translateY(-100%); }
   .header:global(.is-glass) {
     background: var(--dock-glass-bg);
     -webkit-backdrop-filter: blur(var(--dock-glass-blur));

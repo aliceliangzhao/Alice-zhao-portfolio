@@ -85,21 +85,22 @@ export default function Navigation({ sections }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasSections, sections]);
 
-  // --- mobile resurfacing glass bar: hide on scroll-down, glass on scroll-up
+  // --- auto-hide bar: hide on scroll-down, slide back in on scroll-up -------
+  // Runs at all widths. On mobile the resurfaced state also picks up the glass
+  // blur (is-glass); on desktop the bar is glass at all times, so is-glass is a
+  // no-op there (its rule is scoped to the mobile media query).
   useEffect(() => {
     const header = headerRef.current;
     if (!header) return;
-    const mobile = matchMedia("(max-width: 640px)");
     let lastY = window.scrollY, ticking = false;
     const STEP = 8; // ignore sub-pixel jitter
-    const anyOpen = () => sectionDropOpen || menuOpen;
+    const anyOpen = () => sectionDropOpen || menuOpen || contactOpen;
 
     function onScroll() {
-      if (!mobile.matches) { header.classList.remove("is-hidden", "is-glass"); ticking = false; return; }
       const y = window.scrollY;
       const goingDown = y > lastY;
       if (y < 4) {
-        header.classList.remove("is-hidden", "is-glass"); // at top: solid, shown
+        header.classList.remove("is-hidden", "is-glass"); // at top: shown
       } else if (anyOpen()) {
         header.classList.remove("is-hidden");             // never hide while a panel is open
       } else if (goingDown && y - lastY > STEP) {
@@ -117,7 +118,7 @@ export default function Navigation({ sections }) {
     }
     window.addEventListener("scroll", onScrollRaf, { passive: true });
     return () => window.removeEventListener("scroll", onScrollRaf);
-  }, [sectionDropOpen, menuOpen]);
+  }, [sectionDropOpen, menuOpen, contactOpen]);
 
   // a panel being open keeps the bar solid (glass is only for the collapsed,
   // resurfaced state)
