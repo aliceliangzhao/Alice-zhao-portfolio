@@ -59,6 +59,10 @@ export default function Navigation({ sections }) {
   const contactRef = useRef(null);
   const sectionDropRef = useRef(null);
   const menuRef = useRef(null);
+  // measured to decide the desktop-inline vs compact-dropdown layout
+  const brandRef = useRef(null);
+  const sectionNavRef = useRef(null);
+  const desktopMenuRef = useRef(null);
 
   // --- scroll-spy: highlight the section currently in view -----------------
   useEffect(() => {
@@ -84,6 +88,49 @@ export default function Navigation({ sections }) {
     update();
     return () => window.removeEventListener("scroll", onScroll);
   }, [hasSections, sections]);
+
+  // --- overflow-aware layout: collapse to dropdowns when the inline trio
+  //     (brand · phase labels · menu) can't fit on one line. Adapts to the
+  //     actual label text instead of a fixed pixel breakpoint. ---------------
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    let raf = 0;
+
+    function measure() {
+      const cs = getComputedStyle(header);
+      const padL = parseFloat(cs.paddingLeft) || 0;
+      const padR = parseFloat(cs.paddingRight) || 0;
+      const gap = parseFloat(cs.columnGap) || 0;
+      const available = header.clientWidth - padL - padR;
+
+      // scrollWidth reports each region's full width even while it's hidden
+      // (the .compact rules keep the inline trio measurable), so the decision
+      // is the same whether we're currently inline or compact — no flip-flop.
+      const brandW = brandRef.current ? brandRef.current.scrollWidth : 0;
+      const sectionW = sectionNavRef.current ? sectionNavRef.current.scrollWidth : 0;
+      const menuW = desktopMenuRef.current ? desktopMenuRef.current.scrollWidth : 0;
+      const regions = (brandW ? 1 : 0) + (sectionW ? 1 : 0) + (menuW ? 1 : 0);
+      const needed = brandW + sectionW + menuW + Math.max(0, regions - 1) * gap;
+
+      // collapse a little before the labels actually touch the menu (24px)
+      header.classList.toggle("compact", needed > available - 24);
+    }
+
+    function onResize() {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(measure);
+    }
+
+    measure();
+    window.addEventListener("resize", onResize, { passive: true });
+    // re-measure once the web font swaps in (it changes text widths)
+    if (document.fonts?.ready) document.fonts.ready.then(measure).catch(() => {});
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [hasSections]);
 
   // --- auto-hide bar: hide on scroll-down, slide back in on scroll-up -------
   // Runs at all widths. On mobile the resurfaced state also picks up the glass
@@ -170,11 +217,11 @@ export default function Navigation({ sections }) {
   return (
     <header ref={headerRef} className={styles.header}>
       {/* brand — desktop, and mobile when there are no sections */}
-      <Link href="/" className={styles.brand}>Alice Zhao is a UX lead @ Amazon.</Link>
+      <Link ref={brandRef} href="/" className={styles.brand}>Alice Zhao is a UX lead @ Amazon.</Link>
 
       {/* desktop phase labels */}
       {hasSections && (
-        <div className={styles.sectionNav} aria-label="Sections">
+        <div ref={sectionNavRef} className={styles.sectionNav} aria-label="Sections">
           {sections.map((sec, i) => (
             <span key={sec.id} className={styles.sectionItem}>
               <button
@@ -190,7 +237,7 @@ export default function Navigation({ sections }) {
       )}
 
       {/* desktop menu */}
-      <nav className={styles.menu} aria-label="Primary">
+      <nav ref={desktopMenuRef} className={styles.menu} aria-label="Primary">
         {NAV_LINKS.map((l) => (
           <Link key={l.label} href={l.href}>{l.label}</Link>
         ))}

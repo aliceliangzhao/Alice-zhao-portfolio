@@ -148,118 +148,124 @@
   color: var(--color-muted);
 }
 
-/* --- mobile controls: hidden on desktop ---------------------------------- */
+/* --- compact controls: hidden until the bar goes compact ----------------- */
 .mSections, .mBrand, .mMenu { display: none; }
 
-/* =========================================================================
-   Tablet and below (<=1024px): the inline brand + phase labels + menu get
-   crowded, so swap to compact controls — short brand · section jumper · Menu —
-   while keeping the three-region layout (brand left, section dropdown middle,
-   Menu right).
-   ========================================================================= */
-@media (max-width: 1024px) {
-  /* desktop bits give way to the compact controls */
-  .brand, .sectionNav, .menu { display: none; }
-  .mSections, .mMenu { display: block; }
-  .mBrand {
-    display: inline-block;
-    color: var(--color-fg);
-    text-decoration: none;
-    font-size: var(--font-size-p-s);
-    font-weight: var(--font-weight-bold);
-    white-space: nowrap;
-  }
-
-  /* lock the visual order independent of DOM order: brand · sections · menu */
-  .mBrand { order: 0; }
-  .mSections { order: 1; }
-  .mMenu { order: 2; }
-
-  /* shared toggle reset */
-  .mSectionsToggle, .mMenuToggle {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    color: var(--color-fg);
-    font-size: var(--font-size-p-s);
-    padding: 0;
-  }
-  .mSectionsToggle { font-weight: var(--font-weight-bold); display: inline-flex; align-items: center; gap: 0.45em; }
-  .mMenuToggle { font-weight: var(--font-weight-regular); }
-  .mSectionsToggle:focus-visible,
-  .mMenuToggle:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
-
-  /* left: current section + flipping caret */
-  .mSectionsCurrent { white-space: nowrap; }
-  .mSectionsToggle::after {
-    content: "";
-    width: 0.36em;
-    height: 0.36em;
-    border-right: 1.6px solid currentColor;
-    border-bottom: 1.6px solid currentColor;
-    transform: translateY(-0.14em) rotate(45deg);
-    transition: transform 0.2s ease;
-  }
-  .mSectionsOpen::after { transform: translateY(0.04em) rotate(-135deg); }
-
-  /* full-bleed dropdown panels under the bar */
-  .mSectionsMenu, .mMenuPanel {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: var(--color-bg);
-    padding: clamp(1.25rem, 5vw, 2rem) var(--space-pad) clamp(1.5rem, 6vw, 2.25rem);
-    display: flex;
-    flex-direction: column;
-  }
-  .mSectionsMenu { align-items: flex-start; gap: 0.9rem; }
-  .mMenuPanel { align-items: flex-end; text-align: right; }
-  .mMenuNav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.9rem; }
-  .mMenuContact {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    gap: 0.4rem 1.25rem;
-    margin-top: clamp(1.5rem, 6vw, 2.5rem);
-  }
-
-  /* list items: optional current marker + label */
-  .mItem, .mMenuNav a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6em;
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-    color: var(--color-fg);
-    text-decoration: none;
-    font-size: var(--font-size-p-m);
-    font-weight: var(--font-weight-bold);
-    line-height: 1.1;
-    padding: 0;
-  }
-  .mMenuContact a {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    color: var(--color-fg);
-    text-decoration: none;
-    font-size: var(--font-size-p-s);
-    font-weight: var(--font-weight-regular);
-  }
-  /* filled-square current marker; hidden but space kept when not current */
-  .mDot {
-    width: 0.5em;
-    height: 0.5em;
-    flex: none;
-    background: var(--color-fg);
-    visibility: hidden;
-  }
-  .mItemCurrent .mDot { visibility: visible; }
+/* Appearance of the compact controls. Defined unconditionally (harmless while
+   the controls are display:none); the .compact rules below just reveal them. */
+.mBrand {
+  color: var(--color-fg);
+  text-decoration: none;
+  font-size: var(--font-size-p-s);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
 }
+.mSectionsToggle, .mMenuToggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--color-fg);
+  font-size: var(--font-size-p-s);
+  padding: 0;
+}
+.mSectionsToggle { font-weight: var(--font-weight-bold); display: inline-flex; align-items: center; gap: 0.45em; }
+.mMenuToggle { font-weight: var(--font-weight-regular); }
+.mSectionsToggle:focus-visible,
+.mMenuToggle:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
+
+/* left: current section + flipping caret */
+.mSectionsCurrent { white-space: nowrap; }
+.mSectionsToggle::after {
+  content: "";
+  width: 0.36em;
+  height: 0.36em;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  transform: translateY(-0.14em) rotate(45deg);
+  transition: transform 0.2s ease;
+}
+.mSectionsOpen::after { transform: translateY(0.04em) rotate(-135deg); }
+
+/* full-bleed dropdown panels under the bar */
+.mSectionsMenu, .mMenuPanel {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--color-bg);
+  padding: clamp(1.25rem, 5vw, 2rem) var(--space-pad) clamp(1.5rem, 6vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+}
+.mSectionsMenu { align-items: flex-start; gap: 0.9rem; }
+.mMenuPanel { align-items: flex-end; text-align: right; }
+.mMenuNav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.9rem; }
+.mMenuContact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem 1.25rem;
+  margin-top: clamp(1.5rem, 6vw, 2.5rem);
+}
+
+/* list items: optional current marker + label */
+.mItem, .mMenuNav a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--color-fg);
+  text-decoration: none;
+  font-size: var(--font-size-p-m);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+  padding: 0;
+}
+.mMenuContact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  color: var(--color-fg);
+  text-decoration: none;
+  font-size: var(--font-size-p-s);
+  font-weight: var(--font-weight-regular);
+}
+/* filled-square current marker; hidden but space kept when not current */
+.mDot {
+  width: 0.5em;
+  height: 0.5em;
+  flex: none;
+  background: var(--color-fg);
+  visibility: hidden;
+}
+.mItemCurrent .mDot { visibility: visible; }
+
+/* =========================================================================
+   Compact layout (JS-driven). When the inline brand + phase labels + menu
+   can't fit on one line, Navigation.js measures and adds .compact. The inline
+   trio is pulled out of flow and hidden — but kept measurable (scrollWidth
+   still reports its full width) so JS can switch back to inline when the
+   window grows. The compact controls take over, in order:
+   short brand · section jumper · Menu.
+   ========================================================================= */
+.header:global(.compact) .brand,
+.header:global(.compact) .sectionNav,
+.header:global(.compact) .menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  max-width: 100%;   /* clamp the hidden box so it never triggers page scroll */
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
+}
+.header:global(.compact) .mBrand { display: inline-block; order: 0; }
+.header:global(.compact) .mSections { display: block; order: 1; }
+.header:global(.compact) .mMenu { display: block; order: 2; }
 
 /* =========================================================================
    Mobile only (<=640px): compact padding, a solid bar that turns to glass only
@@ -285,8 +291,9 @@
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
   }
-  /* project pages drop the brand on mobile: section jumper + Menu only */
-  .mBrandProject { display: none; }
+  /* project pages drop the brand on mobile: section jumper + Menu only.
+     Scoped under .compact to outrank the .compact .mBrand reveal above. */
+  .header:global(.compact) .mBrandProject { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
