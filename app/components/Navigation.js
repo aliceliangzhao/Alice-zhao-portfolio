@@ -209,7 +209,7 @@ export default function Navigation({ sections }) {
         {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {c.label}
-        {c.external && <ExtIcon />}
+        <ExtIcon />
       </a>
     );
   }
