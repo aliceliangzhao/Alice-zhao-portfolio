@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AWS S3 Tables — Alice Zhao</title>
+
+<!-- Satoshi (display + body) + a serif for the persona names -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&f[]=zodiak@400,500&display=swap" rel="stylesheet" />
+
+<!-- Shared design tokens: colour, rem type scale, spacing, 12-col grid -->
+<link rel="stylesheet" href="tokens.css" />
+
+<style>
+  /* =======================================================================
+     Project detail — AWS S3 Tables
+     A case study on the shared 12-col grid: title + meta + intro, a warm
+     hero band of three labelled product shots, then a numbered "Who and why"
+     section with an interactive tab switcher (Research / Target personas /
+     Pain points / User journey). Imagery is placeholder; the gradient band
+     and dotted fan-out arrows are CSS/SVG decoration.
+     ======================================================================= */
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-p-s);
+    line-height: var(--line-height-base);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* --- 12-column grid ----------------------------------------------------- */
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    column-gap: var(--space-gap);
+    padding-inline: var(--space-pad);
+    width: 100%;
+  }
+  .grid12 > * { min-width: 0; }
+
+  .muted { color: var(--color-muted); }
+  a { color: var(--color-link); }
+
+  /* --- Header / nav (mirrors the homepage) -------------------------------- */
+  header {
+    align-items: baseline;
+    padding-top: var(--space-header-y);
+    padding-bottom: var(--space-header-y);
+    font-size: var(--font-size-p-xs);
+  }
+  .brand {
+    grid-column: 1 / 8;
+    white-space: nowrap;
+    font-weight: var(--font-weight-medium);
+    text-decoration: none;
+    color: var(--color-fg);
+  }
+  .nav {
+    grid-column: 8 / 13;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-nav-gap);
+    align-items: baseline;
+    /* Match the MOBILE-rendered size of the menu nav items. p-m is fluid and
+       renders 24px on desktop but 18px on a phone; pin to its floor (18px) so
+       desktop looks identical to mobile. */
+    font-size: 1.125rem;
+  }
+  .nav a { color: var(--color-link); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+
+  /* Contact disclosure (native <details>): a dropdown of external links.
+     Identical to the homepage so the nav behaves the same across pages.
+     Works without JS; the script below adds outside-click / Esc niceties. */
+  .contact { position: relative; display: inline-block; }
+  .contact > summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+    cursor: pointer;
+    color: var(--color-link);
+  }
+  .contact > summary::-webkit-details-marker { display: none; }
+  .contact > summary:hover { text-decoration: underline; }
+  /* caret that flips open */
+  .contact > summary::after {
+    content: "";
+    width: 0.34em; height: 0.34em;
+    border-right: 1.4px solid currentColor;
+    border-bottom: 1.4px solid currentColor;
+    transform: translateY(-0.12em) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  .contact[open] > summary::after { transform: translateY(0.04em) rotate(-135deg); }
+  .contact__menu {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-fg);
+    z-index: 10;
+  }
+  .contact__menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.6rem 0.85rem;
+    color: var(--color-link);
+    text-decoration: none;
+    white-space: nowrap;
+    /* match the mobile contact links' rendered size: p-s floor (1rem = 16px) */
+    font-size: 1rem;
+    font-weight: var(--font-weight-regular);
+  }
+  .contact__menu a + a { border-top: 1px solid var(--color-fg); }
+  .contact__menu a:hover { background: #f4f4f4; }
+
+  /* external-link icon (↗) next to each Contact item */
+  .ext {
+    width: 0.82em; height: 0.82em;
+    flex: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--color-muted);
+  }
+
+  /* --- Title block -------------------------------------------------------- */
+  .lead { margin-top: clamp(2rem, 6vw, 4.5rem); }
+  .lead h1 {
+    grid-column: 1 / 11;
+    margin: 0;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    line-height: var(--line-height-tight);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  /* meta tag row: UPPERCASE, muted, separated by // */
+  .meta {
+    grid-column: 1 / 11;
+    margin: 0.9rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: var(--font-size-p-xs);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    list-style: none;
+    padding: 0;
+  }
+  .meta li { display: flex; gap: 0.5rem; }
+  .meta li + li::before { content: "//"; color: var(--color-muted); opacity: 0.6; }
+  .meta li + li { margin-left: 0; }
+  /* the // belongs between items; render it as a leading marker on each li>1 */
+  .meta li:not(:first-child) { gap: 0.5rem; }
+
+  .lead .body { grid-column: 1 / 9; margin-top: clamp(1.5rem, 3vw, 2.25rem); }
+  .lead .body p {
+    margin: 0 0 1.1rem;
+    font-size: var(--font-size-p-m);
+    line-height: var(--line-height-base);
+    text-wrap: pretty;
+  }
+  .lead .body p:last-child { margin-bottom: 0; }
+
+  /* --- Hero band: warm gradient + three labelled shots -------------------- */
+  .hero {
+    margin-top: clamp(2.5rem, 6vw, 4.5rem);
+    /* full-bleed: escape the page gutters edge to edge */
+    width: 100%;
+    background: linear-gradient(160deg, #fbe3cf 0%, #fdf1e7 38%, #ffffff 80%);
+    padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
+  }
+  .hero__inner { /* re-enter the grid inside the band */ }
+  .hero__shots {
+    grid-column: 1 / 13;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(1rem, 2vw, 1.75rem);
+    align-items: start;
+  }
+  .shot { display: flex; flex-direction: column; align-items: center; }
+  .shot__label {
+    margin: 0 0 0.6rem;
+    font-size: var(--font-size-p-xs);
+    font-weight: var(--font-weight-medium);
+  }
+  /* the dotted curved arrow that fans down from the label to the shot */
+  .shot__arrow { width: 100%; height: 28px; margin-bottom: -2px; color: var(--color-fg); opacity: 0.5; }
+  .shot__img {
+    width: 100%;
+    aspect-ratio: 16 / 11;
+    background: var(--color-card-placeholder);
+    border-radius: var(--radius-image);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  }
+
+  /* --- "01 Who and why" section ------------------------------------------- */
+  .section { margin-top: clamp(3.5rem, 8vw, 7rem); }
+  .section__head { margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem); }
+  .section__head h2 {
+    grid-column: 1 / 8;
+    margin: 0;
+    font-size: var(--font-size-h2);
+    font-weight: var(--font-weight-bold);
+    letter-spacing: -0.01em;
+  }
+  .section__head h2 .num { color: var(--color-muted); font-weight: var(--font-weight-medium); margin-right: 0.5rem; }
+  .section__head p {
+    grid-column: 1 / 9;
+    margin: 0.85rem 0 0;
+    font-size: var(--font-size-p-s);
+    color: var(--color-fg);
+    text-wrap: pretty;
+  }
+
+  /* tab bar */
+  .tabs {
+    grid-column: 1 / 13;
+    position: relative;              /* anchors the sliding underline */
+    display: flex;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    border-bottom: 1px solid var(--color-fg);
+    padding: 0;
+    margin: 0;
+  }
+  .tab {
+    appearance: none;
+    background: none;
+    border: none;
+    padding: 0 0 0.7rem;
+    margin-bottom: -1px;             /* sit the indicator on the rule */
+    font: inherit;
+    font-size: var(--font-size-p-s);
+    color: var(--color-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease;
+  }
+  .tab:hover { color: var(--color-fg); }
+  .tab[aria-selected="true"] {
+    color: var(--color-fg);
+    font-weight: var(--font-weight-bold);
+    border-bottom-color: var(--color-fg);
+  }
+  .tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
+
+  /* --- JS-enhanced tabs: one underline glides between tabs ----------------
+     When the script adds .js-tabs, each tab hands its own border to a single
+     shared .tab-underline that slides to the active tab. We also drop the
+     bold-on-active weight here so tabs keep a stable width (bold would widen
+     the active tab and make its neighbours shift mid-slide). Selection still
+     reads clearly via the muted -> ink colour shift plus the underline. */
+  .js-tabs .tab { border-bottom-color: transparent; }
+  .js-tabs .tab[aria-selected="true"] { font-weight: inherit; }
+  .tab-underline {
+    position: absolute;
+    bottom: -1px;                    /* sit on the 1px rule, like the old border */
+    left: 0;
+    height: 2px;
+    width: 0;
+    background: var(--color-fg);
+    transform: translateX(0);
+    /* width + position glide together; expo-style ease-out, no bounce */
+    transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+                width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
+  }
+
+  /* tab panel: caption in cols 1-2, content in cols 4-12 */
+  .panel { margin-top: clamp(1.75rem, 4vw, 3rem); }
+  .panel[hidden] { display: none; }
+  /* incoming panel fades in and rises a few px (JS adds .panel--enter for one
+     frame on the newly shown panel, then removes it to play the transition) */
+  .js-tabs .panel {
+    transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+  }
+  .js-tabs .panel--enter { opacity: 0; transform: translateY(6px); }
+  .panel__caption { grid-column: 1 / 3; }
+  .panel__caption p { margin: 0; font-size: var(--font-size-p-xs); line-height: var(--line-height-base); }
+  .panel__content { grid-column: 4 / 13; }
+
+  /* generic media placeholder, reused by the later sections' panels */
+  .media-ph {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--color-card-placeholder);
+    border-radius: var(--radius-image);
+    display: grid;
+    place-items: center;
+    color: var(--color-muted);
+    font-size: var(--font-size-p-xs);
+  }
+  .media-ph--tall { aspect-ratio: 4 / 3; }
+
+  /* Research: a data-texture placeholder + an AI synthesis icon beneath it */
+  .research__field {
+    width: 100%;
+    aspect-ratio: 32 / 9;
+    background:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0 1px, transparent 1px 9px),
+      var(--color-bg);
+    border: 1px solid #ececec;
+    border-radius: var(--radius-image);
+  }
+  .research__ai {
+    width: 56px; height: 56px;
+    margin: 1.25rem auto 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    color: #fff;
+    background: radial-gradient(circle at 50% 40%, #ff8a4c, #ff5e2b);
+    box-shadow: 0 0 0 8px rgba(255,106,61,0.14), 0 0 28px rgba(255,106,61,0.45);
+  }
+  .research__ai svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+
+  /* Target personas: two cards, donut placeholder + legend */
+  .personas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  .persona {
+    background: linear-gradient(180deg, #eef3fc 0%, #ffffff 60%);
+    border: 1px solid #e6ebf5;
+    border-radius: var(--radius-image);
+    padding: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .persona__eyebrow {
+    margin: 0;
+    font-size: var(--font-size-p-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .persona__name {
+    margin: 0.35rem 0 1.5rem;
+    font-family: "Zodiak", Georgia, serif;
+    font-weight: 500;
+    font-size: var(--font-size-p-m);
+  }
+  .persona__chart {
+    width: clamp(120px, 22vw, 150px);
+    aspect-ratio: 1;
+    margin: 0 auto 1.5rem;
+    border-radius: 50%;
+    /* placeholder donut ring */
+    background: var(--color-card-placeholder);
+    -webkit-mask: radial-gradient(circle, transparent 42%, #000 43%);
+            mask: radial-gradient(circle, transparent 42%, #000 43%);
+  }
+  .persona__legend { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+  .persona__legend li {
+    display: grid;
+    grid-template-columns: 0.7rem 1fr auto;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: var(--font-size-p-xs);
+  }
+  .persona__legend .dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; background: var(--color-muted); }
+  .persona__legend .pct { font-variant-numeric: tabular-nums; color: var(--color-fg); }
+
+  /* Pain points: three PROBLEM cards with wireframe-illustration placeholders */
+  .pains {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-project-col-gap);   /* 20px */
+  }
+  .pain {
+    border: 1px solid #ececec;
+    border-radius: var(--radius-image);
+    padding: clamp(1.1rem, 2vw, 1.6rem);
+    display: flex;
+    flex-direction: column;
+  }
+  .pain__eyebrow {
+    margin: 0;
+    font-size: var(--font-size-p-xs);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+  .pain__title {
+    margin: 0.5rem 0 1.25rem;
+    font-family: "Zodiak", Georgia, serif;
+    font-weight: 500;
+    font-size: var(--font-size-p-m);
+    line-height: var(--line-height-tight);
+  }
+  .pain__art {
+    margin-top: auto;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-bg);
+    border-top: 1px dashed #d6d6d6;
+    display: grid;
+    place-items: center;
+    color: var(--color-muted);
+    font-size: var(--font-size-p-xs);
+  }
+
+  /* User journey: a simple stepped placeholder */
+  .journey { display: flex; flex-direction: column; gap: 1rem; }
+  .journey__row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #ececec;
+  }
+  .journey__step {
+    width: 2rem; height: 2rem;
+    border-radius: 50%;
+    border: 1px solid var(--color-fg);
+    display: grid; place-items: center;
+    font-size: var(--font-size-p-xs);
+    font-variant-numeric: tabular-nums;
+  }
+  .journey__bar { height: 12px; background: var(--color-card-placeholder); border-radius: 6px; }
+
+  footer {
+    margin-top: clamp(4rem, 9vw, 8rem);
+    padding-bottom: var(--space-pad);
+    color: var(--color-muted);
+    font-size: var(--font-size-p-xs);
+  }
+  footer a { color: var(--color-link); }
+
+  /* =======================================================================
+     Responsive
+     ======================================================================= */
+  @media (max-width: 900px) {
+    .lead h1, .meta, .lead .body { grid-column: 1 / 13; }
+    .section__head h2, .section__head p { grid-column: 1 / 13; }
+    .panel__caption { grid-column: 1 / 13; margin-bottom: 1.25rem; }
+    .panel__content { grid-column: 1 / 13; }
+  }
+  /* =======================================================================
+     Mobile header (<=640px)
+     A sticky bar that hides on scroll-down and resurfaces (over a glass blur)
+     on scroll-up. Left = a "section jumper": the brand becomes the current
+     section title + caret, opening a list of the page's sections. Right = a
+     Menu disclosure listing the primary nav + contact links. Both are native
+     <details> so they work without JS and stay keyboard-accessible; only one
+     is open at a time (enforced in JS).
+     ======================================================================= */
+  .m-sections, .m-menu, .m-brand { display: none; }   /* desktop: hidden */
+
+  @media (max-width: 640px) {
+    /* --- the resurfacing glass bar ---
+       Selector is header.grid12 (not bare header) so display:flex beats the
+       .grid12 display:grid rule — equal-or-higher specificity is required, or
+       the header stays a grid and the two controls collapse into narrow
+       tracks. */
+    header.grid12 {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-header);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: var(--space-dock-y);
+      padding-bottom: var(--space-dock-y);
+      background: var(--color-bg);
+      border-bottom: 1px solid transparent;
+      will-change: transform;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                  background 0.25s ease, backdrop-filter 0.25s ease,
+                  border-color 0.25s ease;
+    }
+    header.is-hidden { transform: translateY(-100%); }       /* scrolled down */
+    header.is-glass {                                        /* resurfaced */
+      background: var(--dock-glass-bg);
+      -webkit-backdrop-filter: blur(var(--dock-glass-blur));
+      backdrop-filter: blur(var(--dock-glass-blur));
+    }
+    /* a panel is open: solid white bar (glass is only for the resurfaced,
+       collapsed state) */
+    header.has-open {
+      background: var(--color-bg);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    /* swap desktop brand/nav for the mobile controls */
+    .brand, .nav { display: none; }
+    .m-sections, .m-menu { display: block; }
+    .m-brand {
+      display: inline-block;
+      color: var(--color-fg);
+      text-decoration: none;
+      font-size: var(--font-size-p-s);
+      font-weight: var(--font-weight-bold);
+      white-space: nowrap;
+    }
+
+    /* shared summary reset */
+    .m-sections > summary,
+    .m-menu > summary {
+      list-style: none;
+      cursor: pointer;
+      color: var(--color-fg);
+      font-size: var(--font-size-p-s);
+      font-weight: var(--font-weight-bold);
+    }
+    .m-sections > summary::-webkit-details-marker,
+    .m-menu > summary::-webkit-details-marker { display: none; }
+    .m-sections > summary:focus-visible,
+    .m-menu > summary:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
+
+    /* left: current section title + flipping caret */
+    .m-sections > summary { display: inline-flex; align-items: center; gap: 0.45em; }
+    .m-sections__current { white-space: nowrap; }
+    .m-sections > summary::after {
+      content: "";
+      width: 0.36em; height: 0.36em;
+      border-right: 1.6px solid currentColor;
+      border-bottom: 1.6px solid currentColor;
+      transform: translateY(-0.14em) rotate(45deg);
+      transition: transform 0.2s ease;
+    }
+    .m-sections[open] > summary::after { transform: translateY(0.04em) rotate(-135deg); }
+
+    /* right: Menu / Close (text swaps via pseudo on open) */
+    .m-menu > summary { font-weight: var(--font-weight-regular); }
+    .m-menu > summary::after { content: "Menu"; }
+    .m-menu[open] > summary::after { content: "Close"; }
+
+    /* full-bleed dropdown panels under the bar. The containing block is the
+       header's padding box (full viewport width), so left/right:0 already
+       reach edge-to-edge; the panel's own padding restores the gutters. */
+    .m-sections__menu, .m-menu__panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--color-bg);
+      padding: clamp(1.25rem, 5vw, 2rem) var(--space-pad) clamp(1.5rem, 6vw, 2.25rem);
+      display: flex;
+      flex-direction: column;
+    }
+    /* sections: left-aligned big list */
+    .m-sections__menu { align-items: flex-start; gap: 0.9rem; }
+    /* menu: right-aligned nav, then a contact row */
+    .m-menu__panel { align-items: flex-end; text-align: right; }
+    .m-menu__nav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.9rem; }
+    .m-menu__contact {
+      display: flex; flex-wrap: wrap; justify-content: flex-end;
+      gap: 0.4rem 1.25rem;
+      margin-top: clamp(1.5rem, 6vw, 2.5rem);
+    }
+
+    /* list item: optional [.] current marker + label */
+    .m-sections__menu a,
+    .m-menu__nav a {
+      display: inline-flex; align-items: center; gap: 0.6em;
+      color: var(--color-fg); text-decoration: none;
+      font-size: var(--font-size-p-m); font-weight: var(--font-weight-bold);
+      line-height: 1.1;
+    }
+    .m-menu__contact a {
+      display: inline-flex; align-items: center; gap: 0.4em;
+      color: var(--color-fg); text-decoration: none;
+      font-size: var(--font-size-p-s); font-weight: var(--font-weight-regular);
+    }
+    /* the diagonal ↗ icon is styled by the shared .ext rule above */
+    /* the filled-square current marker; hidden (but space kept) when not current */
+    .m-dot {
+      width: 0.5em; height: 0.5em; flex: none;
+      background: var(--color-fg);
+      visibility: hidden;
+    }
+    a.is-current .m-dot { visibility: visible; }
+
+    /* targets land below the sticky bar when jumped to */
+    .lead, .section { scroll-margin-top: 4.5rem; }
+
+    /* existing mobile tweaks */
+    .hero__shots { grid-template-columns: 1fr; }
+    .personas, .pains { grid-template-columns: 1fr; }
+    .tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .tab { white-space: nowrap; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .tab, .tab-underline, .js-tabs .panel { transition: none; }
+    /* no slide: the underline jumps, the panel appears with no fade/rise */
+    .js-tabs .panel--enter { opacity: 1; transform: none; }
+    /* the header resurfaces instantly, no glide */
+    header { transition: none !important; }
+    .m-sections > summary::after { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="grid12">
+    <a class="brand" href="index.html">Alice Zhao is a UX lead @ Amazon.</a>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="index.html#work">Work</a>
+      <a href="index.html#about">About</a>
+      <details class="contact">
+        <summary aria-label="Contact links">Contact</summary>
+        <div class="contact__menu">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            Resume
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+          <a href="mailto:hello@example.com">
+            Email
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+        </div>
+      </details>
+    </nav>
+
+    <!-- Mobile only (<=640px). Left: a section jumper whose label tracks the
+         section in view. Right: a Menu disclosure with the primary nav +
+         contact links. Both hidden on desktop, where .brand/.nav take over. -->
+    <details class="m-sections">
+      <summary aria-label="Jump to section">
+        <span class="m-sections__current">01 Who and why</span>
+      </summary>
+      <div class="m-sections__menu">
+        <a href="#who-and-why" class="is-current"><span class="m-dot" aria-hidden="true"></span>01 Who and why</a>
+        <a href="#product-scoping"><span class="m-dot" aria-hidden="true"></span>02 Product scoping</a>
+        <a href="#design-evolution"><span class="m-dot" aria-hidden="true"></span>03 Design evolution</a>
+      </div>
+    </details>
+
+    <details class="m-menu">
+      <summary aria-label="Menu"></summary>
+      <div class="m-menu__panel">
+        <div class="m-menu__nav">
+          <a href="index.html"><span class="m-dot" aria-hidden="true"></span>Home</a>
+          <a href="index.html#work" class="is-current"><span class="m-dot" aria-hidden="true"></span>Work</a>
+          <a href="index.html#about"><span class="m-dot" aria-hidden="true"></span>About</a>
+        </div>
+        <div class="m-menu__contact">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+          <a href="#" target="_blank" rel="noopener noreferrer">Resume <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+          <a href="mailto:hello@example.com">Email <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+        </div>
+      </div>
+    </details>
+  </header>
+
+  <main>
+    <!-- Title + meta + intro -->
+    <section class="lead grid12">
+      <h1>AWS S3 Tables: 0 → 1 in 8 weeks</h1>
+      <ul class="meta">
+        <li>Design lead</li>
+        <li>2024</li>
+        <li>From concept to launch</li>
+        <li>Cloud infrastructure</li>
+      </ul>
+      <div class="body">
+        <p>Customers were spending millions building and maintaining complex
+        infrastructure for AI/ML workloads. I led a 20-person team to design
+        S3 Tables, a new product to eliminate that complexity, from concept to
+        launch in 8 weeks.</p>
+        <p>S3 Tables, featured in <a href="#">the 2024 AWS CEO keynote</a>,
+        handles infrastructure automatically, providing a seamless console
+        experience that lets teams turn big data into insights in seconds.</p>
+      </div>
+    </section>
+
+    <!-- Hero band: three labelled product shots fanning out from one idea -->
+    <section class="hero" aria-label="Product overview">
+      <div class="hero__inner grid12">
+        <div class="hero__shots">
+          <figure class="shot">
+            <figcaption class="shot__label">Structure</figcaption>
+            <svg class="shot__arrow" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M60 0 C 60 14, 20 14, 14 26" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" stroke-linecap="round"/>
+              <path d="M14 26 l5 -4 M14 26 l5 1" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+            <span class="shot__img" role="img" aria-label="S3 Tables structure view (placeholder)"></span>
+          </figure>
+          <figure class="shot">
+            <figcaption class="shot__label">Integration</figcaption>
+            <svg class="shot__arrow" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M60 0 C 60 16, 60 16, 60 26" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" stroke-linecap="round"/>
+              <path d="M60 26 l-4 -4 M60 26 l4 -4" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+            <span class="shot__img" role="img" aria-label="Query-engine integration view (placeholder)"></span>
+          </figure>
+          <figure class="shot">
+            <figcaption class="shot__label">Insight</figcaption>
+            <svg class="shot__arrow" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M60 0 C 60 14, 100 14, 106 26" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="2 3" stroke-linecap="round"/>
+              <path d="M106 26 l-5 -4 M106 26 l-5 1" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+            <span class="shot__img" role="img" aria-label="Insight / analytics view (placeholder)"></span>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 01 Who and why -->
+    <section class="section" id="who-and-why">
+      <div class="section__head grid12">
+        <h2><span class="num">01</span>Who and why</h2>
+        <p>20+ interviews revealed that customers don't want to store structured
+        data in unstructured storage while maintaining custom infrastructure.
+        They need a solution to streamline storage operations so teams can focus
+        on data, querying, and insight.</p>
+      </div>
+
+      <!-- tab bar -->
+      <div class="grid12">
+        <div class="tabs" role="tablist" aria-label="Who and why">
+          <button class="tab" id="tab-research"  role="tab" aria-selected="true"  aria-controls="panel-research">Research</button>
+          <button class="tab" id="tab-personas"  role="tab" aria-selected="false" aria-controls="panel-personas" tabindex="-1">Target personas</button>
+          <button class="tab" id="tab-pains"     role="tab" aria-selected="false" aria-controls="panel-pains" tabindex="-1">Pain points</button>
+          <button class="tab" id="tab-journey"   role="tab" aria-selected="false" aria-controls="panel-journey" tabindex="-1">User journey</button>
+        </div>
+      </div>
+
+      <!-- Research -->
+      <div class="panel grid12" id="panel-research" role="tabpanel" aria-labelledby="tab-research" tabindex="0">
+        <div class="panel__caption">
+          <p>Data engineers maintain storage systems daily. Strategic leads
+          evaluate infrastructure costs and reliability.</p>
+        </div>
+        <div class="panel__content">
+          <div class="research__field" role="img" aria-label="Wall of interview transcripts (placeholder)"></div>
+          <div class="research__ai" role="img" aria-label="AI synthesis">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3 3 3 0 0 0 0 6 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0 0-6 3 3 0 0 0-3-3Z"/><path d="M12 9v6M9 12h6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Target personas -->
+      <div class="panel grid12" id="panel-personas" role="tabpanel" aria-labelledby="tab-personas" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Data engineers maintain storage systems daily. Strategic leads
+          evaluate infrastructure costs and reliability.</p>
+        </div>
+        <div class="panel__content">
+          <div class="personas">
+            <article class="persona">
+              <p class="persona__eyebrow">Persona</p>
+              <h3 class="persona__name">Data engineer</h3>
+              <div class="persona__chart" role="img" aria-label="Time-allocation donut chart (placeholder)"></div>
+              <ul class="persona__legend">
+                <li><span class="dot"></span><span>Storage maintenance</span><span class="pct">50%</span></li>
+                <li><span class="dot"></span><span>Data ingestion</span><span class="pct">30%</span></li>
+                <li><span class="dot"></span><span>Pipeline integration</span><span class="pct">20%</span></li>
+              </ul>
+            </article>
+            <article class="persona">
+              <p class="persona__eyebrow">Persona</p>
+              <h3 class="persona__name">Strategic lead</h3>
+              <div class="persona__chart" role="img" aria-label="Time-allocation donut chart (placeholder)"></div>
+              <ul class="persona__legend">
+                <li><span class="dot"></span><span>Infra management</span><span class="pct">70%</span></li>
+                <li><span class="dot"></span><span>Datalake strategy</span><span class="pct">18%</span></li>
+                <li><span class="dot"></span><span>Data integration</span><span class="pct">13%</span></li>
+              </ul>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pain points -->
+      <div class="panel grid12" id="panel-pains" role="tabpanel" aria-labelledby="tab-pains" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Millions wasted on custom infrastructure and integration with query
+          engines, while no native way to keep structured data up-to-date.</p>
+        </div>
+        <div class="panel__content">
+          <div class="pains">
+            <article class="pain">
+              <p class="pain__eyebrow">Problem</p>
+              <h3 class="pain__title">Don't have storages for structured data</h3>
+              <div class="pain__art" role="img" aria-label="Wireframe illustration (placeholder)">Illustration</div>
+            </article>
+            <article class="pain">
+              <p class="pain__eyebrow">Problem</p>
+              <h3 class="pain__title">Time-consuming to integrate with query engines</h3>
+              <div class="pain__art" role="img" aria-label="Wireframe illustration (placeholder)">Illustration</div>
+            </article>
+            <article class="pain">
+              <p class="pain__eyebrow">Problem</p>
+              <h3 class="pain__title">Don't want to own custom infrastructure</h3>
+              <div class="pain__art" role="img" aria-label="Wireframe illustration (placeholder)">Illustration</div>
+            </article>
+          </div>
+        </div>
+      </div>
+
+      <!-- User journey -->
+      <div class="panel grid12" id="panel-journey" role="tabpanel" aria-labelledby="tab-journey" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>From provisioning storage to querying insights, the journey today
+          spans days of setup. S3 Tables collapses it to minutes.</p>
+        </div>
+        <div class="panel__content">
+          <div class="journey">
+            <div class="journey__row"><span class="journey__step">1</span><div class="journey__bar" style="width:35%"></div></div>
+            <div class="journey__row"><span class="journey__step">2</span><div class="journey__bar" style="width:60%"></div></div>
+            <div class="journey__row"><span class="journey__step">3</span><div class="journey__bar" style="width:80%"></div></div>
+            <div class="journey__row"><span class="journey__step">4</span><div class="journey__bar" style="width:100%"></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 Product scoping -->
+    <section class="section" id="product-scoping">
+      <div class="section__head grid12">
+        <h2><span class="num">02</span>Product scoping</h2>
+        <p>I adapted the AWS JTBD framework to give the team a shared language
+        for strategic scope trade-offs. We categorized every user action and API
+        detail into 6 workflows and aligned on a launch plan in one week.</p>
+      </div>
+
+      <div class="grid12">
+        <div class="tabs" role="tablist" aria-label="Product scoping">
+          <button class="tab" id="tab-jtbd"   role="tab" aria-selected="true"  aria-controls="panel-jtbd">JTBD framework</button>
+          <button class="tab" id="tab-action" role="tab" aria-selected="false" aria-controls="panel-action" tabindex="-1">Action plan</button>
+        </div>
+      </div>
+
+      <!-- JTBD framework -->
+      <div class="panel grid12" id="panel-jtbd" role="tabpanel" aria-labelledby="tab-jtbd" tabindex="0">
+        <div class="panel__caption">
+          <p>Data engineers maintain storage systems daily. Strategic leads
+          evaluate infrastructure costs and reliability.</p>
+        </div>
+        <div class="panel__content">
+          <div class="research__field" role="img" aria-label="JTBD workflow mapping (placeholder)"></div>
+          <div class="research__ai" role="img" aria-label="AI synthesis">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a3 3 0 0 0-3 3 3 3 0 0 0 0 6 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0 0-6 3 3 0 0 0-3-3Z"/><path d="M12 9v6M9 12h6"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action plan -->
+      <div class="panel grid12" id="panel-action" role="tabpanel" aria-labelledby="tab-action" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Six workflows, scoped and sequenced. Each maps a job-to-be-done to
+          the API surface and the console screens that deliver it.</p>
+        </div>
+        <div class="panel__content">
+          <div class="media-ph" role="img" aria-label="Launch plan / workflow breakdown (placeholder)">Action plan</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 Design evolution -->
+    <section class="section" id="design-evolution">
+      <div class="section__head grid12">
+        <h2><span class="num">03</span>Design evolution</h2>
+        <p>I adapted the AWS JTBD framework to give the team a shared language
+        for strategic scope trade-offs. We categorized every user action and API
+        detail into 6 workflows and aligned on a launch plan in one week.</p>
+      </div>
+
+      <div class="grid12">
+        <div class="tabs" role="tablist" aria-label="Design evolution">
+          <button class="tab" id="tab-userflow" role="tab" aria-selected="true"  aria-controls="panel-userflow">User flow exploration</button>
+          <button class="tab" id="tab-sketches" role="tab" aria-selected="false" aria-controls="panel-sketches" tabindex="-1">Early sketches</button>
+          <button class="tab" id="tab-options"  role="tab" aria-selected="false" aria-controls="panel-options" tabindex="-1">Design options</button>
+          <button class="tab" id="tab-tradeoffs" role="tab" aria-selected="false" aria-controls="panel-tradeoffs" tabindex="-1">Trade-offs</button>
+          <button class="tab" id="tab-decision" role="tab" aria-selected="false" aria-controls="panel-decision" tabindex="-1">Decision</button>
+        </div>
+      </div>
+
+      <!-- User flow exploration -->
+      <div class="panel grid12" id="panel-userflow" role="tabpanel" aria-labelledby="tab-userflow" tabindex="0">
+        <div class="panel__caption">
+          <p>Mapping how data engineers move from provisioning a table to
+          querying it, surfacing where the console could collapse steps.</p>
+        </div>
+        <div class="panel__content">
+          <div class="media-ph" role="img" aria-label="User flow diagram (placeholder)">User flow</div>
+        </div>
+      </div>
+
+      <!-- Early sketches -->
+      <div class="panel grid12" id="panel-sketches" role="tabpanel" aria-labelledby="tab-sketches" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Low-fidelity passes exploring layout and navigation for the table
+          creation and management surfaces.</p>
+        </div>
+        <div class="panel__content">
+          <div class="personas">
+            <div class="media-ph media-ph--tall" role="img" aria-label="Sketch (placeholder)">Sketch 01</div>
+            <div class="media-ph media-ph--tall" role="img" aria-label="Sketch (placeholder)">Sketch 02</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Design options -->
+      <div class="panel grid12" id="panel-options" role="tabpanel" aria-labelledby="tab-options" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Three directions weighed against scope, engineering lift, and how
+          well each fit existing console patterns.</p>
+        </div>
+        <div class="panel__content">
+          <div class="pains">
+            <div class="media-ph media-ph--tall" role="img" aria-label="Option A (placeholder)">Option A</div>
+            <div class="media-ph media-ph--tall" role="img" aria-label="Option B (placeholder)">Option B</div>
+            <div class="media-ph media-ph--tall" role="img" aria-label="Option C (placeholder)">Option C</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trade-offs -->
+      <div class="panel grid12" id="panel-tradeoffs" role="tabpanel" aria-labelledby="tab-tradeoffs" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>Where we chose speed-to-launch over configurability, and the bets
+          that let us ship in 8 weeks without boxing in future work.</p>
+        </div>
+        <div class="panel__content">
+          <div class="media-ph" role="img" aria-label="Trade-off matrix (placeholder)">Trade-offs</div>
+        </div>
+      </div>
+
+      <!-- Decision -->
+      <div class="panel grid12" id="panel-decision" role="tabpanel" aria-labelledby="tab-decision" tabindex="0" hidden>
+        <div class="panel__caption">
+          <p>The direction we committed to, and the rationale that aligned 20+
+          people behind a single launch plan.</p>
+        </div>
+        <div class="panel__content">
+          <div class="media-ph" role="img" aria-label="Final design direction (placeholder)">Decision</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="grid12">
+    <div style="grid-column: 1 / 13;"><a href="index.html">← Back to all work</a></div>
+  </footer>
+
+<script>
+/* Contact disclosure niceties (desktop dropdown): close it when clicking
+   outside, when pressing Escape, or after following a link. Identical to the
+   homepage so the nav behaves the same across pages. */
+(() => {
+  const contact = document.querySelector(".contact");
+  if (!contact) return;
+
+  document.addEventListener("click", (e) => {
+    if (contact.open && !contact.contains(e.target)) contact.open = false;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && contact.open) {
+      contact.open = false;
+      contact.querySelector("summary").focus();
+    }
+  });
+  contact.querySelectorAll(".contact__menu a").forEach((a) =>
+    a.addEventListener("click", () => { contact.open = false; })
+  );
+})();
+
+/* =========================================================================
+   Mobile header: resurfacing glass bar + section jumper + Menu disclosure.
+   All progressive enhancement — the <details> work without this script; this
+   adds mutual exclusion, the hide/reveal-on-scroll behaviour, and the
+   scroll-spy that keeps the left label in sync with the section in view.
+   ========================================================================= */
+(() => {
+  const header   = document.querySelector("header");
+  const sections = document.querySelector(".m-sections");
+  const menu     = document.querySelector(".m-menu");
+  if (!header) return;
+  const disclosures = [sections, menu].filter(Boolean);
+  const mobile = matchMedia("(max-width: 640px)");
+
+  // reflect "any panel open" on the header (solid bar + full rule) and keep
+  // the two disclosures mutually exclusive
+  function syncOpen(justOpened) {
+    if (justOpened) disclosures.forEach((d) => { if (d !== justOpened) d.open = false; });
+    header.classList.toggle("has-open", disclosures.some((d) => d.open));
+  }
+  disclosures.forEach((d) => {
+    d.addEventListener("toggle", () => { if (d.open) syncOpen(d); else syncOpen(); });
+    // close after following a link inside the panel
+    d.querySelectorAll("a").forEach((a) => a.addEventListener("click", () => { d.open = false; }));
+  });
+  // outside-click + Escape close any open panel
+  document.addEventListener("click", (e) => {
+    disclosures.forEach((d) => { if (d.open && !d.contains(e.target)) d.open = false; });
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Escape") return;
+    disclosures.forEach((d) => {
+      if (d.open) { d.open = false; d.querySelector("summary").focus(); }
+    });
+  });
+
+  // --- resurfacing glass bar: hide on scroll-down, reveal on scroll-up ---
+  let lastY = window.scrollY, ticking = false;
+  const REVEAL_AT = 8;     // ignore sub-pixel jitter
+  function onScroll() {
+    if (!mobile.matches) { header.classList.remove("is-hidden", "is-glass"); return; }
+    const y = window.scrollY;
+    const goingDown = y > lastY;
+    const open = disclosures.some((d) => d.open);
+
+    if (y < 4) {
+      // at the very top: fully solid, fully shown
+      header.classList.remove("is-hidden", "is-glass");
+    } else if (open) {
+      header.classList.remove("is-hidden");       // never hide while a panel is open
+    } else if (goingDown && y - lastY > REVEAL_AT) {
+      header.classList.add("is-hidden");
+      header.classList.remove("is-glass");
+    } else if (!goingDown && lastY - y > REVEAL_AT) {
+      header.classList.remove("is-hidden");
+      header.classList.add("is-glass");            // resurfaced over content -> glass
+    }
+    lastY = y;
+    ticking = false;
+  }
+  addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+  }, { passive: true });
+
+  // --- scroll-spy: keep the left label and the [.] markers on the section in view ---
+  const current = document.querySelector(".m-sections__current");
+  const spied = Array.from(document.querySelectorAll(".section[id]"));
+  const linkFor = (id) => document.querySelector(`.m-sections__menu a[href="#${id}"]`);
+  if (current && spied.length && "IntersectionObserver" in window) {
+    let activeId = null;
+    const io = new IntersectionObserver((entries) => {
+      // pick the entry nearest the top that's intersecting
+      const visible = entries.filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (!visible.length) return;
+      const id = visible[0].target.id;
+      if (id === activeId) return;
+      activeId = id;
+      // label = "<num> <title>" (the h2 packs them with no space between the
+      // .num span and the title text, so join them explicitly)
+      const head = visible[0].target.querySelector(".section__head h2");
+      if (head) {
+        const num = head.querySelector(".num");
+        const title = head.lastChild ? head.lastChild.textContent.trim() : "";
+        current.textContent = num ? `${num.textContent.trim()} ${title}` : head.textContent.trim();
+      }
+      document.querySelectorAll(".m-sections__menu a").forEach((a) =>
+        a.classList.toggle("is-current", a === linkFor(id))
+      );
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+    spied.forEach((s) => io.observe(s));
+  }
+})();
+
+/* Interactive tabs (WAI-ARIA tabs pattern). Each [role="tablist"] on the page
+   is wired independently, so the three sections' tab groups don't interfere.
+   Click selects; Left/Right (and Up/Down) move between tabs, Home/End jump to
+   first/last. Only the active panel is shown; the rest carry [hidden]. Roving
+   tabindex keeps one tab per group in the tab order. */
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+document.querySelectorAll('[role="tablist"]').forEach((tablist) => {
+  const tabs = Array.from(tablist.querySelectorAll('[role="tab"]'));
+  if (!tabs.length) return;
+
+  /* Enhance: hand the per-tab borders to a single sliding underline. */
+  tablist.classList.add("js-tabs");
+  const underline = document.createElement("span");
+  underline.className = "tab-underline";
+  underline.setAttribute("aria-hidden", "true");
+  tablist.appendChild(underline);
+
+  // glide the underline to a tab's position/width (relative to the tablist)
+  function moveUnderline(tab) {
+    underline.style.transform = `translateX(${tab.offsetLeft}px)`;
+    underline.style.width = `${tab.offsetWidth}px`;
+  }
+
+  // play the incoming panel's fade-up: start in the entered state, then drop
+  // the class on the next frame so the transition runs from there to rest
+  function enterPanel(panel) {
+    if (reduceMotion) return;
+    panel.classList.add("panel--enter");
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => panel.classList.remove("panel--enter"))
+    );
+  }
+
+  function select(tab, setFocus = true) {
+    tabs.forEach((t) => {
+      const selected = t === tab;
+      t.setAttribute("aria-selected", String(selected));
+      t.tabIndex = selected ? 0 : -1;
+      const panel = document.getElementById(t.getAttribute("aria-controls"));
+      const wasHidden = panel.hidden;
+      panel.hidden = !selected;
+      if (selected && wasHidden) enterPanel(panel);  // only animate a real switch
+    });
+    moveUnderline(tab);
+    if (setFocus) tab.focus();
+  }
+
+  tablist.addEventListener("click", (e) => {
+    const tab = e.target.closest('[role="tab"]');
+    if (tab) select(tab, false);
+  });
+
+  tablist.addEventListener("keydown", (e) => {
+    const i = tabs.indexOf(document.activeElement);
+    if (i < 0) return;
+    let next = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = tabs[(i + 1) % tabs.length];
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = tabs[(i - 1 + tabs.length) % tabs.length];
+    else if (e.key === "Home") next = tabs[0];
+    else if (e.key === "End") next = tabs[tabs.length - 1];
+    if (next) { e.preventDefault(); select(next); }
+  });
+
+  // place the underline under the initially-selected tab, without a slide
+  const initial = tabs.find((t) => t.getAttribute("aria-selected") === "true") || tabs[0];
+  const noSlide = underline.style.transition;
+  underline.style.transition = "none";
+  moveUnderline(initial);
+  // restore the transition after the first paint so future moves glide
+  requestAnimationFrame(() => { underline.style.transition = noSlide; });
+
+  // keep the underline aligned when the tab bar reflows (font load, resize,
+  // horizontal scroll on mobile)
+  let rAF;
+  const realign = () => {
+    cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(() => {
+      const active = tabs.find((t) => t.getAttribute("aria-selected") === "true");
+      if (active) {
+        const prev = underline.style.transition;
+        underline.style.transition = "none";       // snap, don't slide, on reflow
+        moveUnderline(active);
+        requestAnimationFrame(() => { underline.style.transition = prev; });
+      }
+    });
+  };
+  addEventListener("resize", realign);
+  tablist.addEventListener("scroll", realign);     // mobile: tabs overflow-x
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(realign);
+});
+</script>
+
+<!-- Site-wide custom cursor (shared across all pages). See cursor.js. -->
+<script src="cursor.js" defer></script>
+</body>
+</html>
