@@ -1,0 +1,126 @@
+/* ===========================================================================
+   tokens.css — design tokens (atomic values)
+   The single source of truth for color, type, spacing, grid, and motion.
+   Stylesheets should reference these variables, never hard-coded values.
+   =========================================================================== */
+
+:root {
+  color-scheme: light;
+
+  /* --- Color ------------------------------------------------------------- */
+  --color-fg: #111;            /* primary text / ink */
+  --color-muted: #9b9b9b;      /* secondary / de-emphasized text */
+  --color-bg: #fff;            /* page background */
+  --color-link: var(--color-fg);
+
+  /* --- Typography -------------------------------------------------------- */
+  --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-display: "Satoshi", "Helvetica Neue", "Arial Black", Arial, sans-serif;
+
+  /* Type is fluid: clamp(min, preferred[vw-based], max), in rem so it respects
+     the user's browser font-size setting (1rem = 16px default). The max equals
+     the original desktop size; the min keeps things legible on small screens.
+     The vw term stays viewport-relative; only the fixed px parts became rem. */
+  --font-size-base: clamp(0.9375rem, 1.1vw + 0.5625rem, 1.5rem);  /* header / nav / scroll cue */
+  --font-size-h1:   clamp(2.5rem, 7vw, 6rem);                     /* h1 — project titles */
+  --font-size-h2:   clamp(1.75rem, 3.6vw, 3rem);                  /* h2 */
+
+  /* paragraph scale */
+  --font-size-p-l: clamp(1.375rem, 1.8vw + 0.5rem, 2rem);         /* p-l — large: intro */
+  --font-size-p-m: clamp(1.125rem, 1.0vw + 0.75rem, 1.5rem);      /* p-m — captions, tags */
+  --font-size-p-s: clamp(1rem, 0.8vw + 0.6875rem, 1.25rem);       /* p-s — small */
+  --font-size-p-xs: clamp(0.8125rem, 0.5vw + 0.6875rem, 1rem);    /* p-xs — header nav links */
+
+  --line-height-base: 1.32;
+  --line-height-tight: 1.08;   /* big project titles */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --tracking-display: -0.08em; /* letter-spacing for the big hero name */
+
+  /* --- Spacing ----------------------------------------------------------- */
+  /* rem so padding/gaps scale with the user's font setting (1rem = 16px). The
+     vw terms in the clamp()s stay viewport-relative; fixed parts are rem. */
+  --space-pad: clamp(1rem, 2.6vw, 2rem);   /* page edge gutters / content padding */
+  --space-gap: clamp(0.75rem, 1.6vw, 1.25rem);   /* grid column gap */
+  --space-header-y: clamp(1rem, 1.8vw, 1.375rem); /* header vertical padding */
+  --space-dock-y: clamp(0.625rem, 1.2vw, 0.875rem);   /* compact padding for the docked (resurfacing) header */
+  --space-nav-gap: clamp(0.875rem, 1.6vw, 1.375rem);  /* gap between nav links */
+  --space-hero-bottom: 0.625rem;   /* the name sits attached to the screen bottom */
+  --space-cue-bottom: clamp(1rem, 2vw, 1.625rem); /* scroll cue offset from bottom */
+  --space-section-top: clamp(4rem, 9vw, 7.5rem); /* gap above the project list */
+  --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer name block */
+  --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);    /* footer legal-row vertical padding */
+  --space-row-gap: clamp(3rem, 6vw, 5rem);    /* vertical gap between project rows */
+  --space-card-gap: clamp(0.75rem, 1.2vw, 1rem); /* gap inside a card */
+  --space-project-col-gap: 1.25rem;  /* 20px — fixed gap between the two project columns */
+
+  /* --- Project cards ----------------------------------------------------- */
+  --color-card-placeholder: #d9d9d9; /* image placeholder fill */
+  --color-card-surface: #efefef;     /* light-grey fill behind a secondary-work card */
+  --project-image-aspect: 1 / 0.82;  /* image card placeholder ratio */
+  --radius-image: 20px;              /* rounded corners on a standalone image placeholder */
+  --radius-card: 20px;               /* rounded corners on a card container */
+  --radius-image-nested: 10px;       /* image inside a padded card: smaller so its
+                                        curve stays concentric with the container's */
+  --space-card-inset: clamp(1rem, 1.8vw, 1.5rem); /* padding inside a filled card container */
+
+  /* --- Grid -------------------------------------------------------------- */
+  --grid-cols: 12;             /* 12-column grid */
+
+  /* --- Hero / canvas animation (mirrored by JS via getComputedStyle) ----- */
+  --hero-aspect: 0.22;         /* canvas height as a fraction of its width */
+  --hero-cell: 12px;           /* halftone grid spacing (dot density) */
+
+  /* --- Halftone motif (the hero's dots, made the page's grammar) --------- */
+  /* The project dividers print at the SAME dot pitch as the hero name, so the
+     halftone reads as one language across the page, not a one-off trick. */
+  --dot-pitch: var(--hero-cell);   /* dot spacing = hero pitch (12px) */
+  --dot-rule-radius: 1.3px;        /* dot radius in the project dividers */
+  --dot-rule-thickness: 3px;       /* band height of a single dotted rule */
+
+  /* --- Dock glass -------------------------------------------------------- */
+  /* The resurfacing header floats over the page on a frosted-glass panel
+     instead of a hairline rule: a translucent white fill plus a backdrop blur
+     so the ink scrolling beneath it softens rather than reads through sharply.
+     A documented exception to the DESIGN.md Flat-Sheet Rule, scoped to this one
+     transient overlay (it is never a resting surface). */
+  --dock-glass-bg: rgba(255, 255, 255, 0.6);  /* translucent paper tint */
+  --dock-glass-blur: 16px;                     /* backdrop blur radius */
+
+  /* --- Cursor lens ------------------------------------------------------- */
+  /* The ONE sanctioned color on this monochrome page. A soft gradient disc
+     follows the pointer and, via mix-blend-mode: lighten, recolors the ink
+     under it (text, the canvas name, image darks) while leaving the white
+     paper untouched. Transient and cursor-bound; the page is pure ink at rest.
+     See DESIGN.md "Cursor Lens". Only on fine-pointer hover, never under
+     reduced motion. */
+  --lens-ember:   #ff6a3d;   /* warm */
+  --lens-magenta: #e0218a;   /* mid  */
+  --lens-violet:  #8a2be2;   /* cool */
+  /* The lens is a mesh of large saturated colour BLOBS that are heavily blurred
+     (so the hues melt into one another with soft wavy boundaries) and drift on
+     wide, fast paths (so the mesh visibly flows). The disc's outer edge stays
+     crisp because the circular parent clips the blurred layers. No light/white
+     blob — every colour is saturated. Colours live here; geometry + motion live
+     in the .lens rules. */
+  --lens-size: clamp(240px, 30vw, 460px);  /* disc diameter, fluid */
+
+  /* --- Z-index scale ----------------------------------------------------- */
+  /* Page content sits at 1; the scroll cue at 2; the resurfacing header docks
+     above content but below the lens; the cursor lens is the top compositing
+     layer so it blends over everything. */
+  --z-header: 50;
+  --z-lens: 100;
+
+  /* --- Scroll cue (a lone segment that travels down) --------------------- */
+  --scroll-cue-height: 64px;     /* total travel length */
+  --scroll-cue-width: 16px;      /* hit/centering box width */
+  --scroll-cue-thickness: 2px;   /* line thickness */
+  --scroll-cue-runner: 24px;     /* length of the moving segment */
+  --scroll-cue-trail: 44px;      /* length of the fading afterimage trail */
+  --scroll-cue-duration: 1.8s;   /* one travel cycle */
+}

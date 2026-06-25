@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alice Zhao — Product Designer</title>
+
+<!-- Satoshi (display + body), the grotesque used across the page -->
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap" rel="stylesheet" />
+
+<!-- Design tokens: colour, the rem type scale, spacing, and the 12-col grid.
+     Reused from the previous build so the grid system is literally the same. -->
+<link rel="stylesheet" href="tokens.css" />
+
+<style>
+  /* =======================================================================
+     Homepage — editorial v1
+     Clean ink-on-paper layout on the shared 12-col grid. A brand line + a
+     three-item nav (Work / About / Contact, Contact being a disclosure with
+     external links), an intro, a Selected-work section where each company is
+     a row (meta in cols 1-2, projects in cols 4-12), and an About section.
+     ======================================================================= */
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: var(--font-size-p-s);
+    line-height: var(--line-height-base);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* --- 12-column grid ----------------------------------------------------- */
+  .grid12 {
+    display: grid;
+    grid-template-columns: repeat(var(--grid-cols), 1fr);
+    column-gap: var(--space-gap);
+    padding-inline: var(--space-pad);
+    width: 100%;
+  }
+  .grid12 > * { min-width: 0; }   /* let tracks shrink below content size */
+
+  /* paragraph scale utilities */
+  .p-m  { font-size: var(--font-size-p-m); }
+  .p-s  { font-size: var(--font-size-p-s); }
+  .p-xs { font-size: var(--font-size-p-xs); }
+  .muted { color: var(--color-muted); }
+
+  /* anchored sections clear the top edge a little when jumped to */
+  #work, #about { scroll-margin-top: 2rem; }
+
+  /* --- Header / nav ------------------------------------------------------- */
+  header {
+    align-items: baseline;
+    padding-top: var(--space-header-y);
+    padding-bottom: var(--space-header-y);
+    font-size: var(--font-size-p-xs);
+  }
+  .brand {
+    grid-column: 1 / 8;
+    white-space: nowrap;
+    font-weight: var(--font-weight-medium);
+  }
+  .nav {
+    grid-column: 8 / 13;
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-nav-gap);
+    align-items: baseline;
+    /* Match the MOBILE-rendered size of the menu nav items. The type tokens
+       are fluid (clamp + vw), so --font-size-p-m renders 24px on desktop but
+       only 18px on a phone. To make desktop look the same as mobile we pin to
+       p-m's floor (1.125rem = 18px) — the size mobile actually shows. */
+    font-size: 1.125rem;
+  }
+  .nav a, .nav summary {
+    color: var(--color-link);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .nav > a:hover { text-decoration: underline; }
+
+  /* Contact disclosure (native <details>): a dropdown of external links.
+     Works without JS; the script below adds outside-click / Esc niceties.
+     The panel is flat, sharp-cornered and bordered (no shadow). */
+  .contact { position: relative; display: inline-block; }
+  .contact > summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4em;
+  }
+  .contact > summary::-webkit-details-marker { display: none; }
+  .contact > summary:hover { text-decoration: underline; }
+  /* caret that flips open */
+  .contact > summary::after {
+    content: "";
+    width: 0.34em; height: 0.34em;
+    border-right: 1.4px solid currentColor;
+    border-bottom: 1.4px solid currentColor;
+    transform: translateY(-0.12em) rotate(45deg);
+    transition: transform 0.2s ease;
+  }
+  .contact[open] > summary::after { transform: translateY(0.04em) rotate(-135deg); }
+  .contact__menu {
+    position: absolute;
+    top: calc(100% + 0.55rem);
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    min-width: 11rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-fg);
+    z-index: 10;
+  }
+  .contact__menu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 0.6rem 0.85rem;
+    color: var(--color-link);
+    text-decoration: none;
+    white-space: nowrap;
+    /* match the mobile contact links' rendered size: p-s floor (1rem = 16px) */
+    font-size: 1rem;
+    font-weight: var(--font-weight-regular);
+  }
+  .contact__menu a + a { border-top: 1px solid var(--color-fg); }
+  .contact__menu a:hover { background: #f4f4f4; }
+
+  /* external-link icon (↗) next to each Contact item */
+  .ext {
+    width: 0.82em; height: 0.82em;
+    flex: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    color: var(--color-muted);
+  }
+
+  /* --- Intro -------------------------------------------------------------- */
+  .intro { margin-top: clamp(1.5rem, 4vw, 3.5rem); }
+  .intro p {
+    grid-column: 1 / 8;
+    margin: 0;
+    font-size: var(--font-size-p-l);
+    line-height: var(--line-height-base);
+    text-wrap: pretty;
+  }
+  .intro .muted { color: var(--color-muted); }
+
+  /* --- Section label ------------------------------------------------------ */
+  .section-label {
+    grid-column: 1 / 13;
+    margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+    font-size: var(--font-size-p-xs);
+    color: var(--color-muted);
+  }
+
+  /* --- Selected work ------------------------------------------------------ */
+  .work { margin-top: var(--space-section-top); }
+
+  /* each company is a row on the same 12-col grid */
+  .work-row { row-gap: 1.25rem; align-items: start; }
+  .work-row + .work-row { margin-top: var(--space-row-gap); }
+
+  /* meta: company name + year + description, cols 1-2 */
+  .work-meta { grid-column: 1 / 3; }
+  .work-meta h3 {
+    margin: 0;
+    font-size: var(--font-size-p-s);
+    font-weight: var(--font-weight-bold);
+  }
+  .work-meta .year {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: var(--font-size-p-xs);
+    color: var(--color-muted);
+  }
+  .work-meta p {
+    margin: 0.85rem 0 0;
+    font-size: var(--font-size-p-xs);
+    line-height: var(--line-height-base);
+  }
+
+  /* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured
+     card spans both columns; the rest flow two-per-row beneath it. */
+  .work-projects {
+    grid-column: 4 / 13;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-project-col-gap);   /* 20px */
+    row-gap: clamp(1.25rem, 2.5vw, 2rem);
+  }
+  .work-card.feature { grid-column: 1 / -1; }
+
+  /* a project card: placeholder thumb + title + subtitle */
+  .work-card { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+  .work-card__thumb {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    background: var(--color-card-placeholder);
+    border-radius: var(--radius-image);
+    transition: opacity 0.3s ease;
+  }
+  .work-card.feature .work-card__thumb { aspect-ratio: 21 / 9; }
+  .work-card:hover .work-card__thumb { opacity: 0.88; }
+  .work-card__title {
+    margin: 0.8rem 0 0;
+    font-size: var(--font-size-p-s);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+  }
+  .work-card.feature .work-card__title { font-size: var(--font-size-p-m); }
+  .work-card:hover .work-card__title { text-decoration: underline; }
+  .work-card__sub {
+    margin: 0.3rem 0 0;
+    font-size: var(--font-size-p-xs);
+    color: var(--color-muted);
+  }
+
+  /* --- Secondary work: external links without a project page -------------- */
+  /* Work that shipped as a public launch/article rather than a case-study page.
+     A horizontal card: thumb on the left; on the right, the title pinned to the
+     top, then the role/year bottom-left and the external-link icon bottom-right.
+     The whole card is one link that opens the external page in a new tab. These
+     sit under the project cards in the same cols 4-12 track and 2-up grid; the
+     horizontal layout (vs. the cards' vertical stack) is what marks them as the
+     lighter-weight, off-site items. */
+  .work-notes {
+    grid-column: 4 / 13;
+    margin-top: clamp(1.5rem, 3vw, 2.5rem);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-project-col-gap);   /* 20px, same as the cards */
+    row-gap: clamp(1rem, 2vw, 1.5rem);
+  }
+  /* a filled, rounded panel grouping the image + content; padded so both sit
+     inset from the rounded edge (Soft-Corner Rule, Card Surface). */
+  .note-card {
+    display: flex;
+    gap: var(--space-card-gap);
+    padding: var(--space-card-inset);
+    background: var(--color-card-surface);
+    border-radius: var(--radius-card);
+    text-decoration: none;
+    color: inherit;
+  }
+  /* thumb stretches to the card height (flex default), reading as a solid panel
+     beside 1–3 lines of title. Uses the smaller nested radius so its corners stay
+     concentric with the padded container's. */
+  .note-card__thumb {
+    flex: none;
+    width: clamp(96px, 13vw, 132px);
+    background: var(--color-card-placeholder);
+    border-radius: var(--radius-image-nested);
+    transition: opacity 0.3s ease;
+  }
+  .note-card:hover .note-card__thumb { opacity: 0.88; }
+  /* body: title at the top, meta row pushed to the bottom */
+  .note-card__body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: clamp(112px, 13vw, 148px);
+  }
+  .note-card__title {
+    margin: 0;
+    font-size: var(--font-size-p-s);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-tight);
+  }
+  .note-card:hover .note-card__title { text-decoration: underline; }
+  .note-card__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .note-card__role { font-size: var(--font-size-p-xs); color: var(--color-muted); }
+  .note-card__ext { width: 1em; height: 1em; }
+
+  /* visually-hidden helper for the "opens in a new tab" cue */
+  .vh {
+    position: absolute; width: 1px; height: 1px;
+    margin: -1px; padding: 0; border: 0;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+  }
+
+  /* --- About -------------------------------------------------------------- */
+  .about { margin-top: var(--space-section-top); padding-bottom: var(--space-section-top); }
+  .about h2 {
+    grid-column: 1 / 3;
+    margin: 0;
+    font-size: var(--font-size-p-s);
+    font-weight: var(--font-weight-bold);
+  }
+  .about__body { grid-column: 4 / 10; }
+  .about__body p {
+    margin: 0 0 1.1rem;
+    font-size: var(--font-size-p-m);
+    line-height: var(--line-height-base);
+    text-wrap: pretty;
+  }
+  .about__body p:last-child { margin-bottom: 0; }
+
+  /* =======================================================================
+     Responsive
+     ======================================================================= */
+  /* Tablet: company meta stacks above its projects; About goes full width */
+  @media (max-width: 900px) {
+    .intro p { grid-column: 1 / 11; }
+    .work-meta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
+    .work-meta p { max-width: 48ch; }
+    .work-projects { grid-column: 1 / 13; }
+    .work-notes { grid-column: 1 / 13; }
+    .about h2 { grid-column: 1 / 13; margin-bottom: 1rem; }
+    .about__body { grid-column: 1 / 13; }
+  }
+
+  /* =======================================================================
+     Mobile header (<=640px)
+     Same resurfacing glass bar as the project pages, minus the section
+     jumper (the homepage has no numbered sections). The brand shortens to
+     the name and a Menu disclosure holds the nav + contact links. The Menu
+     is a native <details> so it works without JS and stays keyboard-friendly.
+     ======================================================================= */
+  .m-menu { display: none; }   /* desktop: hidden */
+
+  @media (max-width: 640px) {
+    /* --- the resurfacing glass bar ---
+       Selector is header.grid12 (not bare header) so display:flex beats the
+       .grid12 display:grid rule on specificity. */
+    header.grid12 {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-header);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding-top: var(--space-dock-y);
+      padding-bottom: var(--space-dock-y);
+      background: var(--color-bg);
+      will-change: transform;
+      transition: transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+                  background 0.25s ease, backdrop-filter 0.25s ease;
+    }
+    header.is-hidden { transform: translateY(-100%); }       /* scrolled down */
+    header.is-glass {                                        /* resurfaced */
+      background: var(--dock-glass-bg);
+      -webkit-backdrop-filter: blur(var(--dock-glass-blur));
+      backdrop-filter: blur(var(--dock-glass-blur));
+    }
+    /* panel open: solid white bar (glass only in the collapsed state) */
+    header.has-open {
+      background: var(--color-bg);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+
+    /* desktop brand+nav give way to a short brand + the Menu disclosure */
+    .nav { display: none; }
+    .m-menu { display: block; }
+    .brand {
+      grid-column: auto;
+      white-space: nowrap;
+      /* match the project pages' left control (section title): p-s, bold.
+         font-size: 0 hides the long desktop sentence; the ::after restores
+         p-s on the short name shown beside "Menu". */
+      font-size: 0;
+      font-weight: var(--font-weight-bold);
+    }
+    /* shorten the long brand sentence to just the name beside "Menu" */
+    .brand::after {
+      content: "Alice Zhao";
+      font-size: var(--font-size-p-s);
+    }
+
+    /* Menu / Close toggle — p-s regular, matching the project pages' Menu */
+    .m-menu > summary {
+      list-style: none;
+      cursor: pointer;
+      color: var(--color-fg);
+      font-size: var(--font-size-p-s);
+      font-weight: var(--font-weight-regular);
+    }
+    .m-menu > summary::-webkit-details-marker { display: none; }
+    .m-menu > summary:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
+    .m-menu > summary::after { content: "Menu"; }
+    .m-menu[open] > summary::after { content: "Close"; }
+
+    /* full-bleed dropdown panel under the bar */
+    .m-menu__panel {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--color-bg);
+      padding: clamp(1.25rem, 5vw, 2rem) var(--space-pad) clamp(1.5rem, 6vw, 2.25rem);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      text-align: right;
+    }
+    .m-menu__nav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.9rem; }
+    .m-menu__nav a {
+      display: inline-flex; align-items: center; gap: 0.6em;
+      color: var(--color-fg); text-decoration: none;
+      font-size: var(--font-size-p-m); font-weight: var(--font-weight-bold);
+      line-height: 1.1;
+    }
+    /* the filled-square current marker (■); hidden but space kept when not
+       current. Identical to the project pages so the menu reads the same. */
+    .m-dot {
+      width: 0.5em; height: 0.5em; flex: none;
+      background: var(--color-fg);
+      visibility: hidden;
+    }
+    a.is-current .m-dot { visibility: visible; }
+    .m-menu__contact {
+      display: flex; flex-wrap: wrap; justify-content: flex-end;
+      gap: 0.4rem 1.25rem;
+      margin-top: clamp(1.5rem, 6vw, 2.5rem);
+    }
+    .m-menu__contact a {
+      display: inline-flex; align-items: center; gap: 0.4em;
+      color: var(--color-fg); text-decoration: none;
+      font-size: var(--font-size-p-s); font-weight: var(--font-weight-regular);
+    }
+    .m-menu__contact .ext { color: var(--color-muted); }
+
+    /* anchored sections land below the sticky bar when jumped to */
+    #work, #about { scroll-margin-top: 4.5rem; }
+
+    /* existing mobile layout tweaks */
+    .intro p { grid-column: 1 / 13; }
+    .work-projects { grid-template-columns: 1fr; }
+    .work-card.feature .work-card__thumb { aspect-ratio: 16 / 9; }
+    .work-notes { grid-template-columns: 1fr; }
+  }
+
+  /* Respect reduced motion: no smooth-scroll, no hover transitions */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .work-card__thumb, .note-card__thumb, .contact > summary::after { transition: none; }
+    header.grid12 { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="grid12">
+    <div class="brand">Alice Zhao is a UX lead @ Amazon.</div>
+    <nav class="nav" aria-label="Primary">
+      <a href="index.html">Home</a>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <details class="contact">
+        <summary aria-label="Contact links">Contact</summary>
+        <div class="contact__menu">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">
+            LinkedIn
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer">
+            Resume
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+          <a href="mailto:hello@example.com">
+            Email
+            <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+          </a>
+        </div>
+      </details>
+    </nav>
+
+    <!-- Mobile only (<=640px). The desktop .nav is hidden; this Menu
+         disclosure holds the same nav + contact links. No section jumper
+         here (the homepage has no numbered sections). -->
+    <details class="m-menu">
+      <summary aria-label="Menu"></summary>
+      <div class="m-menu__panel">
+        <div class="m-menu__nav">
+          <a href="index.html" class="is-current"><span class="m-dot" aria-hidden="true"></span>Home</a>
+          <a href="#work"><span class="m-dot" aria-hidden="true"></span>Work</a>
+          <a href="#about"><span class="m-dot" aria-hidden="true"></span>About</a>
+        </div>
+        <div class="m-menu__contact">
+          <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+          <a href="#" target="_blank" rel="noopener noreferrer">Resume <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+          <a href="mailto:hello@example.com">Email <svg class="ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg></a>
+        </div>
+      </div>
+    </details>
+  </header>
+
+  <main>
+    <!-- Intro -->
+    <section class="intro grid12">
+      <p>
+        Currently leading the UX for AWS S3 products and exploring the future of
+        agentic console experience.
+        <span class="muted">Previously built design systems and enterprise
+        applications at Morgan Stanley, Siemens, the National Science Foundation,
+        and Insperity.</span>
+      </p>
+    </section>
+
+    <!-- Selected work -->
+    <section id="work" class="work">
+      <div class="grid12"><p class="section-label">Selected work</p></div>
+
+      <!-- Amazon: featured card + two cards -->
+      <article class="work-row grid12">
+        <div class="work-meta">
+          <h3>Amazon AWS</h3>
+          <span class="year">2021 — Current</span>
+          <p>Leading the UX for S3 products and designing AI-native experiences
+          for the AWS console. Took S3 Tables and SLG from concept to launch,
+          driving a 10% week-over-week storage increase and over 500 TB stored.</p>
+        </div>
+        <div class="work-projects">
+          <a class="work-card feature" href="project-s3-tables.html">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">AWS S3 Tables: 0 → 1 in 8 weeks</h4>
+            <p class="work-card__sub">Fully managed Apache Iceberg tables for analytics at scale</p>
+          </a>
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">AWS file systems: unifying 3 products</h4>
+            <p class="work-card__sub">One console surface for three storage services</p>
+          </a>
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">S3 console: redesigned navigation</h4>
+            <p class="work-card__sub">Restructured IA for 200+ features</p>
+          </a>
+        </div>
+
+        <!-- Secondary work: public launches/articles without a case-study page.
+             Each card is one external link opening in a new tab. -->
+        <div class="work-notes">
+          <a class="note-card" href="https://aws.amazon.com/about-aws/whats-new/" target="_blank" rel="noopener noreferrer">
+            <span class="note-card__thumb" aria-hidden="true"></span>
+            <span class="note-card__body">
+              <span class="note-card__title">Introducing attribute-based access control for Amazon S3 general purpose buckets</span>
+              <span class="note-card__meta">
+                <span class="note-card__role">UX Lead // 2025</span>
+                <svg class="ext note-card__ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+                <span class="vh">(opens in a new tab)</span>
+              </span>
+            </span>
+          </a>
+          <a class="note-card" href="https://aws.amazon.com/about-aws/whats-new/" target="_blank" rel="noopener noreferrer">
+            <span class="note-card__thumb" aria-hidden="true"></span>
+            <span class="note-card__body">
+              <span class="note-card__title">New — Failover Controls for Amazon S3 Multi-Region Access Points</span>
+              <span class="note-card__meta">
+                <span class="note-card__role">UX Lead // 2023</span>
+                <svg class="ext note-card__ext" viewBox="0 0 16 16" aria-hidden="true"><path d="M6 4h6v6M11.5 4.5 4 12"/></svg>
+                <span class="vh">(opens in a new tab)</span>
+              </span>
+            </span>
+          </a>
+        </div>
+      </article>
+
+      <!-- Morgan Stanley: two cards -->
+      <article class="work-row grid12">
+        <div class="work-meta">
+          <h3>Morgan Stanley</h3>
+          <span class="year">2017 — 2021</span>
+          <p>Led design across 20+ wealth-management products serving ~800,000
+          users and $1.5T in assets under management. Built the design system
+          used by 50+ designers across four global orgs, lifting adoption 90%
+          in three months.</p>
+        </div>
+        <div class="work-projects">
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">Wealth management dashboard</h4>
+            <p class="work-card__sub">Advisor-facing portfolio analytics</p>
+          </a>
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">Advisor workstation redesign</h4>
+            <p class="work-card__sub">A unified daily workspace</p>
+          </a>
+        </div>
+      </article>
+
+      <!-- Insperity: two cards -->
+      <article class="work-row grid12">
+        <div class="work-meta">
+          <h3>Insperity</h3>
+          <span class="year">2015 — 2017</span>
+          <p>Established the design pattern library for the technology department
+          and launched five major products in the HR suite over three years,
+          generating ~$15M in revenue and a ~140% increase in product adoption.</p>
+        </div>
+        <div class="work-projects">
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">HR suite pattern library</h4>
+            <p class="work-card__sub">Components for 5 product teams</p>
+          </a>
+          <a class="work-card" href="#">
+            <span class="work-card__thumb"></span>
+            <h4 class="work-card__title">Benefits enrollment flow</h4>
+            <p class="work-card__sub">Guided multi-step enrollment</p>
+          </a>
+        </div>
+      </article>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="about grid12">
+      <h2>About</h2>
+      <div class="about__body">
+        <p>I am a product designer focused on the dense, high-stakes surfaces
+        teams rely on all day: consoles, data tools, and the design systems that
+        hold them together.</p>
+        <p>My work pairs systems thinking with a bias for shipping. I like taking
+        ambiguous, technical problems from zero to one, then refining them into
+        durable patterns other teams can build on.</p>
+      </div>
+    </section>
+  </main>
+
+<script>
+/* Contact disclosure niceties: close it when clicking outside, when pressing
+   Escape, or after following a link. The native <details> already opens/closes
+   and is keyboard-accessible; this is purely polish. */
+(() => {
+  const contact = document.querySelector(".contact");
+  if (!contact) return;
+
+  document.addEventListener("click", (e) => {
+    if (contact.open && !contact.contains(e.target)) contact.open = false;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && contact.open) {
+      contact.open = false;
+      contact.querySelector("summary").focus();
+    }
+  });
+  contact.querySelectorAll(".contact__menu a").forEach((a) =>
+    a.addEventListener("click", () => { contact.open = false; })
+  );
+})();
+
+/* =========================================================================
+   Mobile header: resurfacing glass bar + Menu disclosure (<=640px).
+   Progressive enhancement — the <details> works without this; this adds the
+   open/close polish and the hide-on-scroll-down / reveal-on-scroll-up glass.
+   No scroll-spy here: the homepage has no numbered sections to track.
+   ========================================================================= */
+(() => {
+  const header = document.querySelector("header");
+  const menu   = document.querySelector(".m-menu");
+  if (!header || !menu) return;
+  const mobile = matchMedia("(max-width: 640px)");
+
+  // reflect "menu open" on the header (solid white instead of glass)
+  function sync() { header.classList.toggle("has-open", menu.open); }
+  menu.addEventListener("toggle", sync);
+  // close on outside-click / Escape / after following a link
+  document.addEventListener("click", (e) => {
+    if (menu.open && !menu.contains(e.target)) menu.open = false;
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && menu.open) { menu.open = false; menu.querySelector("summary").focus(); }
+  });
+  menu.querySelectorAll(".m-menu__panel a").forEach((a) =>
+    a.addEventListener("click", () => { menu.open = false; })
+  );
+
+  // resurfacing glass bar: hide on scroll-down, reveal (over glass) on scroll-up
+  let lastY = window.scrollY, ticking = false;
+  const STEP = 8;   // ignore sub-pixel jitter
+  function onScroll() {
+    if (!mobile.matches) { header.classList.remove("is-hidden", "is-glass"); return; }
+    const y = window.scrollY;
+    const goingDown = y > lastY;
+    if (y < 4) {
+      header.classList.remove("is-hidden", "is-glass");      // at top: solid, shown
+    } else if (menu.open) {
+      header.classList.remove("is-hidden");                  // never hide while open
+    } else if (goingDown && y - lastY > STEP) {
+      header.classList.add("is-hidden");
+      header.classList.remove("is-glass");
+    } else if (!goingDown && lastY - y > STEP) {
+      header.classList.remove("is-hidden");
+      header.classList.add("is-glass");                      // resurfaced -> glass
+    }
+    lastY = y;
+    ticking = false;
+  }
+  addEventListener("scroll", () => {
+    if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+  }, { passive: true });
+})();
+</script>
+
+<!-- Site-wide custom cursor (shared across all pages). See cursor.js. -->
+<script src="cursor.js" defer></script>
+</body>
+</html>

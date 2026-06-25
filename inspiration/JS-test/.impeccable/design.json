@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-04T00:00:00Z",
+  "title": "Design System: Alice Zhao — Product Designer",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "primary",
+        "displayName": "Ink",
+        "canonical": "#111111",
+        "tonalRamp": ["#000000", "#111111", "#2b2b2b", "#494949", "#6b6b6b", "#909090", "#bcbcbc", "#f2f2f2"]
+      },
+      "paper": {
+        "role": "neutral",
+        "displayName": "Paper",
+        "canonical": "#ffffff",
+        "tonalRamp": ["#1a1a1a", "#3d3d3d", "#5f5f5f", "#838383", "#a8a8a8", "#cfcfcf", "#ededed", "#ffffff"]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Muted",
+        "canonical": "#767676",
+        "tonalRamp": ["#1f1f1f", "#3a3a3a", "#565656", "#767676", "#959595", "#b6b6b6", "#d8d8d8", "#f4f4f4"]
+      },
+      "card-placeholder": {
+        "role": "neutral",
+        "displayName": "Card Placeholder",
+        "canonical": "#d9d9d9",
+        "tonalRamp": ["#2e2e2e", "#4f4f4f", "#717171", "#949494", "#b7b7b7", "#d9d9d9", "#eaeaea", "#fafafa"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The hero name only, rendered on canvas as a halftone morph. Satoshi Black, tracking -0.08em." },
+      "headline": { "displayName": "Headline", "purpose": "Project titles. The second-loudest voice on the page." },
+      "title": { "displayName": "Title", "purpose": "Smaller heading step for future sub-sections." },
+      "body-large": { "displayName": "Body Large", "purpose": "The intro paragraph; the only running prose on the first screen." },
+      "body": { "displayName": "Body", "purpose": "Captions (700), meta rows (700), and tags (500)." },
+      "label": { "displayName": "Label", "purpose": "Header brand line and nav links. Sentence case, never uppercase." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-cue", "value": "cubic-bezier(0.7, 0, 0.3, 1)", "purpose": "Scroll-cue travel easing; also the general ease-in/ease-out feel for the system." },
+      { "name": "cue-duration", "value": "1.8s", "purpose": "One scroll-cue travel cycle." },
+      { "name": "hero-period", "value": "1800ms morph + 900ms hold-solid", "purpose": "Hero halftone loop: rest on solid letters, breathe to dots, return." },
+      { "name": "intro-seed-stagger", "value": "150ms", "purpose": "Load intro: gap between each letter's representative dot lighting up." },
+      { "name": "intro-reveal-ease", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Page content fade-and-rise after the name resolves (ease-out-quint feel)." },
+      { "name": "intro-failsafe", "value": "4000ms", "purpose": "Backstop that forces the solid name + revealed page if the load intro ever stalls." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "900px" },
+      { "name": "mobile", "value": "640px" },
+      { "name": "narrow", "value": "380px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Navigation Link",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Header nav and utility links. Ink, no underline at rest, underline on hover. No color shift.",
+      "html": "<nav class=\"ds-nav\"><a href=\"#\">Work</a><a href=\"#\">About</a><a href=\"#\">Lab</a></nav>",
+      "css": ".ds-nav { display: flex; gap: clamp(14px, 1.6vw, 22px); font-family: Satoshi, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: clamp(15px, 1.1vw + 9px, 24px); font-weight: 400; } .ds-nav a { color: #111; text-decoration: none; } .ds-nav a:hover { text-decoration: underline; } .ds-nav a:focus-visible { outline: 2px solid #111; outline-offset: 3px; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "project-title",
+      "description": "A full-width project row: meta line under a hairline rule, large title, muted tag line, paired with a placeholder thumb and bold caption.",
+      "html": "<article class=\"ds-project\"><div class=\"ds-project__text\"><div class=\"ds-project__meta\"><span><strong>UX lead</strong> @ <strong>Amazon AWS</strong></span><span>2024</span></div><h2 class=\"ds-project__title\">AWS S3 Tables:<br>0 &rarr; 1 in 8 weeks</h2><p class=\"ds-project__tags\">From concept to launch // Cloud infrastructure // AI-assist design process</p></div><div class=\"ds-project__media\"><div class=\"ds-project__thumb\"></div><p class=\"ds-project__caption\">A seamless console experience that turns big data into insights in seconds</p></div></article>",
+      "css": ".ds-project { display: grid; grid-template-columns: 1fr 1fr; column-gap: clamp(12px, 1.6vw, 20px); align-items: start; font-family: Satoshi, 'Helvetica Neue', Helvetica, Arial, sans-serif; } .ds-project__text, .ds-project__media { display: flex; flex-direction: column; gap: clamp(12px, 1.2vw, 16px); margin: 0; } .ds-project__media { order: -1; } .ds-project__meta { display: flex; justify-content: space-between; font-size: clamp(18px, 1.0vw + 12px, 24px); font-weight: 700; border-top: 1px solid #111; padding-top: 10px; color: #111; } .ds-project__title { font-size: clamp(40px, 7vw, 96px); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; margin: 0; color: #111; } .ds-project__tags { font-size: clamp(18px, 1.0vw + 12px, 24px); font-weight: 500; color: #767676; margin: 0; } .ds-project__thumb { width: 100%; aspect-ratio: 1 / 0.82; background: #d9d9d9; } .ds-project__caption { font-size: clamp(18px, 1.0vw + 12px, 24px); font-weight: 700; line-height: 1.32; max-width: 30ch; margin: 0; color: #111; } @media (max-width: 640px) { .ds-project { grid-template-columns: 1fr; row-gap: clamp(12px, 1.2vw, 16px); } .ds-project__media { order: 0; } }"
+    },
+    {
+      "name": "Intro Line",
+      "kind": "custom",
+      "refersTo": "body-large",
+      "description": "The single running paragraph under the nav: a bold present-tense clause followed by a muted past clause.",
+      "html": "<p class=\"ds-intro\"><b>Currently designing agentic experience at Amazon AWS.</b> <span class=\"ds-intro__muted\">Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and Insperity.</span></p>",
+      "css": ".ds-intro { font-family: Satoshi, 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: clamp(22px, 1.8vw + 8px, 32px); line-height: 1.32; margin: 0; color: #111; max-width: 65ch; } .ds-intro b { font-weight: 700; } .ds-intro__muted { color: #767676; font-weight: 500; }"
+    },
+    {
+      "name": "Scroll Cue",
+      "kind": "custom",
+      "refersTo": "ink",
+      "description": "A thin runner segment with a fading trail that travels downward to imply 'keep scrolling'. Decorative, aria-hidden, with a reduced-motion rest state.",
+      "html": "<div class=\"ds-cue\" aria-hidden=\"true\"><span class=\"ds-cue__trail\"></span><span class=\"ds-cue__runner\"></span></div>",
+      "css": ".ds-cue { position: relative; width: 16px; height: 64px; } .ds-cue__runner, .ds-cue__trail { position: absolute; left: 0; right: 0; margin: 0 auto; top: 0; width: 2px; } .ds-cue__runner { height: 24px; background: #111; animation: ds-cue-runner 1.8s cubic-bezier(0.7,0,0.3,1) infinite; } .ds-cue__trail { height: 44px; background: linear-gradient(to top, #111, transparent); opacity: 0.5; animation: ds-cue-trail 1.8s cubic-bezier(0.7,0,0.3,1) infinite; } @keyframes ds-cue-runner { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: 1; } 80% { opacity: 1; } 100% { transform: translateY(40px); opacity: 0; } } @keyframes ds-cue-trail { 0% { transform: translateY(-20px); opacity: 0; } 15% { opacity: 0.5; } 80% { opacity: 0.5; } 100% { transform: translateY(20px); opacity: 0; } } @media (prefers-reduced-motion: reduce) { .ds-cue__runner { animation: none; opacity: 1; } .ds-cue__trail { animation: none; opacity: 0; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Halftone Press",
+    "overview": "This is a printing press caught mid-impression. The page's whole reason to exist is one act: a field of ink dots resolving into the name Alice Zhao, set enormous in Satoshi Black. Everything else, the hairline-ruled project list, the 12-column grid, the single intro line, is the clean broadsheet around that one inked headline. The personality is confident, precise, playful, in that order and held in tension on purpose. Confidence is the scale of the type; precision is the visible grid and hairline rules; play is rationed to exactly one place, the halftone dot-morph, so it reads as wit rather than decoration. The system rejects the generic AI/SaaS landing page, rejects minimal-to-a-fault, and guards against the second-order 'black Helvetica on white grid' portfolio reflex.",
+    "keyCharacteristics": [
+      "Near-monochrome: near-black ink on white paper, gray reserved for secondary text and image placeholders.",
+      "One typeface (Satoshi) carrying the whole system through weight and scale, 400 to 900.",
+      "Type set huge: the hero name fills the viewport width; project titles reach 96px.",
+      "A visible, intentional 12-column grid with fluid clamp() spacing.",
+      "Zero border-radius, zero shadow; depth from scale, hairline rules, and the dot-morph.",
+      "Exactly one signature motion (the halftone morph), plus a quiet looping scroll cue."
+    ],
+    "rules": [
+      { "name": "The Single-Ink Rule", "body": "There is one ink and one paper. No accent hue is ever introduced 'for interest'. If a screen feels like it needs color to be interesting, the type or the layout is underperforming; fix that instead.", "section": "colors" },
+      { "name": "The AA Floor Rule", "body": "Secondary text is #767676 (>=4.5:1 on paper), never the legacy #9b9b9b (~2.6:1, fails AA). Light-gray-for-elegance is prohibited at body sizes. #9b9b9b is deprecated and must not be used for any text.", "section": "colors" },
+      { "name": "The One-Family Rule", "body": "Satoshi carries the entire system. Adding a second typeface is prohibited unless a true functional need appears (e.g. a monospace for code), and even then it is the exception, not a pairing.", "section": "typography" },
+      { "name": "The Negative-Tracking Rule", "body": "Big type tightens, it never loosens. Display tracks -0.08em, headlines -0.02em. Tracking floor is -0.08em (letters must not touch).", "section": "typography" },
+      { "name": "The Sentence-Case Rule", "body": "No all-caps body copy, ever. Uppercase is reserved for nothing on this page; even labels are sentence case.", "section": "typography" },
+      { "name": "The Flat-Sheet Rule", "body": "Surfaces are flat. If a future element seems to need a shadow to be legible, the contrast or spacing is wrong; fix that instead of lifting it off the page. The only 'elevation' is a hairline rule or the grid.", "section": "elevation" },
+      { "name": "The Sharp-Corner Rule", "body": "Border-radius is 0 everywhere. Rounded corners are prohibited; the broadsheet aesthetic depends on crisp right angles.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let the type be the design. Set the name and project titles huge; scale contrast is the primary hierarchy tool.",
+      "Do keep everything on the visible 12-column grid with the fluid clamp() spacing tokens. Alignment is the argument for precision.",
+      "Do use #767676 for all secondary/de-emphasized text (>=4.5:1 on paper).",
+      "Do keep one playful moment (the halftone morph) and keep its surroundings disciplined so it reads as wit, not noise.",
+      "Do ship a prefers-reduced-motion: reduce path for the hero morph and the scroll cue, and keep the real <h1> text behind the canvas.",
+      "Do tighten tracking on large type (-0.08em display, -0.02em headlines) and never loosen it."
+    ],
+    "donts": [
+      "Don't introduce an accent hue or a gradient. One ink, one paper. No background-clip: text gradient headings.",
+      "Don't use #9b9b9b (or any sub-4.5:1 gray) for text; it fails AA. Legacy value is deprecated.",
+      "Don't build the generic AI/SaaS landing page: no gradient blobs, no identical icon-heading-text card grids, no tiny uppercase tracked eyebrows over every section, no big-number hero-metric template.",
+      "Don't let it become minimal-to-a-fault. Stark is fine; forgettable is a failure.",
+      "Don't settle for 'black Helvetica on white grid' as the whole idea; the halftone press moment is what differentiates it.",
+      "Don't add border-radius, shadows, blur, or glass. Depth comes from scale, hairlines, and the morph.",
+      "Don't add a second typeface without a real functional need; Satoshi carries the system.",
+      "Don't set body copy in ALL CAPS, and don't let large headings overflow their grid track at any breakpoint."
+    ]
+  }
+}
