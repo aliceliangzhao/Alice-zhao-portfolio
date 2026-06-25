@@ -237,8 +237,15 @@ export default function Navigation({ sections }) {
         </div>
       )}
 
-      {/* mobile: short brand when there are no sections to jump */}
-      {!hasSections && <Link href="/" className={styles.mBrand}>Alice Zhao</Link>}
+      {/* short brand — shown on tablet always; on mobile only when there are no
+          sections (project pages drop the brand on mobile, keeping just the
+          section jumper + Menu) */}
+      <Link
+        href="/"
+        className={`${styles.mBrand}${hasSections ? ` ${styles.mBrandProject}` : ""}`}
+      >
+        Alice Zhao
+      </Link>
 
       {/* mobile Menu */}
       <div className={styles.mMenu} ref={menuRef}>

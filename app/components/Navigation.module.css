@@ -151,30 +151,13 @@
 .mSections, .mBrand, .mMenu { display: none; }
 
 /* =========================================================================
-   Mobile (<=640px): swap brand + desktop menu for the two controls, and let
-   the bar hide on scroll-down / resurface over glass on scroll-up.
+   Tablet and below (<=1024px): the inline brand + phase labels + menu get
+   crowded, so swap to compact controls — short brand · section jumper · Menu —
+   while keeping the three-region layout (brand left, section dropdown middle,
+   Menu right).
    ========================================================================= */
-@media (max-width: 640px) {
-  .header {
-    padding-top: var(--space-dock-y);
-    padding-bottom: var(--space-dock-y);
-    /* solid at rest; glass only while resurfaced (see is-glass below) */
-    background: var(--color-bg);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-  .header:global(.is-glass) {
-    background: var(--dock-glass-bg);
-    -webkit-backdrop-filter: blur(var(--dock-glass-blur));
-    backdrop-filter: blur(var(--dock-glass-blur));
-  }
-  .header:global(.has-open) {
-    background: var(--color-bg);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-
-  /* desktop bits give way to the mobile controls */
+@media (max-width: 1024px) {
+  /* desktop bits give way to the compact controls */
   .brand, .sectionNav, .menu { display: none; }
   .mSections, .mMenu { display: block; }
   .mBrand {
@@ -185,6 +168,11 @@
     font-weight: var(--font-weight-bold);
     white-space: nowrap;
   }
+
+  /* lock the visual order independent of DOM order: brand · sections · menu */
+  .mBrand { order: 0; }
+  .mSections { order: 1; }
+  .mMenu { order: 2; }
 
   /* shared toggle reset */
   .mSectionsToggle, .mMenuToggle {
@@ -270,6 +258,34 @@
     visibility: hidden;
   }
   .mItemCurrent .mDot { visibility: visible; }
+}
+
+/* =========================================================================
+   Mobile only (<=640px): compact padding, a solid bar that turns to glass only
+   while resurfaced, and dropping the brand on project pages (the section jumper
+   + Menu take the bar).
+   ========================================================================= */
+@media (max-width: 640px) {
+  .header {
+    padding-top: var(--space-dock-y);
+    padding-bottom: var(--space-dock-y);
+    /* solid at rest; glass only while resurfaced (see is-glass below) */
+    background: var(--color-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .header:global(.is-glass) {
+    background: var(--dock-glass-bg);
+    -webkit-backdrop-filter: blur(var(--dock-glass-blur));
+    backdrop-filter: blur(var(--dock-glass-blur));
+  }
+  .header:global(.has-open) {
+    background: var(--color-bg);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  /* project pages drop the brand on mobile: section jumper + Menu only */
+  .mBrandProject { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
