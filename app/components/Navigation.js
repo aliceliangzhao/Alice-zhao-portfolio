@@ -2,85 +2,67 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import WaveBackground from "./WaveBackground";
 import styles from "./Navigation.module.css";
 
-const BG_COLORS = [
-  { value: "#DAF0F7", label: "Ice blue" },
-  { value: "#F5D9E0", label: "Blush" },
-  { value: "#F5EDCC", label: "Cream" },
-  { value: "#D4F0D4", label: "Mint" },
-  { value: "#ffffff", label: "White" },
-  { value: "#110F0B", label: "Dark", dark: true },
+/* Primary site nav (simple-editorial style). Used by project, about, and lab
+   pages (the homepage has its own header until it's rebuilt).
+
+   Desktop layout, left to right:  brand · phase labels · menu
+     - brand        the standing positioning line, links home
+     - phase labels  the project's sections (01/02/03) with scroll-spy. Only
+                     rendered when `sections` is passed (project pages).
+     - menu          Home / Work / About / Contact (Contact is a dropdown of
+                     external links)
+
+   Mobile (<=640px): the brand and desktop menu give way to two controls in a
+   sticky bar that hides on scroll-down and resurfaces over a glass blur on
+   scroll-up:
+     - left   a section jumper (dropdown) when `sections` exist, else the short
+              brand
+     - right  a Menu disclosure holding the nav + contact links
+
+   `title` is still accepted for backwards-compatible call sites but no longer
+   rendered (the page title now lives in the page's own <h1>, not the header). */
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  // These homepage anchors get real targets when the homepage Work/About
+  // sections are rebuilt (migration steps 4-5); until then they land at the top.
+  { label: "Work", href: "/#work" },
+  { label: "About", href: "/#about" },
 ];
 
-export default function Navigation({ title, isHome, sections }) {
-  const [bgColor, setBgColor] = useState("#ffffff");
-  const bgInitialized = useRef(false);
-  const [pickerOpen, setPickerOpen] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+const CONTACT_LINKS = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/in/liangzhaoux/", external: true },
+  { label: "Resume", href: "https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view", external: true },
+  { label: "Email", href: "mailto:liangzhao0801@gmail.com", external: false },
+];
+
+// the small diagonal ↗ drawn next to external contact links
+function ExtIcon() {
+  return (
+    <svg className={styles.ext} viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M6 4h6v6M11.5 4.5 4 12" />
+    </svg>
+  );
+}
+
+export default function Navigation({ sections }) {
+  const hasSections = Array.isArray(sections) && sections.length > 0;
+
   const [activeSection, setActiveSection] = useState(null);
-  const [sectionDropOpen, setSectionDropOpen] = useState(false);
-  const navRef = useRef(null);
-  const pickerRef = useRef(null);
+  const [contactOpen, setContactOpen] = useState(false);   // desktop Contact dropdown
+  const [sectionDropOpen, setSectionDropOpen] = useState(false); // mobile section jumper
+  const [menuOpen, setMenuOpen] = useState(false);         // mobile Menu
+
+  const headerRef = useRef(null);
+  const contactRef = useRef(null);
   const sectionDropRef = useRef(null);
+  const menuRef = useRef(null);
 
+  // --- scroll-spy: highlight the section currently in view -----------------
   useEffect(() => {
-    if (!bgInitialized.current) {
-      const saved = localStorage.getItem("bg-color");
-      if (saved && saved !== "#ffffff") {
-        setBgColor(saved);
-        return;
-      }
-      bgInitialized.current = true;
-    }
-    const selected = BG_COLORS.find((c) => c.value === bgColor);
-    const isDark = selected?.dark ?? false;
-    document.body.toggleAttribute("data-dark", isDark);
-    document.documentElement.style.setProperty("--bg", bgColor);
-    if (!isDark) {
-      document.documentElement.style.setProperty("--bg2", bgColor);
-    }
-    localStorage.setItem("bg-color", bgColor);
-    bgInitialized.current = true;
-  }, [bgColor]);
-
-  useEffect(() => {
-    const onNavVisibility = (e) => {
-      if (!navRef.current) return;
-      const p = e.detail.progress;
-      navRef.current.style.transform = `translateY(${-p * 60}px)`;
-    };
-    const onToggleDrawer = () => setDrawerOpen((o) => !o);
-    const onToggleMode = () => {
-      setBgColor((prev) => {
-        const current = BG_COLORS.find((c) => c.value === prev);
-        return current?.dark ? "#ffffff" : "#110F0B";
-      });
-    };
-    const onClickOutside = (e) => {
-      if (pickerRef.current && !pickerRef.current.contains(e.target)) {
-        setPickerOpen(false);
-      }
-      if (sectionDropRef.current && !sectionDropRef.current.contains(e.target)) {
-        setSectionDropOpen(false);
-      }
-    };
-    window.addEventListener("nav-visibility", onNavVisibility);
-    window.addEventListener("toggle-drawer", onToggleDrawer);
-    window.addEventListener("toggle-mode", onToggleMode);
-    document.addEventListener("mousedown", onClickOutside);
-    return () => {
-      window.removeEventListener("nav-visibility", onNavVisibility);
-      window.removeEventListener("toggle-drawer", onToggleDrawer);
-      window.removeEventListener("toggle-mode", onToggleMode);
-      document.removeEventListener("mousedown", onClickOutside);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!sections || sections.length === 0) return;
-
+    if (!hasSections) return;
     const ids = sections.map((s) => s.id);
     let ticking = false;
 
@@ -90,150 +72,195 @@ export default function Navigation({ title, isHome, sections }) {
       for (const id of ids) {
         const el = document.getElementById(id);
         if (!el) continue;
-        const rect = el.getBoundingClientRect();
-        if (rect.top <= vh * 0.4) current = id;
+        if (el.getBoundingClientRect().top <= vh * 0.4) current = id;
       }
-      setActiveSection((prev) => {
-        if (prev !== current) setSectionDropOpen(false);
-        return current;
-      });
+      setActiveSection(current);
       ticking = false;
     }
-
     function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(update);
-        ticking = true;
-      }
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
     }
-
     window.addEventListener("scroll", onScroll, { passive: true });
     update();
     return () => window.removeEventListener("scroll", onScroll);
-  }, [sections]);
+  }, [hasSections, sections]);
+
+  // --- mobile resurfacing glass bar: hide on scroll-down, glass on scroll-up
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    const mobile = matchMedia("(max-width: 640px)");
+    let lastY = window.scrollY, ticking = false;
+    const STEP = 8; // ignore sub-pixel jitter
+    const anyOpen = () => sectionDropOpen || menuOpen;
+
+    function onScroll() {
+      if (!mobile.matches) { header.classList.remove("is-hidden", "is-glass"); ticking = false; return; }
+      const y = window.scrollY;
+      const goingDown = y > lastY;
+      if (y < 4) {
+        header.classList.remove("is-hidden", "is-glass"); // at top: solid, shown
+      } else if (anyOpen()) {
+        header.classList.remove("is-hidden");             // never hide while a panel is open
+      } else if (goingDown && y - lastY > STEP) {
+        header.classList.add("is-hidden");
+        header.classList.remove("is-glass");
+      } else if (!goingDown && lastY - y > STEP) {
+        header.classList.remove("is-hidden");
+        header.classList.add("is-glass");                 // resurfaced over content -> glass
+      }
+      lastY = y;
+      ticking = false;
+    }
+    function onScrollRaf() {
+      if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
+    }
+    window.addEventListener("scroll", onScrollRaf, { passive: true });
+    return () => window.removeEventListener("scroll", onScrollRaf);
+  }, [sectionDropOpen, menuOpen]);
+
+  // a panel being open keeps the bar solid (glass is only for the collapsed,
+  // resurfaced state)
+  useEffect(() => {
+    headerRef.current?.classList.toggle("has-open", sectionDropOpen || menuOpen);
+  }, [sectionDropOpen, menuOpen]);
+
+  // --- close dropdowns on outside-click / Escape ---------------------------
+  useEffect(() => {
+    function onDown(e) {
+      if (contactRef.current && !contactRef.current.contains(e.target)) setContactOpen(false);
+      if (sectionDropRef.current && !sectionDropRef.current.contains(e.target)) setSectionDropOpen(false);
+      if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
+    }
+    function onKey(e) {
+      if (e.key === "Escape") { setContactOpen(false); setSectionDropOpen(false); setMenuOpen(false); }
+    }
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
 
   function scrollToSection(id) {
     const el = document.getElementById(id);
     if (!el) return;
-    const panel = el.closest(".project-section-handoff-panel") || el;
-    const rect = panel.getBoundingClientRect();
-    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height")) * parseFloat(getComputedStyle(document.documentElement).fontSize);
-    window.scrollTo({ top: window.scrollY + rect.top - navHeight, behavior: "smooth" });
+    const offset = headerRef.current ? headerRef.current.offsetHeight : 0;
+    const top = window.scrollY + el.getBoundingClientRect().top - offset;
+    window.scrollTo({ top, behavior: "smooth" });
   }
 
-  const closeDrawer = () => setDrawerOpen(false);
+  const currentSection = sections?.find((s) => s.id === activeSection) || sections?.[0];
+
+  function renderContactLink(c) {
+    return (
+      <a
+        key={c.label}
+        href={c.href}
+        {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      >
+        {c.label}
+        {c.external && <ExtIcon />}
+      </a>
+    );
+  }
 
   return (
-    <>
-      <div className={styles.fixedBtns}>
-        <button
-          className={`${styles.menuBtn}${drawerOpen ? ` ${styles.open}` : ""}`}
-          onClick={() => setDrawerOpen((o) => !o)}
-          aria-label="Open menu"
-          data-cursor="Sésame, ouvre-toi"
-        >
-          <span></span><span></span><span></span>
-        </button>
-        <div className={styles.colorPicker} ref={pickerRef}>
+    <header ref={headerRef} className={styles.header}>
+      {/* brand — desktop, and mobile when there are no sections */}
+      <Link href="/" className={styles.brand}>Alice Zhao is a UX lead @ Amazon.</Link>
+
+      {/* desktop phase labels */}
+      {hasSections && (
+        <div className={styles.sectionNav} aria-label="Sections">
+          {sections.map((sec, i) => (
+            <span key={sec.id} className={styles.sectionItem}>
+              <button
+                className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
+                onClick={() => scrollToSection(sec.id)}
+              >
+                {sec.navLabel}
+              </button>
+              {i < sections.length - 1 && <span className={styles.sectionSep} aria-hidden="true">·</span>}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* desktop menu */}
+      <nav className={styles.menu} aria-label="Primary">
+        {NAV_LINKS.map((l) => (
+          <Link key={l.label} href={l.href}>{l.label}</Link>
+        ))}
+        <div className={styles.contact} ref={contactRef}>
           <button
-            className={styles.colorPickerBtn}
-            onClick={() => setPickerOpen((o) => !o)}
-            aria-label="Change background color"
-            data-cursor=""
+            className={`${styles.contactToggle}${contactOpen ? ` ${styles.contactOpen}` : ""}`}
+            onClick={() => setContactOpen((o) => !o)}
+            aria-expanded={contactOpen}
           >
-            <span className={styles.colorSwatch} style={{ backgroundColor: bgColor }} />
+            Contact
           </button>
-          {pickerOpen && (
-            <div className={styles.colorDropdown}>
-              {BG_COLORS.map((c) => (
+          {contactOpen && (
+            <div className={styles.contactMenu}>
+              {CONTACT_LINKS.map(renderContactLink)}
+            </div>
+          )}
+        </div>
+      </nav>
+
+      {/* mobile: section jumper (only when sections exist) */}
+      {hasSections && (
+        <div className={styles.mSections} ref={sectionDropRef}>
+          <button
+            className={`${styles.mSectionsToggle}${sectionDropOpen ? ` ${styles.mSectionsOpen}` : ""}`}
+            onClick={() => setSectionDropOpen((o) => !o)}
+            aria-expanded={sectionDropOpen}
+          >
+            <span className={styles.mSectionsCurrent}>{currentSection?.navLabel}</span>
+          </button>
+          {sectionDropOpen && (
+            <div className={styles.mSectionsMenu}>
+              {sections.map((sec) => (
                 <button
-                  key={c.value}
-                  className={`${styles.colorOption}${bgColor === c.value ? ` ${styles.colorOptionActive}` : ""}`}
-                  onClick={() => { setBgColor(c.value); setPickerOpen(false); }}
-                  aria-label={c.label}
-                  data-cursor=""
+                  key={sec.id}
+                  className={`${styles.mItem}${activeSection === sec.id ? ` ${styles.mItemCurrent}` : ""}`}
+                  onClick={() => { scrollToSection(sec.id); setSectionDropOpen(false); }}
                 >
-                  <span className={styles.colorSwatch} style={{ backgroundColor: c.value }} />
+                  <span className={styles.mDot} aria-hidden="true" />
+                  {sec.navLabel}
                 </button>
               ))}
             </div>
           )}
         </div>
-      </div>
+      )}
 
-      <nav ref={navRef} className={styles.nav}>
-        {isHome ? (
-          <a href="#" className={styles.name} data-cursor="Go back to the awesome homepage">Alice Zhao</a>
-        ) : (
-          <div className={styles.breadcrumb}>
-            <Link href="/" className={styles.name} data-cursor="Go back to the awesome homepage">Alice Zhao</Link>
-            {title && (
-              <>
-                <span className={styles.separator}>/</span>
-                <span className={styles.title}>{title}</span>
-              </>
-            )}
-          </div>
-        )}
-        {sections && sections.length > 0 && (
-          <>
-            <div className={styles.sectionNav}>
-              {sections.map((sec, i) => (
-                <span key={sec.id}>
-                  <button
-                    className={`${styles.sectionLink}${activeSection === sec.id ? ` ${styles.sectionActive}` : ""}`}
-                    onClick={() => scrollToSection(sec.id)}
-                    data-cursor=""
-                  >
-                    {sec.navLabel}
-                  </button>
-                  {i < sections.length - 1 && <span className={styles.sectionSep}>/</span>}
-                </span>
+      {/* mobile: short brand when there are no sections to jump */}
+      {!hasSections && <Link href="/" className={styles.mBrand}>Alice Zhao</Link>}
+
+      {/* mobile Menu */}
+      <div className={styles.mMenu} ref={menuRef}>
+        <button
+          className={styles.mMenuToggle}
+          onClick={() => setMenuOpen((o) => !o)}
+          aria-expanded={menuOpen}
+        >
+          {menuOpen ? "Close" : "Menu"}
+        </button>
+        {menuOpen && (
+          <div className={styles.mMenuPanel}>
+            <div className={styles.mMenuNav}>
+              {NAV_LINKS.map((l) => (
+                <Link key={l.label} href={l.href} onClick={() => setMenuOpen(false)}>{l.label}</Link>
               ))}
             </div>
-            <div className={styles.sectionDrop} ref={sectionDropRef}>
-              <button
-                className={styles.sectionDropTrigger}
-                onClick={() => setSectionDropOpen((o) => !o)}
-              >
-                <span>{(sections.find((s) => s.id === activeSection) || sections[0]).navLabel}</span>
-                <span className={`${styles.sectionDropArrow}${sectionDropOpen ? ` ${styles.sectionDropArrowOpen}` : ""}`}>▾</span>
-              </button>
-              {sectionDropOpen && (
-                <div className={styles.sectionDropList}>
-                  {sections.map((sec) => (
-                    <button
-                      key={sec.id}
-                      className={`${styles.sectionDropItem}${activeSection === sec.id ? ` ${styles.sectionDropItemActive}` : ""}`}
-                      onClick={() => { scrollToSection(sec.id); setSectionDropOpen(false); }}
-                    >
-                      {sec.navLabel}
-                    </button>
-                  ))}
-                </div>
-              )}
+            <div className={styles.mMenuContact}>
+              {CONTACT_LINKS.map(renderContactLink)}
             </div>
-          </>
+          </div>
         )}
-      </nav>
-
-      <div className={`${styles.drawer}${drawerOpen ? ` ${styles.open}` : ""}`}>
-        {drawerOpen && <WaveBackground className={styles.drawerWaves} />}
-        <nav className={styles.links}>
-          <Link href="/" onClick={closeDrawer}>Back to home</Link>
-          <Link href="/projects/s3-tables" onClick={closeDrawer}>AWS S3 Tables</Link>
-          <Link href="/projects/simplifying-data-access" onClick={closeDrawer}>Simplifying data access</Link>
-          <Link href="/about" onClick={closeDrawer}>About me</Link>
-          <Link href="/about#design-process" onClick={closeDrawer}>My design process</Link>
-          <Link href="/about#ai-toolkit" onClick={closeDrawer}>My design toolkit</Link>
-          <Link href="/lab" onClick={closeDrawer}>My lab</Link>
-        </nav>
-        <div className={styles.bottom}>
-          <a href="https://www.linkedin.com/in/liangzhaoux/" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-          <a href="mailto:liangzhao0801@gmail.com">Email ↗</a>
-          <a href="https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view" target="_blank" rel="noreferrer">Resume ↗</a>
-        </div>
       </div>
-    </>
+    </header>
   );
 }
