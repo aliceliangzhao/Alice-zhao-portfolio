@@ -1,0 +1,276 @@
+/* ===========================================================================
+   editorial.module.css — shared styles for the Halftone Press homepage
+   sections (intro + Selected Work). Built on the simple-editorial tokens in
+   tokens.css; references variables, never hard-coded values. Imported by both
+   EditorialIntro.js and SelectedWork.js so the 12-col grid primitive lives in
+   one place.
+   =========================================================================== */
+
+/* --- 12-column grid ------------------------------------------------------- */
+.grid12 {
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  column-gap: var(--space-gap);
+  padding-inline: var(--space-pad);
+  width: 100%;
+}
+.grid12 > * { min-width: 0; }   /* let tracks shrink below content size */
+
+.muted { color: var(--color-muted); }
+
+/* anchored sections clear the top edge a little when jumped to */
+.work { scroll-margin-top: 2rem; }
+
+/* --- Intro ---------------------------------------------------------------- */
+/* Sits below the sticky header; this margin gives the intro a little breathing
+   room from the bar above it. */
+.intro { margin-top: var(--space-section-top); }
+.intro p {
+  grid-column: 1 / 8;
+  margin: 0;
+  font-size: var(--font-size-p-l);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-base);
+  text-wrap: pretty;
+}
+
+/* --- Section label -------------------------------------------------------- */
+/* Label + a hairline rule that fills the rest of the row — the divider
+   between the hero/intro and the work section. */
+.sectionLabel {
+  grid-column: 1 / 13;
+  display: flex;
+  align-items: baseline;   /* the rule sits on the text's baseline (bottom) */
+  gap: 1rem;
+  margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
+  font-size: var(--font-size-p-xs);
+  color: var(--color-fg);
+}
+.sectionLabelText { white-space: nowrap; }
+.sectionRule {
+  flex: 1;
+  height: 1px;
+  background: var(--color-fg);
+}
+
+/* --- Selected work -------------------------------------------------------- */
+.work { margin-top: var(--space-section-top); }
+
+/* each company is a row on the same 12-col grid */
+.workRow { row-gap: 1.25rem; align-items: start; }
+.workRow + .workRow { margin-top: var(--space-row-gap); }
+
+/* meta: company name + year + description, cols 1-2 */
+.workMeta { grid-column: 1 / 3; }
+.workMeta h3 {
+  margin: 0;
+  font-size: var(--font-size-p-l);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+.workMeta .year {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: var(--font-size-p-xs);
+  color: var(--color-muted);
+}
+.workMeta p {
+  margin: 0.85rem 0 0;
+  font-size: var(--font-size-p-xs);
+  line-height: var(--line-height-base);
+}
+
+/* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured
+   card spans both columns; the rest flow two-per-row beneath it. */
+.workProjects {
+  grid-column: 4 / 13;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-project-col-gap);   /* 20px */
+  row-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+.workCard.feature { grid-column: 1 / -1; }
+
+/* a project card: thumb + title + subtitle */
+.workCard { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--color-card-placeholder);
+  border-radius: var(--radius-image);
+  overflow: hidden;
+  transition: opacity 0.3s ease;
+}
+.thumb img { object-fit: cover; object-position: top left; }
+.workCard.feature .thumb { aspect-ratio: 21 / 9; }
+.workCard:hover .thumb { opacity: 0.88; }
+.cardTitle {
+  margin: 0.8rem 0 0;
+  font-size: var(--font-size-p-s);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+.workCard.feature .cardTitle { font-size: var(--font-size-p-m); }
+.workCard:hover .cardTitle { text-decoration: underline; }
+.cardSub {
+  margin: 0.3rem 0 0;
+  font-size: var(--font-size-p-xs);
+  color: var(--color-muted);
+}
+
+/* --- Secondary work: external links without a project page ---------------- */
+/* Work that shipped as a public launch/article rather than a case-study page.
+   A horizontal card: thumb on the left; on the right, the title pinned to the
+   top, then the role bottom-left and the external-link icon bottom-right. The
+   whole card is one link that opens the external page in a new tab. */
+.workNotes {
+  grid-column: 4 / 13;
+  margin-top: clamp(1.5rem, 3vw, 2.5rem);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-project-col-gap);   /* 20px, same as the cards */
+  row-gap: clamp(1rem, 2vw, 1.5rem);
+}
+/* when a row has no case-study cards above, the notes start the cols 4-12 track */
+.workNotes.flush { margin-top: 0; }
+/* a filled, rounded panel grouping the image + content */
+.noteCard {
+  display: flex;
+  gap: var(--space-card-gap);
+  padding: var(--space-card-inset);
+  background: var(--color-card-surface);
+  border-radius: var(--radius-card);
+  text-decoration: none;
+  color: inherit;
+}
+.noteThumb {
+  flex: none;
+  width: clamp(96px, 13vw, 132px);
+  background: var(--color-card-placeholder);
+  border-radius: var(--radius-image-nested);
+  transition: opacity 0.3s ease;
+}
+.noteCard:hover .noteThumb { opacity: 0.88; }
+.noteBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: clamp(112px, 13vw, 148px);
+}
+.noteTitle {
+  margin: 0;
+  font-size: var(--font-size-p-s);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+}
+.noteCard:hover .noteTitle { text-decoration: underline; }
+.noteMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.noteRole { font-size: var(--font-size-p-xs); color: var(--color-muted); }
+
+/* external-link icon (↗) */
+.ext {
+  width: 0.82em; height: 0.82em;
+  flex: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--color-muted);
+}
+.noteExt { width: 1em; height: 1em; }
+
+/* visually-hidden helper for the "opens in a new tab" cue */
+.vh {
+  position: absolute; width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
+}
+
+/* --- About ---------------------------------------------------------------- */
+.about {
+  margin-top: var(--space-section-top);
+  scroll-margin-top: 2rem;
+  align-items: baseline;
+  row-gap: 1rem;
+}
+.aboutLabel {
+  grid-column: 1 / 3;
+  margin: 0;
+  font-size: var(--font-size-p-xs);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+.aboutText {
+  grid-column: 3 / 13;
+  margin: 0;
+  font-size: clamp(1.375rem, 1.8vw + 0.75rem, 2.25rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+
+/* --- Photo marquee: full-bleed, loops left-to-right, pauses on hover ------- */
+.marquee {
+  margin-top: var(--space-section-top);
+  width: 100%;
+  overflow: hidden;
+}
+.marqueeTrack {
+  display: flex;
+  gap: var(--space-gap);
+  width: max-content;
+  /* moving from -50% to 0 carries the duplicated content rightward (L->R) */
+  animation: marquee-ltr 45s linear infinite;
+  animation-play-state: paused;     /* off until in view (see [data-inview]) */
+}
+.marquee[data-inview="true"] .marqueeTrack { animation-play-state: running; }
+.marquee:hover .marqueeTrack { animation-play-state: paused; }  /* pause on hover */
+.marqueeItem {
+  flex: none;
+  height: clamp(180px, 22vw, 300px);
+  aspect-ratio: var(--ar, 3 / 2);
+  background: var(--color-card-placeholder);
+  border-radius: var(--radius-image);
+}
+@keyframes marquee-ltr {
+  from { transform: translateX(-50%); }
+  to   { transform: translateX(0); }
+}
+
+/* =========================================================================
+   Responsive
+   ========================================================================= */
+/* Tablet: company meta stacks above its projects */
+@media (max-width: 900px) {
+  .intro p { grid-column: 1 / 11; }
+  .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
+  .workMeta p { max-width: 48ch; }
+  .workProjects { grid-column: 1 / 13; }
+  .workNotes { grid-column: 1 / 13; }
+  .aboutLabel { grid-column: 1 / 13; }
+  .aboutText { grid-column: 1 / 13; }
+}
+
+@media (max-width: 640px) {
+  .work { scroll-margin-top: 4.5rem; }
+  .intro p { grid-column: 1 / 13; }
+  .workProjects { grid-template-columns: 1fr; }
+  .workCard.feature .thumb { aspect-ratio: 16 / 9; }
+  .workNotes { grid-template-columns: 1fr; }
+}
+
+/* Respect reduced motion: no hover transitions, no marquee scroll */
+@media (prefers-reduced-motion: reduce) {
+  .thumb, .noteThumb { transition: none; }
+  .marqueeTrack { animation: none; transform: translateX(0); }
+}

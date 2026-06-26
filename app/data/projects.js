@@ -90,7 +90,7 @@ export const projects = {
 
   "s3-tables": {
     slug: "s3-tables",
-    heroImage: "/img/s3tables/final-visual/newUI/title-thumbnail.png",
+    heroImage: "/img/s3tables/thumbnail.jpg",
     projectTitle: { main: "AWS S3 Tables", sub: "0→1 in 8 weeks" },
     navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",

@@ -1,3 +1,8 @@
+export const intro = {
+  lead: "Currently leading the UX for AWS S3 products and exploring the future of AWS agentic console experiences.",
+  muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, the National Science Foundation, and Insperity.",
+};
+
 export const bio = {
   heading: "I'm Alice (Liang) Zhao, a UX Designer at Amazon, where I work on agentic experiences for AWS S3. I enjoy turning complex products and technologies into intuitive and customer-focused experience.",
   personal: "Outside of work, I love to explore nature and capture everyday moments through photography.",
