@@ -1,7 +1,7 @@
 import "./tokens.css";
 import "./globals.css";
 import "./project.css";
-import CursorTrail from "./components/CursorTrail";
+import BlobCursor from "./components/BlobCursor";
 
 export const viewport = {
   width: "device-width",
@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <CursorTrail />
+        <BlobCursor />
         {children}
       </body>
     </html>
