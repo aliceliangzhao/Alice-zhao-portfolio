@@ -70,7 +70,7 @@
 }
 .workMeta .year {
   display: block;
-  margin-top: 0.15rem;
+  margin-top: 0.5rem;
   font-size: var(--font-size-p-xs);
   color: var(--color-muted);
 }
@@ -80,8 +80,9 @@
   line-height: var(--line-height-base);
 }
 
-/* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured
-   card spans both columns; the rest flow two-per-row beneath it. */
+/* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured (first)
+   card spans both columns; the rest flow two-per-row beneath it. Title size is
+   uniform across all cards. */
 .workProjects {
   grid-column: 4 / 13;
   display: grid;
@@ -107,11 +108,10 @@
 .workCard:hover .thumb { opacity: 0.88; }
 .cardTitle {
   margin: 0.8rem 0 0;
-  font-size: var(--font-size-p-s);
+  font-size: var(--font-size-p-l);
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
 }
-.workCard.feature .cardTitle { font-size: var(--font-size-p-m); }
 .workCard:hover .cardTitle { text-decoration: underline; }
 .cardSub {
   margin: 0.3rem 0 0;
@@ -149,7 +149,14 @@
   width: clamp(96px, 13vw, 132px);
   background: var(--color-card-placeholder);
   border-radius: var(--radius-image-nested);
+  overflow: hidden;
   transition: opacity 0.3s ease;
+}
+.noteThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 .noteCard:hover .noteThumb { opacity: 0.88; }
 .noteBody {

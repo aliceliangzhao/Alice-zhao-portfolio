@@ -38,6 +38,7 @@ function resolveWork(items) {
         title: item.name,
         href: item.href,
         external: item.href.startsWith("http"),
+        thumb: item.thumb || null,
       });
     }
   }
@@ -68,7 +69,9 @@ function NoteCard({ note, role }) {
     : { href: note.href };
   return (
     <a className={s.noteCard} {...linkProps}>
-      <span className={s.noteThumb} aria-hidden="true" />
+      <span className={s.noteThumb} aria-hidden="true">
+        {note.thumb && <img src={note.thumb} alt="" />}
+      </span>
       <span className={s.noteBody}>
         <span className={s.noteTitle}>{note.title}</span>
         <span className={s.noteMeta}>

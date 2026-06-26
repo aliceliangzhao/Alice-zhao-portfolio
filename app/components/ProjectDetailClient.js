@@ -238,11 +238,16 @@ export default function ProjectDetailClient({ project }) {
           )}
         </section>
 
-        {/* Hero band */}
-        {project.heroImage && (
+        {/* Hero band. Uses `detailImage` if the project sets one, otherwise
+            falls back to `heroImage` (the same image as the homepage card). */}
+        {(project.detailImage || project.heroImage) && (
           <section className="pd-hero" aria-label="Product overview">
             <div className="pd-hero-inner pd-grid">
-              <img className="pd-hero-img" src={project.heroImage} alt={project.impact || project.navTitle || ""} />
+              <img
+                className="pd-hero-img"
+                src={project.detailImage || project.heroImage}
+                alt={project.impact || project.navTitle || ""}
+              />
             </div>
           </section>
         )}

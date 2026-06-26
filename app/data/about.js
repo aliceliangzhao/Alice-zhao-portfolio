@@ -12,14 +12,14 @@ export const bio = {
 export const workExperience = [
   {
     time: "Sep 2020 — present",
-    title: "UX Designer",
+    title: "Lead UX Designer",
     company: "Amazon Web Services",
     description: "Designing AI-native and agentic experiences for AWS S3. Launched 40+ products in 4 years, including initiatives that shipped in 10 weeks, driving a 10% week-over-week storage increase and over 500 TB of data stored. Partnered with researchers and ML engineers to develop scalable AI design frameworks adopted across 15 AWS services.",
     selectedWork: [
       { name: "AWS S3 Tables", href: "/projects/s3-tables" },
       { name: "Simplifying data access", href: "/projects/simplifying-data-access" },
       { name: "AWS agentic experience", href: "#" },
-      { name: "Multi-Region Access Point failover control", href: "https://aws.amazon.com/blogs/aws/new-failover-controls-for-amazon-s3-multi-region-access-points/"},
+      { name: "Multi-Region Access Point failover control", href: "https://aws.amazon.com/blogs/aws/new-failover-controls-for-amazon-s3-multi-region-access-points/", thumb: "/img/external/mrap-failover.png" },
       { name: "Support 1 million buckets per account", href: "https://aws.amazon.com/about-aws/whats-new/2024/11/amazon-s3-up-1-million-buckets-per-aws-account/"},
     ],
   },

@@ -91,6 +91,7 @@ export const projects = {
   "s3-tables": {
     slug: "s3-tables",
     heroImage: "/img/s3tables/thumbnail.jpg",
+    detailImage: "/img/s3tables/top.jpg",
     projectTitle: { main: "AWS S3 Tables", sub: "0→1 in 8 weeks" },
     navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
@@ -98,7 +99,7 @@ export const projects = {
     impact: "A seamless console experience that turns big data into insights in seconds",
     type: "AWS",
     year: "2024",
-    tags: ["0 → 1", "AI", "keynote launch"],
+    tags: ["Design lead", "From concept to launch", "Cloud infrastructure"],
     externalLink: {
       url: "https://www.youtube.com/watch?v=eztA5VYH2nM",
       cursor: "BIGGGGG launch of the year",
@@ -195,44 +196,93 @@ export const projects = {
 
   "agent-opportunities": {
     slug: "agent-opportunities",
-    comingSoon: true,
     heroImage: "/img/s3tables/heroimg-1.JPEG",
     projectTitle: { main: "AWS agentic\nexperience", sub: "Let agents do the heavy lifting" },
     navTitle: "AWS agentic experience",
-    heroProblem: "",
-    comingSoonMessage: true,
-    heroSolution: "",
+    // NOTE: the case-study body below (heroProblem/heroSolution, metrics, and
+    // sections) is duplicated from Simplifying Data Access as a layout template.
+    // Replace the copy, metrics, and images with the agentic project's own
+    // content. The page now renders the full layout instead of "coming soon".
+    heroProblem: "Customers were managing storage infrastructure across three separate consoles by repeating the same setup tasks, with no unified way to access data stored in different storages. I led a cross-functional team of 10 to design a cohesive console experience that unified setup and access across all three services.",
+    heroSolution: "Launched at {link:AWS re:Invent 2025}, the unified console experience cuts cross-service infrastructure setup to a single guided flow, allowing customers to scale access for large datasets in seconds.",
+    externalLink: {
+      url: "https://www.youtube.com/watch?v=NVZV0gfV-jA",
+    },
     impact: "Transforming AWS console interactions from manual workflows to agent-driven experiences",
     type: "AWS",
     year: "2025 - present",
     role: "Lead UX Designer",
-    timeline: "",
-    team: [],
     tags: ["AI", "0 → 1"],
-    metrics: [],
+    metrics: [
+      { value: 34, suffix: "%", label: "Customers adoption" },
+      { value: 90, suffix: "%", label: "Customer satisfaction rate" },
+      { value: 194, suffix: "%", label: "MoM growth in 6 months" },
+      { value: 79, suffix: "%", label: "Success rate" },
+    ],
     sections: [
       {
         id: "problem",
-        navLabel: "01 Problem",
-        heading: "01 Problem",
-        summary: "",
-        content: { who: "", why: "", what: "" },
-        research: { stats: [] },
+        navLabel: "01  Who and why",
+        heading: "01  Who and why.",
+        content: {
+          lead: "Two personas, three separate consoles, and constant context-switching revealed the need for a unified data access experience.",
+          subsections: [
+            { label: "Research", text: "I synthesized 6 customer calls, 3 sales calls, and 30+ survey responses to map two personas, their journeys, and their core pain points.", images: [{ src: "/img/sda/problem/research.jpg", alt: "Research synthesis" }] },
+            { label: "Target personas", text: "Storage admins spend too much on third-party integrations and duplicate data just to connect services. Developers repeat identical tasks across consoles because there is no unified way to access data.", images: [{ src: "/img/sda/problem/userjourneymap.jpg", alt: "Target personas" }] },
+            { label: "Pain points", text: "No unified view of access points across storage services, no way to create access points connecting to file systems from the console, and constant page-hopping to view and manage resources.", images: [{ src: "/img/sda/problem/painpoint.jpg", alt: "Pain points analysis" }] },
+          ],
+        },
+      },
+      {
+        id: "scoping",
+        navLabel: "02 Product scoping",
+        heading: "02 Product scoping.",
+        content: {
+          lead: "I mapped the user journey into prioritized stories that drove a scope decision: what ships at launch vs. what waits. This aligned the team on the three flows that mattered most.",
+          subsections: [
+            { label: "User stories", text: "The full story map exposed 20+ user needs across three services. This gave the team a shared view of the full scope and allow us to draw launch boundary.", images: [{ src: "/img/sda/product-scoping/userstories.jpg", alt: "User stories" }] },
+            { label: "User flows", text: "I mapped each priority flow end-to-end, illustrating how each flow fits into the overall experience.", images: [{ src: "/img/sda/product-scoping/userflow.jpg", alt: "User flows" }] },
+          ],
+        },
       },
       {
         id: "design-iteration",
-        navLabel: "02 Design Iteration",
-        heading: "02 Design Iteration",
-        summary: "",
-        content: { challenge: "", iteration: "", decisions: [] },
+        navLabel: "03 Design iteration",
+        heading: "03 Design iteration.",
+        content: {
+          lead: "Internal testing exposed a critical flaw: stringing multiple API calls caused partial failures with no clear recovery path. I advocated for a UX pattern that surfaces all required steps during creation, resolving both the usability and durability issues. Follow-up testing validated the pattern.",
+          subsections: [
+            { label: "Exploration", text: "During internal testing, the creation flow broke mid-way when one API in the chain failed. Customers found it frustrating that they lost their input and had no way to tell what succeeded and what didn't.", images: [{ src: "/img/sda/design-iteration/exploration.jpg", alt: "Exploration" }] },
+            { label: "Trade-offs", text: "The original sequential flow was simpler to build but fragile. Surfacing all steps upfront added complexity to the UI, but gave customers a clear picture of what was required and let the service call one API at a time.", images: [{ src: "/img/sda/design-iteration/tradeoff.jpg", alt: "Trade-offs" }] },
+            { label: "Decision", text: "I pushed for a pattern that displays the full list of required steps during creation. Each API call runs independently, so a single failure doesn't cascade. Follow-up testing proved the pattern was clear and robust.", images: [{ src: "/img/sda/design-iteration/decision.jpg", alt: "Decision" }] },
+          ],
+        },
       },
       {
         id: "outcome",
-        navLabel: "03 Outcome",
-        heading: "03 Outcome",
-        summary: "",
-        content: { summary: "" },
-        productVisuals: [],
+        navLabel: "04 Outcome",
+        heading: "04 Outcome",
+        headingAlign: "center",
+        summary: "A unified console for customers to set up and manage cloud infrastructure across three storage services.",
+        content: [
+          {
+            subheading: "Streamlined infrastructure setup",
+            text: "Storage admins can now set up their infrastructure directly within the AWS console. No more third-party applications needed.",
+            images: [
+              { src: "/img/sda/final-visual/createap.png", alt: "Infrastructure setup console" },
+              { src: "/img/sda/final-visual/createreviewap.png", alt: "Storage service configuration" },
+            ],
+          },
+          {
+            subheading: "Unified data operations",
+            text: "Developers can now view and manage all the data operations and security-related tasks in a single console. No more switching among storage services.",
+            images: [
+              { src: "/img/sda/final-visual/fsxlist.png", alt: "Data operations dashboard" },
+              { src: "/img/sda/final-visual/fsxdetails.png", alt: "Security management console" },
+              { src: "/img/sda/final-visual/outcome2.png", alt: "Security management console" },
+            ],
+          },
+        ],
       },
     ],
     nextProject: "s3-tables",

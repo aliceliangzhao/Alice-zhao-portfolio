@@ -66,7 +66,6 @@
 
 /* --- Hero band: full-bleed, the product visual ---------------------------- */
 .pd-hero {
-  margin-top: clamp(2.5rem, 6vw, 4.5rem);
   width: 100%;
   padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
 }
