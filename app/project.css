@@ -68,7 +68,6 @@
 .pd-hero {
   margin-top: clamp(2.5rem, 6vw, 4.5rem);
   width: 100%;
-  background: linear-gradient(160deg, #fbe3cf 0%, #fdf1e7 38%, #ffffff 80%);
   padding: clamp(2.5rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3.5rem);
 }
 .pd-hero-img {
