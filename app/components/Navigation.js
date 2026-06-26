@@ -47,6 +47,16 @@ function ExtIcon() {
   );
 }
 
+// stroked chevron next to Contact; shares the ↗ icon's round-cap language and
+// flips 180° (down -> up) when the dropdown opens
+function Caret() {
+  return (
+    <svg className={styles.caret} viewBox="0 0 16 16" aria-hidden="true">
+      <path d="M4 6.5 8 10l4-3.5" />
+    </svg>
+  );
+}
+
 export default function Navigation({ sections }) {
   const hasSections = Array.isArray(sections) && sections.length > 0;
 
@@ -102,7 +112,13 @@ export default function Navigation({ sections }) {
       const padL = parseFloat(cs.paddingLeft) || 0;
       const padR = parseFloat(cs.paddingRight) || 0;
       const gap = parseFloat(cs.columnGap) || 0;
-      const available = header.clientWidth - padL - padR;
+      // Measure against the viewport, not header.clientWidth: when the inline
+      // nav overflows it widens the page, which stretches the sticky header
+      // past the viewport. Reading the header's own width would then report
+      // that inflated space and never collapse (a self-reinforcing loop).
+      // documentElement.clientWidth is the layout viewport, immune to overflow.
+      const vw = document.documentElement.clientWidth;
+      const available = vw - padL - padR;
 
       // scrollWidth reports each region's full width even while it's hidden
       // (the .compact rules keep the inline trio measurable), so the decision
@@ -113,8 +129,11 @@ export default function Navigation({ sections }) {
       const regions = (brandW ? 1 : 0) + (sectionW ? 1 : 0) + (menuW ? 1 : 0);
       const needed = brandW + sectionW + menuW + Math.max(0, regions - 1) * gap;
 
-      // collapse a little before the labels actually touch the menu (24px)
-      header.classList.toggle("compact", needed > available - 24);
+      // Collapse to the dropdown bar when the inline row would overflow (a bit
+      // before it touches, 24px) OR at mobile widths (<=640px), so the compact
+      // bar always agrees with the mobile CSS breakpoint. Same rule everywhere,
+      // so behaviour is identical on every page that uses this component.
+      header.classList.toggle("compact", needed > available - 24 || vw <= 640);
     }
 
     function onResize() {
@@ -248,6 +267,7 @@ export default function Navigation({ sections }) {
             aria-expanded={contactOpen}
           >
             Contact
+            <Caret />
           </button>
           {contactOpen && (
             <div className={styles.contactMenu}>
@@ -266,6 +286,7 @@ export default function Navigation({ sections }) {
             aria-expanded={sectionDropOpen}
           >
             <span className={styles.mSectionsCurrent}>{currentSection?.navLabel}</span>
+            <Caret />
           </button>
           {sectionDropOpen && (
             <div className={styles.mSectionsMenu}>

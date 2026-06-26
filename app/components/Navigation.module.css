@@ -98,17 +98,21 @@
   padding: 0;
 }
 .contactToggle:hover { text-decoration: underline; }
-/* caret that flips open */
-.contactToggle::after {
-  content: "";
-  width: 0.34em;
-  height: 0.34em;
-  border-right: 1.4px solid currentColor;
-  border-bottom: 1.4px solid currentColor;
-  transform: translateY(-0.12em) rotate(45deg);
+/* stroked chevron (matches the ↗ icon); flips 180° when open */
+.caret {
+  width: 0.7em;
+  height: 0.7em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  color: var(--color-muted);
   transition: transform 0.2s ease;
 }
-.contactOpen::after { transform: translateY(0.04em) rotate(-135deg); }
+.contactOpen .caret,
+.mSectionsOpen .caret { transform: rotate(180deg); }
 .contactMenu {
   position: absolute;
   top: calc(100% + 0.55rem);
@@ -176,18 +180,8 @@
 .mSectionsToggle:focus-visible,
 .mMenuToggle:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
 
-/* left: current section + flipping caret */
+/* left: current section + flipping caret (shared .caret, same as Contact) */
 .mSectionsCurrent { white-space: nowrap; }
-.mSectionsToggle::after {
-  content: "";
-  width: 0.36em;
-  height: 0.36em;
-  border-right: 1.6px solid currentColor;
-  border-bottom: 1.6px solid currentColor;
-  transform: translateY(-0.14em) rotate(45deg);
-  transition: transform 0.2s ease;
-}
-.mSectionsOpen::after { transform: translateY(0.04em) rotate(-135deg); }
 
 /* full-bleed dropdown panels under the bar */
 .mSectionsMenu, .mMenuPanel {
@@ -300,5 +294,5 @@
 
 @media (prefers-reduced-motion: reduce) {
   .header { transition: none !important; }
-  .contactToggle::after, .mSectionsToggle::after { transition: none; }
+  .caret { transition: none; }
 }
