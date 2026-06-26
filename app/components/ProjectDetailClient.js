@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import Navigation from "./Navigation";
 import MetricsCounter from "./MetricsCounter";
@@ -64,14 +65,9 @@ function Block({ label, text, images }) {
   );
 }
 
-function Section({ section, metrics }) {
-  const isOutcome = section.id === "outcome";
-  // outcome carries content as an array of {subheading,text,images}; other
-  // sections carry content.subsections of {label,text,images}.
-  const blocks = isOutcome
-    ? (Array.isArray(section.content) ? section.content : [])
-    : (section.content?.subsections || []);
-  const lead = isOutcome ? section.summary : section.content?.lead;
+function Section({ section }) {
+  const blocks = section.content?.subsections || [];
+  const lead = section.content?.lead;
 
   return (
     <section id={section.id} className="pd-section">
@@ -80,19 +76,142 @@ function Section({ section, metrics }) {
         {lead && <p>{lead}</p>}
       </header>
 
-      {isOutcome && metrics?.length > 0 && (
-        <div className="pd-grid">
-          <div className="pd-metrics">
-            <MetricsCounter metrics={metrics} />
+      <div className="pd-blocks">
+        {blocks.map((b, i) => (
+          <Block key={i} label={b.label} text={b.text} images={b.images} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* Outcome keeps the style-card cinematic treatment: a zigzag of text + images
+   where the final image is pinned and expands to fill the viewport as you
+   scroll past it. The scroll math is unchanged from style-card. */
+function OutcomeZigzag({ content }) {
+  const revealRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const stage = revealRef.current;
+    if (!stage) return;
+    const pin = stage.querySelector(".zigzag-reveal-pin");
+    const frame = stage.querySelector(".zigzag-reveal-frame");
+    const img = stage.querySelector(".zigzag-reveal-img");
+    if (!pin || !frame || !img) return;
+
+    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReduced) return;
+
+    const clamp = (v, min = 0, max = 1) => Math.max(min, Math.min(max, v));
+    const smoothstep = (v) => v * v * (3 - 2 * v);
+
+    function measure() {
+      const baseWidth = stage.clientWidth;
+      const ratio = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 16 / 9;
+      const baseHeight = baseWidth / ratio;
+      const viewportHeight = window.innerHeight;
+      const revealDistance = Math.max(viewportHeight * 1.05, 680);
+      const holdDistance = viewportHeight * 0.55;
+
+      stage.style.setProperty("--reveal-ratio", ratio);
+      stage.style.setProperty("--reveal-base-h", `${baseHeight}px`);
+      stage.style.setProperty("--reveal-distance", `${revealDistance}px`);
+      stage.style.setProperty("--reveal-extra", `${revealDistance + holdDistance}px`);
+      update();
+    }
+
+    function update() {
+      const rect = stage.getBoundingClientRect();
+      const baseWidth = stage.clientWidth;
+      const baseHeight = parseFloat(stage.style.getPropertyValue("--reveal-base-h")) || pin.offsetHeight;
+      const revealDistance = parseFloat(stage.style.getPropertyValue("--reveal-distance")) || window.innerHeight;
+      const vh = window.innerHeight;
+      const vw = window.innerWidth;
+      const stickyTop = Math.max(0, (vh - baseHeight) / 2);
+      const progress = clamp((stickyTop - rect.top) / revealDistance);
+      const eased = smoothstep(progress);
+
+      frame.style.setProperty("--reveal-frame-w", `${baseWidth + (vw - baseWidth) * eased}px`);
+      frame.style.setProperty("--reveal-frame-h", `${baseHeight + (vh - baseHeight) * eased}px`);
+      frame.style.setProperty("--reveal-frame-x", `${-rect.left * eased}px`);
+      frame.style.setProperty("--reveal-frame-y", `${-stickyTop * eased}px`);
+    }
+
+    let loopId = 0;
+    function tick() { update(); loopId = requestAnimationFrame(tick); }
+    function onResize() { measure(); }
+
+    window.addEventListener("resize", onResize, { passive: true });
+    measure();
+    tick();
+    if (!img.complete) img.addEventListener("load", measure, { once: true });
+    return () => {
+      cancelAnimationFrame(loopId);
+      window.removeEventListener("resize", onResize);
+      img.removeEventListener("load", measure);
+    };
+  }, []);
+
+  const lastBlockIdx = content.length - 1;
+
+  return (
+    <div className="outcome-zigzag">
+      {content.map((block, i) => {
+        const isLeft = i % 2 === 0;
+        const isLastBlock = i === lastBlockIdx;
+        const images = block.images || [];
+        const regularImages = isLastBlock ? images.slice(0, -1) : images;
+        const expandImage = isLastBlock && images.length > 0 ? images[images.length - 1] : null;
+
+        return (
+          <div key={i} className={`zigzag-row pd-grid ${isLeft ? "zigzag-left" : "zigzag-right"}`}>
+            <div className="zigzag-text">
+              <p className="subsection-label">{block.subheading}</p>
+              <p className="subsection-text">{block.text}</p>
+            </div>
+            <div className="zigzag-images">
+              {regularImages.map((image, j) => (
+                <img key={j} src={image.src} alt={image.alt} className="zigzag-img" />
+              ))}
+              {expandImage && (
+                <div ref={revealRef} className="zigzag-reveal-stage">
+                  <div className="zigzag-reveal-pin">
+                    <div className="zigzag-reveal-frame">
+                      <img src={expandImage.src} alt={expandImage.alt} className="zigzag-reveal-img" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function OutcomeSection({ section, metrics }) {
+  const content = section.content;
+  const blocks = Array.isArray(content) ? content : null;
+
+  return (
+    <section id={section.id} className="pd-section">
+      <header className="pd-section-head pd-grid">
+        <h2><SectionHeading heading={section.heading} /></h2>
+        {section.summary && <p>{section.summary}</p>}
+      </header>
+
+      {metrics?.length > 0 && (
+        <div className="pd-grid">
+          <div className="pd-metrics"><MetricsCounter metrics={metrics} /></div>
         </div>
       )}
 
-      <div className="pd-blocks">
-        {blocks.map((b, i) => (
-          <Block key={i} label={b.label || b.subheading} text={b.text} images={b.images} />
-        ))}
-      </div>
+      {blocks ? (
+        <OutcomeZigzag content={blocks} />
+      ) : content?.summary ? (
+        <div className="pd-grid"><p className="pd-outcome-summary">{content.summary}</p></div>
+      ) : null}
     </section>
   );
 }
@@ -147,14 +266,14 @@ export default function ProjectDetailClient({ project }) {
           </section>
         )}
 
-        {/* Sections */}
-        {sections.map((section) => (
-          <Section
-            key={section.id}
-            section={section}
-            metrics={section.id === "outcome" ? project.metrics : undefined}
-          />
-        ))}
+        {/* Sections — outcome keeps the style-card cinematic zigzag/reveal */}
+        {sections.map((section) =>
+          section.id === "outcome" ? (
+            <OutcomeSection key={section.id} section={section} metrics={project.metrics} />
+          ) : (
+            <Section key={section.id} section={section} />
+          )
+        )}
       </main>
 
       <footer className="pd-footer pd-grid">

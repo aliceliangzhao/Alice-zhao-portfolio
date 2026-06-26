@@ -138,10 +138,9 @@
   border: 1px solid #ececec;
 }
 
-/* --- Outcome metrics strip ----------------------------------------------- */
+/* --- Outcome metrics strip (the strip carries its own vertical margin) ---- */
 .pd-metrics {
   grid-column: 1 / 13;
-  margin-bottom: clamp(2rem, 4vw, 3rem);
 }
 
 /* --- Footer: back link --------------------------------------------------- */
@@ -159,8 +158,105 @@
 .pd-back:hover { color: var(--color-fg); text-decoration: underline; }
 
 /* =========================================================================
+   Outcome — style-card cinematic treatment (kept by request)
+   A count-up metrics strip, a zigzag of text + images, and a final image that
+   pins and expands to fill the viewport on scroll. Rows ride on .pd-grid; the
+   scroll math is driven by the component. Uses the legacy tokens.
+   ========================================================================= */
+.pd-outcome-summary {
+  grid-column: 1 / 9;
+  margin: 0;
+  font-size: var(--font-size-p-m);
+  line-height: var(--line-height-base);
+}
+
+.metrics-strip {
+  grid-column: 1 / 13;
+  display: flex;
+  gap: 0;
+  margin: clamp(2.5rem, 6vw, 6rem) 0;
+}
+.metric-item { flex: 1; border: none; }
+.metric-item + .metric-item {
+  border-left: 1px solid var(--border);
+  transition: border-color 0.2s;
+}
+
+.subsection-label {
+  font-size: var(--t-label);
+  text-transform: uppercase;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0 0 1.5rem;
+}
+.subsection-text {
+  font-size: var(--t-p);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+.outcome-zigzag { margin-top: clamp(2rem, 4vw, 3rem); }
+.zigzag-row { align-items: start; margin-bottom: var(--grid-gap); }
+.zigzag-left .zigzag-text {
+  grid-column: 1 / 3;
+  position: sticky;
+  top: calc(var(--nav-height) + 60px);
+  align-self: start;
+}
+.zigzag-left .zigzag-images { grid-column: 3 / 7; }
+.zigzag-right .zigzag-text {
+  grid-column: 7 / 9;
+  position: sticky;
+  top: calc(var(--nav-height) + 60px);
+  align-self: start;
+}
+.zigzag-right .zigzag-images { grid-column: 3 / 7; grid-row: 1; }
+.zigzag-images { display: flex; flex-direction: column; gap: var(--grid-gap); }
+.zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-image); }
+
+.zigzag-reveal-stage {
+  --reveal-extra: 115vh;
+  position: relative;
+  min-height: calc(var(--reveal-base-h, 480px) + var(--reveal-extra));
+}
+.zigzag-reveal-pin {
+  position: sticky;
+  top: max(var(--nav-height), calc((100vh - var(--reveal-base-h, 480px)) / 2));
+  z-index: 2;
+  width: 100%;
+  height: var(--reveal-base-h, auto);
+  aspect-ratio: var(--reveal-ratio, 16 / 9);
+}
+.zigzag-reveal-frame {
+  width: var(--reveal-frame-w, 100%);
+  height: var(--reveal-frame-h, var(--reveal-base-h, auto));
+  aspect-ratio: var(--reveal-ratio, 16 / 9);
+  overflow: hidden;
+  transform: translate3d(var(--reveal-frame-x, 0), var(--reveal-frame-y, 0), 0);
+  transform-origin: top left;
+  will-change: transform, width, height;
+}
+.zigzag-reveal-img { width: 100%; height: 100%; display: block; object-fit: cover; }
+
+/* =========================================================================
    Responsive
    ========================================================================= */
+@media (max-width: 900px) {
+  /* outcome zigzag stacks; sticky text becomes static */
+  .metrics-strip { flex-wrap: wrap; }
+  .metric-item { flex: 1 1 45%; }
+  .metric-item + .metric-item { border-left: none; }
+  .zigzag-row { display: flex; flex-direction: column; gap: 16px; margin-bottom: 6rem; }
+  .zigzag-left .zigzag-text,
+  .zigzag-right .zigzag-text { position: static; grid-column: unset; }
+  .zigzag-left .zigzag-images,
+  .zigzag-right .zigzag-images { grid-column: unset; grid-row: unset; }
+  .zigzag-reveal-stage { min-height: calc(var(--reveal-base-h, 320px) + var(--reveal-extra, 110vh)); }
+  .zigzag-reveal-pin { top: max(var(--nav-height), calc((100vh - var(--reveal-base-h, 320px)) / 2)); }
+}
+
 @media (max-width: 900px) {
   .pd-lead h1 { grid-column: 1 / 13; }
   .pd-meta { grid-column: 1 / 13; }
@@ -174,4 +270,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .pd-section { scroll-margin-top: 5rem; }
+  /* outcome reveal: no pin/expand, just show the image at rest */
+  .zigzag-reveal-stage { min-height: auto; }
+  .zigzag-reveal-pin { position: static; height: auto; }
+  .zigzag-reveal-frame { width: 100%; height: auto; transform: none; will-change: auto; }
+  .zigzag-reveal-img { height: auto; }
 }
