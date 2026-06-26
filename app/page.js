@@ -3,6 +3,7 @@ import EditorialIntro from "./components/EditorialIntro";
 import SelectedWork from "./components/SelectedWork";
 import EditorialAbout from "./components/EditorialAbout";
 import PhotoMarquee from "./components/PhotoMarquee";
+import Footer from "./components/Footer";
 
 export default function Home() {
   return (
@@ -14,6 +15,7 @@ export default function Home() {
         <EditorialAbout />
         <PhotoMarquee />
       </main>
+      <Footer />
     </>
   );
 }
