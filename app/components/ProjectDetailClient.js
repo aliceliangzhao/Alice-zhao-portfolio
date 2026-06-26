@@ -6,6 +6,7 @@ import Navigation from "./Navigation";
 import MetricsCounter from "./MetricsCounter";
 import ExternalLink from "./ExternalLink";
 import InlineImageLoop from "./InlineImageLoop";
+import SectionTabs from "./SectionTabs";
 
 /* Project detail page — simple-editorial style.
    A calm, flat, scrollable page: lead (title + meta + intro) → hero band →
@@ -47,26 +48,8 @@ function SectionHeading({ heading }) {
   );
 }
 
-// One block: a short caption (label + text) beside its media. (Becomes a tab
-// panel in Step 6b.)
-function Block({ label, text, images }) {
-  return (
-    <div className="pd-block pd-grid">
-      <div className="pd-block-caption">
-        <p className="pd-block-label">{label}</p>
-        {text && <p className="pd-block-text">{text}</p>}
-      </div>
-      <div className="pd-block-media">
-        {(images || []).map((img, i) => (
-          <img key={i} className="pd-media" src={img.src} alt={img.alt} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function Section({ section }) {
-  const blocks = section.content?.subsections || [];
+  const subsections = section.content?.subsections || [];
   const lead = section.content?.lead;
 
   return (
@@ -76,11 +59,9 @@ function Section({ section }) {
         {lead && <p>{lead}</p>}
       </header>
 
-      <div className="pd-blocks">
-        {blocks.map((b, i) => (
-          <Block key={i} label={b.label} text={b.text} images={b.images} />
-        ))}
-      </div>
+      {subsections.length > 0 && (
+        <SectionTabs sectionId={section.id} subsections={subsections} />
+      )}
     </section>
   );
 }

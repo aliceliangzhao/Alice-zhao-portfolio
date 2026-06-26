@@ -106,26 +106,81 @@
   text-wrap: pretty;
 }
 
-/* --- Blocks: caption (cols 1-3) + media (cols 4-12) ---------------------- */
-.pd-blocks {
+/* --- Tabbed sections -----------------------------------------------------
+   Desktop: a tab bar with a sliding underline, one panel shown at a time.
+   Mobile (<=640): the tab bar hides and every panel stacks as a labelled list.
+   ------------------------------------------------------------------------- */
+.pd-tabwrap { /* groups the tab bar + panels */ }
+
+.pd-tabs {
+  position: relative;            /* anchors the sliding underline */
   display: flex;
-  flex-direction: column;
-  gap: clamp(2.5rem, 5vw, 4rem);
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  padding-inline: var(--space-pad);
+  border-bottom: 1px solid var(--color-fg);
+  overflow-x: auto;              /* many tabs -> swipe sideways, never clip */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
-.pd-block { align-items: start; row-gap: 1rem; }
-.pd-block-caption { grid-column: 1 / 4; }
-.pd-block-label {
+.pd-tabs::-webkit-scrollbar { display: none; }
+.pd-tab {
+  appearance: none;
+  background: none;
+  border: none;
+  flex: none;
+  padding: 0 0 0.7rem;
+  font-family: inherit;
+  font-size: var(--font-size-p-s);
+  color: var(--color-muted);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.pd-tab:hover { color: var(--color-fg); }
+.pd-tab--active { color: var(--color-fg); }
+.pd-tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
+.pd-tab-underline {
+  position: absolute;
+  bottom: -1px;                  /* sit on the 1px rule */
+  left: 0;
+  height: 2px;
+  width: 0;
+  background: var(--color-fg);
+  transform: translateX(0);
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+              width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+/* panels */
+.pd-panels { margin-top: clamp(1.75rem, 4vw, 3rem); }
+.pd-panel {
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  column-gap: var(--space-gap);
+  padding-inline: var(--space-pad);
+  align-items: start;
+}
+.pd-panel:not([hidden]) { display: grid; }       /* desktop: only the active panel */
+.pd-panel[data-active="true"] { animation: pd-panel-enter 0.25s ease-out; }
+@keyframes pd-panel-enter {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.pd-panel-caption { grid-column: 1 / 4; }
+.pd-panel-label {
+  display: none;                 /* desktop: the tab shows the label */
   margin: 0 0 0.5rem;
   font-size: var(--font-size-p-s);
   font-weight: var(--font-weight-bold);
 }
-.pd-block-text {
+.pd-panels--static .pd-panel-label { display: block; }  /* single subsection */
+.pd-panel-text {
   margin: 0;
   font-size: var(--font-size-p-xs);
   line-height: var(--line-height-base);
   color: var(--color-fg);
 }
-.pd-block-media {
+.pd-panel-media {
   grid-column: 4 / 13;
   display: flex;
   flex-direction: column;
@@ -263,13 +318,28 @@
   .pd-intro { grid-column: 1 / 13; }
   .pd-section-head h2,
   .pd-section-head p { grid-column: 1 / 13; }
-  /* caption stacks above its media */
-  .pd-block-caption { grid-column: 1 / 13; }
-  .pd-block-media { grid-column: 1 / 13; }
+  /* panel caption stacks above its media */
+  .pd-panel-caption { grid-column: 1 / 13; }
+  .pd-panel-media { grid-column: 1 / 13; }
+}
+
+/* Mobile: drop the tabs entirely and list every subsection down the page,
+   each headed by its label. */
+@media (max-width: 640px) {
+  .pd-tabs { display: none; }
+  .pd-panels { margin-top: 0; }
+  .pd-panel { display: grid; }            /* show all panels (overrides [hidden]) */
+  .pd-panel-label { display: block; }
+  .pd-panel + .pd-panel { margin-top: clamp(2.5rem, 8vw, 3.5rem); }
+  /* no per-panel entrance animation when they're all listed */
+  .pd-panel[data-active="true"] { animation: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pd-section { scroll-margin-top: 5rem; }
+  /* tabs: underline snaps, panels swap with no fade */
+  .pd-tab-underline { transition: none; }
+  .pd-panel[data-active="true"] { animation: none; }
   /* outcome reveal: no pin/expand, just show the image at rest */
   .zigzag-reveal-stage { min-height: auto; }
   .zigzag-reveal-pin { position: static; height: auto; }
