@@ -145,7 +145,7 @@ function OutcomeZigzag({ content }) {
         const expandImage = isLastBlock && images.length > 0 ? images[images.length - 1] : null;
 
         return (
-          <div key={i} className={`zigzag-row pd-grid ${isLeft ? "zigzag-left" : "zigzag-right"}`}>
+          <div key={i} className={`zigzag-row ${isLeft ? "zigzag-left" : "zigzag-right"}`}>
             <div className="zigzag-text">
               <p className="subsection-label">{block.subheading}</p>
               <p className="subsection-text">{block.text}</p>
