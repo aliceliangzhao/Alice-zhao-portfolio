@@ -1,8 +1,8 @@
 "use client";
 
 import { useLayoutEffect, useRef } from "react";
-import Link from "next/link";
 import Navigation from "./Navigation";
+import Footer from "./Footer";
 import MetricsCounter from "./MetricsCounter";
 import ExternalLink from "./ExternalLink";
 import InlineImageLoop from "./InlineImageLoop";
@@ -257,9 +257,7 @@ export default function ProjectDetailClient({ project }) {
         )}
       </main>
 
-      <footer className="pd-footer pd-grid">
-        <Link href="/#work" className="pd-back">&larr; Back to all work</Link>
-      </footer>
+      <Footer />
     </>
   );
 }

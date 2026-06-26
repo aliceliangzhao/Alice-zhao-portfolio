@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useCallback } from "react";
 import Navigation from "../components/Navigation";
+import Footer from "../components/Footer";
 import { labItems } from "../data/lab";
 import "./lab.css";
 
@@ -151,6 +152,7 @@ export default function Lab() {
           ✦ Scroll or drag to explore
         </span>
       </div>
+      <Footer />
     </>
   );
 }
