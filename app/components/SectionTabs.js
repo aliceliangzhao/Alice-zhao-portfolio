@@ -30,7 +30,12 @@ function Panel({ sectionId, index, sub, hidden }) {
       </div>
       <div className="pd-panel-media">
         {(sub.images || []).map((img, j) => (
-          <img key={j} className="pd-media" src={img.src} alt={img.alt} />
+          <img
+            key={j}
+            className={`pd-media${img.noBorder ? " pd-media--no-border" : ""}`}
+            src={img.src}
+            alt={img.alt}
+          />
         ))}
       </div>
     </div>

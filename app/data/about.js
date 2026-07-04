@@ -1,6 +1,6 @@
 export const intro = {
-  lead: "Currently leading the UX for AWS S3 products and exploring the future of AWS agentic console experiences.",
-  muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, the National Science Foundation, and Insperity.",
+  lead: "Currently leading the UX for AWS S3 and exploring the future of AWS agentic experience.",
+  muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and the National Science Foundation.",
 };
 
 export const bio = {

@@ -1,7 +1,7 @@
 export const projects = {
   "simplifying-data-access": {
     slug: "simplifying-data-access",
-    heroImage: "/img/sda/final-visual/newUI/title-thumbnail.jpg",
+    heroImage: "/img/sda/thumbnail.jpg",
     projectTitle: { main: "Simplifying data\naccess", sub: "Unifying 3 products into 1" },
     navTitle: "Simplifying data access: Unifying 3 endpoint products into 1",
     heroProblem: "Customers were managing storage infrastructure across three separate consoles by repeating the same setup tasks, with no unified way to access data stored in different storages. I led a cross-functional team of 10 to design a cohesive console experience that unified setup and access across all three services.",
@@ -13,6 +13,7 @@ export const projects = {
     type: "AWS",
     year: "2024",
     tags: ["Cloud infrastructure", "0 → 1"],
+    metricsImage: "/img/sda/final-visual/createap.png",
     metrics: [
       { value: 34, suffix: "%", label: "Customers adoption" },
       { value: 90, suffix: "%", label: "Customer satisfaction rate" },
@@ -96,10 +97,11 @@ export const projects = {
     navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
     heroSolution: "S3 Tables, featured in {link:the 2024 AWS CEO keynote}, handles infrastructure automatically, providing a seamless console experience that lets teams turn big data into insights in seconds.",
-    impact: "A seamless console experience that turns big data into insights in seconds",
+    impact: "I led the UX of S3 Tables, a seamless console experience that turns big data into insights in seconds.",
     type: "AWS",
     year: "2024",
     tags: ["Design lead", "From concept to launch", "Cloud infrastructure"],
+    metricsImage: "/img/s3tables/final-visual/newUI/tb-list.png",
     externalLink: {
       url: "https://www.youtube.com/watch?v=eztA5VYH2nM",
       cursor: "BIGGGGG launch of the year",
@@ -118,6 +120,7 @@ export const projects = {
         content: {
           lead: "20+ interviews revealed that customers {img:/img/s3tables/customers-inline-img/netflix.jpg,/img/s3tables/customers-inline-img/bmw.jpg,/img/s3tables/customers-inline-img/mcdonlad.jpg,/img/s3tables/customers-inline-img/nasdaq.jpg,/img/s3tables/customers-inline-img/siemens.jpg,/img/s3tables/customers-inline-img/3m.jpg} don't want to store structured data in unstructured storage while maintaining custom infrastructure. They need a solution to streamline storage operations so teams can focus on data querying.",
           subsections: [
+            { label: "Research", text: "I used internal AI tools to synthesize transcripts from 20+ enterprise customer interviews, and the outcome revealed who we are designing for and their respective pain points.", images:[{ src: "/img/s3tables/problem/research-process.png", alt: "Research", noBorder: true}]},
             { label: "Target personas", text: "Data engineers maintain storage systems daily. Strategic leads evaluate infrastructure costs and reliability.", images: [{ src: "/img/s3tables/problem/p-data-engineer.png", alt: "Data engineer persona", noBorder: true }, { src: "/img/s3tables/problem/p-strategic-lead.png", alt: "Strategic lead persona", noBorder: true }] },
             { label: "Pain points", text: "Millions wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/problem-1.png", alt: "Problem 1", noBorder: true }, { src: "/img/s3tables/problem/problem-2.png", alt: "Problem 2", noBorder: true }] },
             { label: "User journey", text: "I mapped the user journey into phases to surface the highest-friction tasks, guiding the team to align on priorities to act on.", images: [{ src: "/img/s3tables/problem/user-journey.png", alt: "User journey", noBorder: true }] },
@@ -196,7 +199,7 @@ export const projects = {
 
   "agent-opportunities": {
     slug: "agent-opportunities",
-    heroImage: "/img/s3tables/heroimg-1.JPEG",
+    heroImage: "/img/sda/sda-placeholder.jpg",
     projectTitle: { main: "AWS agentic\nexperience", sub: "Let agents do the heavy lifting" },
     navTitle: "AWS agentic experience",
     // NOTE: the case-study body below (heroProblem/heroSolution, metrics, and
@@ -213,6 +216,7 @@ export const projects = {
     year: "2025 - present",
     role: "Lead UX Designer",
     tags: ["AI", "0 → 1"],
+    metricsImage: "/img/sda/final-visual/createap.png",
     metrics: [
       { value: 34, suffix: "%", label: "Customers adoption" },
       { value: 90, suffix: "%", label: "Customer satisfaction rate" },

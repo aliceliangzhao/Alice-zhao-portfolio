@@ -1,0 +1,87 @@
+/* Outcome metrics bento — a grid of square cards that reflows by breakpoint.
+   Placement is hand-set via grid-template-areas:
+     desktop (4 cols): M S M IMG / S M M S
+     tablet  (3 cols): M S M     / IMG M M
+     mobile  (2 cols): M M       / M M           (metrics only) */
+
+.bento {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.3125rem;   /* 5px */
+  margin: clamp(2.5rem, 6vw, 5rem) 0;
+  grid-template-areas:
+    "m1 sa m2 im"
+    "sb m3 m4 sc";
+}
+
+.m1 { grid-area: m1; }
+.m2 { grid-area: m2; }
+.m3 { grid-area: m3; }
+.m4 { grid-area: m4; }
+.im { grid-area: im; }
+.sa { grid-area: sa; }
+.sb { grid-area: sb; }
+.sc { grid-area: sc; }
+
+.card {
+  aspect-ratio: 1;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;   /* value pinned top, label pinned bottom */
+  padding: clamp(1.25rem, 2.2vw, 1.75rem);
+  background: var(--color-metric-fill);
+}
+/* spacers are empty by default; the fill reveals on hover */
+.spacer {
+  background: transparent;
+  transition: background-color 0.25s ease;
+}
+.spacer:hover { background: var(--color-metric-spacer); }
+.image { background: var(--color-metric-spacer); }
+.image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.value {
+  font-family: var(--f-display);        /* EB Garamond serif accent */
+  font-size: var(--font-size-h2);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: var(--color-fg);
+}
+.suffix { font-size: 0.7em; }
+.label {
+  font-size: var(--font-size-p-xs);
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+
+/* Tablet: 3 columns; the two outer spacers drop, the image moves to row 2. */
+@media (max-width: 900px) {
+  .bento {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      "m1 sa m2"
+      "im m3 m4";
+  }
+  .sb, .sc { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spacer { transition: none; }
+}
+
+/* Mobile: 2 columns, metrics only — image and remaining spacer drop. */
+@media (max-width: 640px) {
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "m1 m2"
+      "m3 m4";
+  }
+  .im, .sa { display: none; }
+}

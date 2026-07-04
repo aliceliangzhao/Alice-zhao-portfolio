@@ -3,10 +3,13 @@
 import { useLayoutEffect, useRef } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
-import MetricsCounter from "./MetricsCounter";
+import MetricsBento from "./MetricsBento";
 import ExternalLink from "./ExternalLink";
 import InlineImageLoop from "./InlineImageLoop";
 import SectionTabs from "./SectionTabs";
+import SelectedWork from "./SelectedWork";
+import DotGridBackground from "./DotGridBackground";
+import { projectOrder } from "../data/projects";
 
 /* Project detail page — simple-editorial style.
    A calm, flat, scrollable page: lead (title + meta + intro) → hero band →
@@ -91,8 +94,8 @@ function OutcomeZigzag({ content }) {
       const ratio = img.naturalWidth && img.naturalHeight ? img.naturalWidth / img.naturalHeight : 16 / 9;
       const baseHeight = baseWidth / ratio;
       const viewportHeight = window.innerHeight;
-      const revealDistance = Math.max(viewportHeight * 1.05, 680);
-      const holdDistance = viewportHeight * 0.55;
+      const revealDistance = Math.max(viewportHeight * 0.9, 600);
+      const holdDistance = 0;   /* release as soon as the image finishes expanding */
 
       stage.style.setProperty("--reveal-ratio", ratio);
       stage.style.setProperty("--reveal-base-h", `${baseHeight}px`);
@@ -171,7 +174,7 @@ function OutcomeZigzag({ content }) {
   );
 }
 
-function OutcomeSection({ section, metrics }) {
+function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt }) {
   const content = section.content;
   const blocks = Array.isArray(content) ? content : null;
 
@@ -184,7 +187,9 @@ function OutcomeSection({ section, metrics }) {
 
       {metrics?.length > 0 && (
         <div className="pd-grid">
-          <div className="pd-metrics"><MetricsCounter metrics={metrics} /></div>
+          <div className="pd-metrics">
+            <MetricsBento metrics={metrics} image={metricsImage} imageAlt={metricsImageAlt} />
+          </div>
         </div>
       )}
 
@@ -201,6 +206,8 @@ export default function ProjectDetailClient({ project }) {
   const comingSoon = !!project.comingSoon;
   const sections = comingSoon ? [] : (project.sections || []);
   const meta = [project.role, project.year, ...(project.tags || [])].filter(Boolean);
+  // the other case studies, for the "more work" section above the footer
+  const otherSlugs = projectOrder.filter((slug) => slug !== project.slug);
 
   return (
     <>
@@ -255,12 +262,27 @@ export default function ProjectDetailClient({ project }) {
         {/* Sections — outcome keeps the style-card cinematic zigzag/reveal */}
         {sections.map((section) =>
           section.id === "outcome" ? (
-            <OutcomeSection key={section.id} section={section} metrics={project.metrics} />
+            <OutcomeSection
+              key={section.id}
+              section={section}
+              metrics={project.metrics}
+              metricsImage={project.metricsImage}
+              metricsImageAlt={project.navTitle}
+            />
           ) : (
             <Section key={section.id} section={section} />
           )
         )}
+
+        {!comingSoon && otherSlugs.length > 0 && (
+          <SelectedWork projectSlugs={otherSlugs} />
+        )}
       </main>
+
+      {/* dotted band fills the gap between the work section and the footer */}
+      <div className="pd-dot-gap" aria-hidden="true">
+        <DotGridBackground className="pd-dot-gap-fill" />
+      </div>
 
       <Footer />
     </>

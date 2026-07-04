@@ -17,6 +17,19 @@ function ExtIcon({ className }) {
    /projects/* pages, enriched from projects.js) and external note-cards
    (public launches/articles that live off-site). Keeps content single-sourced:
    titles/thumbs come from projects.js, never re-typed here. */
+/* Shape a project record into the card data used by CaseStudyCard. Single
+   source for both the homepage rows and the project-page "more work" variant. */
+function projectToCard(project, href) {
+  return {
+    href,
+    title: project.navTitle,
+    subtitle:
+      typeof project.impact === "object" ? project.impact.card : project.impact,
+    thumb: project.heroImage,
+    tags: project.tags || [],
+  };
+}
+
 function resolveWork(items) {
   const caseStudies = [];
   const notes = [];
@@ -26,13 +39,7 @@ function resolveWork(items) {
       : null;
     const project = slug ? projects[slug] : null;
     if (project) {
-      caseStudies.push({
-        href: item.href,
-        title: project.navTitle,
-        subtitle:
-          typeof project.impact === "object" ? project.impact.card : project.impact,
-        thumb: project.heroImage,
-      });
+      caseStudies.push(projectToCard(project, item.href));
     } else {
       notes.push({
         title: item.name,
@@ -57,8 +64,20 @@ function CaseStudyCard({ card, featured }) {
           priority={featured}
         />
       </span>
-      <h4 className={s.cardTitle}>{card.title}</h4>
-      <p className={s.cardSub}>{card.subtitle}</p>
+      <div className={s.cardBody}>
+        <h4 className={s.cardTitle}>
+          {card.title}
+          <span className={s.cardArrow} aria-hidden="true">↗</span>
+        </h4>
+        <p className={s.cardSub}>{card.subtitle}</p>
+        {card.tags.length > 0 && (
+          <p className={s.tags}>
+            {card.tags.map((tag) => (
+              <span key={tag} className={s.tag}>{tag}</span>
+            ))}
+          </p>
+        )}
+      </div>
     </Link>
   );
 }
@@ -117,13 +136,44 @@ function WorkRow({ job }) {
   );
 }
 
-/* Selected work — one row per company, drawn from workExperience. */
-export default function SelectedWork() {
+/* Project-page variant: a stripped, full-width row of project cards (the other
+   case studies), under the same "Selected work" label. */
+function MoreWork({ slugs }) {
+  const cards = slugs
+    .map((slug) => {
+      const project = projects[slug];
+      return project ? projectToCard(project, `/projects/${slug}`) : null;
+    })
+    .filter(Boolean);
+  if (cards.length === 0) return null;
+
+  return (
+    <section className={s.work}>
+      <div className={s.grid12}>
+        <p className={s.sectionLabel}>
+          <span className={s.sectionLabelText}>Selected work</span>
+          <span className={s.sectionRule} aria-hidden="true" />
+        </p>
+        <div className={s.workProjectsFull}>
+          {cards.map((card) => (
+            <CaseStudyCard key={card.href} card={card} featured={false} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* Selected work. Default (homepage): one row per company from workExperience.
+   With `projectSlugs`: the project-page variant — full-width project cards. */
+export default function SelectedWork({ projectSlugs }) {
+  if (projectSlugs) return <MoreWork slugs={projectSlugs} />;
+
   return (
     <section id="work" className={s.work}>
       <div className={s.grid12}>
         <p className={s.sectionLabel}>
-          <span className={s.sectionLabelText}>Selected work &darr;</span>
+          <span className={s.sectionLabelText}>Selected work</span>
           <span className={s.sectionRule} aria-hidden="true" />
         </p>
       </div>

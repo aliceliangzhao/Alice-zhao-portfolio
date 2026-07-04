@@ -20,6 +20,7 @@
                                   deprecate for failing AA; #767676 is the accessible value. */
   --color-bg: #fff;            /* page background */
   --color-link: var(--color-fg);
+  --color-divider: #e0e0e0;    /* light-grey hairline (e.g. under the section label) */
 
   /* --- Typography -------------------------------------------------------- */
   --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -29,15 +30,20 @@
      the user's browser font-size setting (1rem = 16px default). The max equals
      the original desktop size; the min keeps things legible on small screens.
      The vw term stays viewport-relative; only the fixed px parts became rem. */
-  --font-size-base: clamp(0.9375rem, 1.1vw + 0.5625rem, 1.5rem);  /* header / nav / scroll cue */
-  --font-size-h1:   clamp(2.5rem, 7vw, 6rem);                     /* h1 — project titles */
-  --font-size-h2:   clamp(1.75rem, 3.6vw, 3rem);                  /* h2 */
+  /* Type scale (primitives) — the single source of every size value. Semantic
+     tokens (headings, below) alias into this; components reference either layer
+     but never a raw clamp(). */
+  --font-size-p-2xl: clamp(2.25rem, 5.5vw, 4.5rem);              /* 36–72px */
+  --font-size-p-xl:  clamp(1.75rem, 3.6vw, 3rem);                /* 28–48px */
+  --font-size-p-l:   clamp(1.375rem, 1.8vw + 0.5rem, 2rem);      /* 22–32px — intro, card titles */
+  --font-size-p-m:   clamp(1.125rem, 1.0vw + 0.75rem, 1.5rem);   /* 18–24px — captions */
+  --font-size-p-s:   clamp(1rem, 0.8vw + 0.6875rem, 1.25rem);    /* 16–20px — small */
+  --font-size-p-xs:  clamp(0.8125rem, 0.5vw + 0.6875rem, 1rem);  /* 13–16px — nav links */
+  --font-size-p-2xs: clamp(0.6875rem, 0.25vw + 0.6rem, 0.8125rem); /* 11–13px — uppercase tags */
 
-  /* paragraph scale */
-  --font-size-p-l: clamp(1.375rem, 1.8vw + 0.5rem, 2rem);         /* p-l — large: intro */
-  --font-size-p-m: clamp(1.125rem, 1.0vw + 0.75rem, 1.5rem);      /* p-m — captions, tags */
-  --font-size-p-s: clamp(1rem, 0.8vw + 0.6875rem, 1.25rem);       /* p-s — small */
-  --font-size-p-xs: clamp(0.8125rem, 0.5vw + 0.6875rem, 1rem);    /* p-xs — header nav links */
+  /* Semantic headings — alias into the scale, never hold a raw value. */
+  --font-size-h1: var(--font-size-p-2xl);  /* page / project title */
+  --font-size-h2: var(--font-size-p-xl);   /* section title */
 
   --line-height-base: 1.32;
   --line-height-tight: 1.08;   /* big project titles */
@@ -60,6 +66,7 @@
   --space-hero-bottom: 0.625rem;   /* the name sits attached to the screen bottom */
   --space-cue-bottom: clamp(1rem, 2vw, 1.625rem); /* scroll cue offset from bottom */
   --space-section-top: clamp(4rem, 9vw, 7.5rem); /* gap above the project list */
+  --space-hero-dots-bleed: clamp(3.6rem, 6.5vw, 5.6rem); /* how far the hero dot-grid extends above/below the intro text (~one extra dot row each side vs. the text); kept < section-top so it clears the nav and the Selected Work rule */
   --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer name block */
   --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);    /* footer legal-row vertical padding */
   --space-row-gap: clamp(3rem, 6vw, 5rem);    /* vertical gap between project rows */
@@ -69,12 +76,25 @@
   /* --- Project cards ----------------------------------------------------- */
   --color-card-placeholder: #d9d9d9; /* image placeholder fill */
   --color-card-surface: #efefef;     /* light-grey fill behind a secondary-work card */
+  --color-dot-grid: #b4b0a6;         /* warm grey hero dot-grid; subtle so it sits behind text */
   --project-image-aspect: 1 / 0.82;  /* image card placeholder ratio */
   --radius-image: 20px;              /* rounded corners on a standalone image placeholder */
   --radius-card: 20px;               /* rounded corners on a card container */
   --radius-image-nested: 10px;       /* image inside a padded card: smaller so its
                                         curve stays concentric with the container's */
   --space-card-inset: clamp(1rem, 1.8vw, 1.5rem); /* padding inside a filled card container */
+
+  /* --- Tags -------------------------------------------------------------- */
+  /* Capability labels under a project card: sharp-cornered beige rectangles,
+     uppercase, smallest type. Warm sepia fill + ink to match the parchment
+     direction; the text tone clears AA contrast on the beige. */
+  --color-tag-bg: #e3dfd5;       /* low-saturation beige fill */
+  --color-metric-fill: #e3dfd5;  /* outcome metric card fill (warm beige) */
+  --color-metric-spacer: #f1ede4; /* outcome bento spacer card (lighter warm tint) */
+  --color-tag-fg: #57534a;       /* warm dark taupe label, AA-safe on the beige */
+  --space-tag-py: 8px;           /* tag padding, top/bottom */
+  --space-tag-px: 20px;          /* tag padding, left/right */
+  --space-tag-gap: 12px;         /* gap between adjacent tags */
 
   /* --- Grid -------------------------------------------------------------- */
   --grid-cols: 12;             /* 12-column grid */

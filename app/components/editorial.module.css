@@ -24,33 +24,58 @@
 /* --- Intro ---------------------------------------------------------------- */
 /* Sits below the sticky header; this margin gives the intro a little breathing
    room from the bar above it. */
-.intro { margin-top: var(--space-section-top); }
+.intro { margin-top: var(--space-section-top); position: relative; }
 .intro p {
+  position: relative;   /* lift the text above the dot-grid canvas */
+  z-index: 1;
   grid-column: 1 / 8;
   margin: 0;
   font-size: var(--font-size-p-l);
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-base);
   text-wrap: pretty;
 }
 
+/* Dot-grid canvas — fills the right half of the hero, behind the text. Bounded
+   by the intro section: it starts below the nav (the section's top margin) and
+   the Selected Work section's own top margin keeps a gap below, so the grid
+   never reaches the nav or the "Selected work" rule. Desktop only. */
+.heroDots {
+  position: absolute;
+  /* bleed above/below the intro text into the section gaps (negative insets
+     don't affect layout, so Selected Work stays put). The bleed is < the
+     section gap, so it never reaches the nav or the Selected Work rule. */
+  top: calc(-1 * var(--space-hero-dots-bleed));
+  bottom: calc(-1 * var(--space-hero-dots-bleed));
+  left: 50%;
+  right: 0;          /* aligns to the page gutter (inside .grid12 padding) */
+  z-index: 0;
+  pointer-events: none;
+}
+/* The canvas fills the wrapper; its bitmap size is set in JS, but its layout
+   size is pinned to the wrapper so attribute writes can't drive a resize loop. */
+.heroDots canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* --- Section label -------------------------------------------------------- */
-/* Label + a hairline rule that fills the rest of the row — the divider
-   between the hero/intro and the work section. */
+/* Label stacked above a full-width light-grey hairline — the divider between
+   the hero/intro and the work section. */
 .sectionLabel {
   grid-column: 1 / 13;
   display: flex;
-  align-items: baseline;   /* the rule sits on the text's baseline (bottom) */
-  gap: 1rem;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1.25rem);
   margin: 0 0 clamp(1.5rem, 3vw, 2.5rem);
   font-size: var(--font-size-p-xs);
   color: var(--color-fg);
 }
 .sectionLabelText { white-space: nowrap; }
 .sectionRule {
-  flex: 1;
   height: 1px;
-  background: var(--color-fg);
+  background: var(--color-divider);   /* full-width in the column flow */
 }
 
 /* --- Selected work -------------------------------------------------------- */
@@ -64,7 +89,7 @@
 .workMeta { grid-column: 1 / 3; }
 .workMeta h3 {
   margin: 0;
-  font-size: var(--font-size-p-l);
+  font-size: var(--font-size-p-m);   /* one step below the card title */
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }
@@ -92,6 +117,19 @@
 }
 .workCard.feature { grid-column: 1 / -1; }
 
+/* Project-page "more work": cards span the full width (no company-meta column),
+   two-up on desktop, single-column on mobile. */
+.workProjectsFull {
+  grid-column: 1 / 13;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: var(--space-project-col-gap);
+  row-gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+/* full-width cards are ~half the page wide, so a 4/3 thumb would be huge and
+   push the title out of view — use a landscape ratio so each card reads whole */
+.workProjectsFull .thumb { aspect-ratio: 16 / 9; }
+
 /* a project card: thumb + title + subtitle */
 .workCard { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
 .thumb {
@@ -100,23 +138,63 @@
   aspect-ratio: 4 / 3;
   background: var(--color-card-placeholder);
   border-radius: var(--radius-image);
-  overflow: hidden;
-  transition: opacity 0.3s ease;
+  overflow: hidden;   /* clips the hover zoom so nothing around it shifts */
 }
-.thumb img { object-fit: cover; object-position: top left; }
+/* Hover A: the image slowly zooms inside its fixed frame (see :hover below) */
+.thumb img {
+  object-fit: cover;
+  object-position: top left;
+  transition: transform 0.6s cubic-bezier(0.2, 0, 0.1, 1);
+}
 .workCard.feature .thumb { aspect-ratio: 21 / 9; }
-.workCard:hover .thumb { opacity: 0.88; }
+.workCard:hover .thumb img { transform: scale(1.04); }
+/* Text block under the thumb. One knob for the whole group's outer spacing:
+   margin-top = thumb-to-title gap, margin-bottom = space below the tags. The
+   internal gaps (title→impact, impact→tags) live on the elements themselves. */
+.cardBody {
+  margin: 1.5rem 0 2rem;
+}
 .cardTitle {
-  margin: 0.8rem 0 0;
-  font-size: var(--font-size-p-l);
-  font-weight: var(--font-weight-medium);
+  margin: 0;
+  font-size: var(--font-size-p-l);   /* matches the hero intro text */
+  font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }
-.workCard:hover .cardTitle { text-decoration: underline; }
+/* ↗ arrow: hidden and nudged left at rest, slides in beside the title on hover */
+.cardArrow {
+  display: inline-block;
+  margin-left: 0.35em;
+  opacity: 0;
+  transform: translateX(-0.25em);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.workCard:hover .cardArrow {
+  opacity: 1;
+  transform: translateX(0);
+}
 .cardSub {
   margin: 0.3rem 0 0;
-  font-size: var(--font-size-p-xs);
+  font-size: var(--font-size-p-s);
   color: var(--color-muted);
+}
+
+/* Capability tags: sharp-cornered beige rectangles, uppercase, smallest type.
+   Sit in a wrapping row under the card subtitle. */
+.tags {
+  margin: 0.75rem 0 0;   /* gap above tags; bottom spacing lives on .cardBody */
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-tag-gap);
+}
+.tag {
+  padding: var(--space-tag-py) var(--space-tag-px);
+  background: var(--color-tag-bg);
+  color: var(--color-tag-fg);
+  font-size: var(--font-size-p-2xs);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 /* --- Secondary work: external links without a project page ---------------- */
@@ -259,6 +337,7 @@
    ========================================================================= */
 /* Tablet: company meta stacks above its projects */
 @media (max-width: 900px) {
+  .heroDots { display: none; }
   .intro p { grid-column: 1 / 11; }
   .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
   .workMeta p { max-width: 48ch; }
@@ -272,12 +351,17 @@
   .work { scroll-margin-top: 4.5rem; }
   .intro p { grid-column: 1 / 13; }
   .workProjects { grid-template-columns: 1fr; }
+  .workProjectsFull { grid-template-columns: 1fr; }
   .workCard.feature .thumb { aspect-ratio: 16 / 9; }
   .workNotes { grid-template-columns: 1fr; }
 }
 
 /* Respect reduced motion: no hover transitions, no marquee scroll */
 @media (prefers-reduced-motion: reduce) {
-  .thumb, .noteThumb { transition: none; }
+  .noteThumb { transition: none; }
+  .thumb img { transition: none; }
+  .workCard:hover .thumb img { transform: none; }   /* no zoom */
+  /* keep the arrow as an affordance, but appear instantly (no slide) */
+  .cardArrow { transition: none; transform: none; }
   .marqueeTrack { animation: none; transform: translateX(0); }
 }
