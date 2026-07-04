@@ -103,7 +103,7 @@
 .workMeta p {
   margin: 0.85rem 0 0;
   font-size: var(--font-size-p-xs);
-  line-height: var(--line-height-base);
+  line-height: 1.55;
 }
 
 /* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured (first)

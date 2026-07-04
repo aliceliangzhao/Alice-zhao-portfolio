@@ -1,10 +1,10 @@
 export const intro = {
-  lead: "Currently leading the UX for AWS S3 and exploring the future of AWS agentic experience.",
+  lead: "Currently leading the UX of AWS S3 and exploring the future of AWS agentic experience.",
   muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and the National Science Foundation.",
 };
 
 export const bio = {
-  heading: "I'm Alice (Liang) Zhao, a UX Designer at Amazon, where I work on agentic experiences for AWS S3. I enjoy turning complex products and technologies into intuitive and customer-focused experience.",
+  heading: "I'm Alice (Liang) Zhao, a UX Lead at AWS, where I work on the storage agentic experiences. I enjoy turning complex products and technologies into intuitive and customer-focused experience.",
   personal: "Outside of work, I love to explore nature and capture everyday moments through photography.",
   image: "/img/aboutMe/alice-liang.jpg",
 };
@@ -14,7 +14,7 @@ export const workExperience = [
     time: "Sep 2020 — present",
     title: "Lead UX Designer",
     company: "Amazon Web Services",
-    description: "Designing AI-native and agentic experiences for AWS S3. Launched 40+ products in 4 years, including initiatives that shipped in 10 weeks, driving a 10% week-over-week storage increase and over 500 TB of data stored. Partnered with researchers and ML engineers to develop scalable AI design frameworks adopted across 15 AWS services.",
+    description: "Designing AI-native experiences for AWS storage services. Launched 40+ features in 4 years, including 4 products from concept to launch.",
     selectedWork: [
       { name: "AWS S3 Tables", href: "/projects/s3-tables" },
       { name: "Simplifying data access", href: "/projects/simplifying-data-access" },
