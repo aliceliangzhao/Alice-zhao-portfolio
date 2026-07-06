@@ -199,41 +199,37 @@ export const projects = {
 
   "agent-opportunities": {
     slug: "agent-opportunities",
-    heroImage: "/img/sda/sda-placeholder.jpg",
-    projectTitle: { main: "AWS agentic\nexperience", sub: "Let agents do the heavy lifting" },
+    heroImage: "/img/ai-assistant/thumbnail.jpg",
+    detailImage: "/img/ai-assistant/AWS Assistant.jpg",
+    projectTitle: { main: "AWS agentic\nexperience", sub: "Purpose over services" },
     navTitle: "AWS agentic experience",
-    // NOTE: the case-study body below (heroProblem/heroSolution, metrics, and
-    // sections) is duplicated from Simplifying Data Access as a layout template.
-    // Replace the copy, metrics, and images with the agentic project's own
-    // content. The page now renders the full layout instead of "coming soon".
-    heroProblem: "Customers were managing storage infrastructure across three separate consoles by repeating the same setup tasks, with no unified way to access data stored in different storages. I led a cross-functional team of 10 to design a cohesive console experience that unified setup and access across all three services.",
-    heroSolution: "Launched at {link:AWS re:Invent 2025}, the unified console experience cuts cross-service infrastructure setup to a single guided flow, allowing customers to scale access for large datasets in seconds.",
-    externalLink: {
-      url: "https://www.youtube.com/watch?v=NVZV0gfV-jA",
-    },
-    impact: "Transforming AWS console interactions from manual workflows to agent-driven experiences",
+    // NOTE: content is real (from the user's raw thinking, structured like
+    // s3-tables). Still PLACEHOLDER / pending review:
+    //  - title / value statement (navTitle, projectTitle)
+    //  - metrics: left empty on purpose (no real numbers yet -> bento hidden)
+    //  - product name (Amazon Q vs. generic), timeline, team size
+    //  - most subsections have no image yet; real screenshots to be added.
+    //    Available: /img/ai-assistant/AWS Assistant-*.{png,jpg} (names have spaces).
+    heroProblem: "The launched Amazon Q console needed to be more agentic and streamlined. Working from customer feedback, I partnered with product to find the workflows that would benefit most from an agentic flow, then designed an experience for two very different customers: new users exploring AWS, and power users who live in the terminal.",
+    heroSolution: "The result is an agentic app layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
+    impact: "Transforming AWS console interactions from manual, service-driven workflows to purpose-driven, agent-driven experiences.",
     type: "AWS",
     year: "2025 - present",
     role: "Lead UX Designer",
     tags: ["AI", "0 → 1"],
-    metricsImage: "/img/sda/final-visual/createap.png",
-    metrics: [
-      { value: 34, suffix: "%", label: "Customers adoption" },
-      { value: 90, suffix: "%", label: "Customer satisfaction rate" },
-      { value: 194, suffix: "%", label: "MoM growth in 6 months" },
-      { value: 79, suffix: "%", label: "Success rate" },
-    ],
+    // metrics intentionally empty until real numbers are available.
+    metrics: [],
     sections: [
       {
         id: "problem",
         navLabel: "01  Who and why",
         heading: "01  Who and why.",
         content: {
-          lead: "Two personas, three separate consoles, and constant context-switching revealed the need for a unified data access experience.",
+          lead: "Customer feedback on the launched Amazon Q console pointed to one gap: the experience was service-driven and manual when customers wanted it to be agentic and streamlined. I partnered with product to consolidate usage data and find the workflows that would benefit most from an agentic flow.",
           subsections: [
-            { label: "Research", text: "I synthesized 6 customer calls, 3 sales calls, and 30+ survey responses to map two personas, their journeys, and their core pain points.", images: [{ src: "/img/sda/problem/research.jpg", alt: "Research synthesis" }] },
-            { label: "Target personas", text: "Storage admins spend too much on third-party integrations and duplicate data just to connect services. Developers repeat identical tasks across consoles because there is no unified way to access data.", images: [{ src: "/img/sda/problem/userjourneymap.jpg", alt: "Target personas" }] },
-            { label: "Pain points", text: "No unified view of access points across storage services, no way to create access points connecting to file systems from the console, and constant page-hopping to view and manage resources.", images: [{ src: "/img/sda/problem/painpoint.jpg", alt: "Pain points analysis" }] },
+            { label: "Research", text: "I built a research knowledge base and used a research agent to pull from it alongside trustworthy external sources and internal persona reports. The agent generated a product requirement document that I reviewed and refined with the product team." },
+            { label: "Target personas", text: "Two customer types shaped every decision. New and casual users want to state a purpose and explore AWS services through conversation. Power users live in the terminal and want conversational help layered on top, not a replacement." },
+            { label: "Pain points", text: "The console was organized around services rather than intent, so customers had to know which service to use before they could start. Common workflows were manual and fragmented, with no agentic path to complete them end to end." },
           ],
         },
       },
@@ -242,23 +238,24 @@ export const projects = {
         navLabel: "02 Product scoping",
         heading: "02 Product scoping.",
         content: {
-          lead: "I mapped the user journey into prioritized stories that drove a scope decision: what ships at launch vs. what waits. This aligned the team on the three flows that mattered most.",
+          lead: "I turned the research into a shared product definition and a system design the team could build on, aligning product and engineering before any pixels were drawn.",
           subsections: [
-            { label: "User stories", text: "The full story map exposed 20+ user needs across three services. This gave the team a shared view of the full scope and allow us to draw launch boundary.", images: [{ src: "/img/sda/product-scoping/userstories.jpg", alt: "User stories" }] },
-            { label: "User flows", text: "I mapped each priority flow end-to-end, illustrating how each flow fits into the overall experience.", images: [{ src: "/img/sda/product-scoping/userflow.jpg", alt: "User flows" }] },
+            { label: "Requirement alignment", text: "I used the generated requirement document to align the product team on scope. We reviewed it, updated it, and agreed on what the agentic experience needed to do." },
+            { label: "System design", text: "I partnered with engineering to draft and test the system design, making sure the backend was robust enough to support the expansion into an agentic experience." },
+            { label: "Experience mapping", text: "I mapped the Amazon Q console layout in FigJam so the team could see how the agentic flow fit into the existing console." },
           ],
         },
       },
       {
         id: "design-iteration",
-        navLabel: "03 Design iteration",
-        heading: "03 Design iteration.",
+        navLabel: "03 Design Iteration",
+        heading: "03 Design Iteration.",
         content: {
-          lead: "Internal testing exposed a critical flaw: stringing multiple API calls caused partial failures with no clear recovery path. I advocated for a UX pattern that surfaces all required steps during creation, resolving both the usability and durability issues. Follow-up testing validated the pattern.",
+          lead: "The core challenge was serving two very different customers in one experience without splitting it into two products. I explored layouts with AI design tools and landed on a three-panel view that lets each customer type work the way they prefer.",
           subsections: [
-            { label: "Exploration", text: "During internal testing, the creation flow broke mid-way when one API in the chain failed. Customers found it frustrating that they lost their input and had no way to tell what succeeded and what didn't.", images: [{ src: "/img/sda/design-iteration/exploration.jpg", alt: "Exploration" }] },
-            { label: "Trade-offs", text: "The original sequential flow was simpler to build but fragile. Surfacing all steps upfront added complexity to the UI, but gave customers a clear picture of what was required and let the service call one API at a time.", images: [{ src: "/img/sda/design-iteration/tradeoff.jpg", alt: "Trade-offs" }] },
-            { label: "Decision", text: "I pushed for a pattern that displays the full list of required steps during creation. Each API call runs independently, so a single failure doesn't cascade. Follow-up testing proved the pattern was clear and robust.", images: [{ src: "/img/sda/design-iteration/decision.jpg", alt: "Decision" }] },
+            { label: "Planning", text: "I used the requirement document as the starting point and a planning skill to create design, product, and task documents. This gave the AI design tools the right context and clear next steps, which I reviewed to keep the plan aligned with the direction I had in mind." },
+            { label: "Exploration", text: "Working with awscx-mcp and our internal design agent, I studied how each customer type wanted to work. New and casual users prefer to start on the left with a chat input, then move right to view, confirm, and manage the output. Power users prefer a hybrid of terminal and chat, mostly using the terminal for actions and chat for additional requests.", images: [{ src: "/img/ai-assistant/AWS Assistant-start.png", alt: "Casual user chat-first flow" }] },
+            { label: "Decision", text: "I designed a three-panel view that serves both. The left panel is a terminal for calling APIs, collapsed by default. The middle is a chat panel for natural language. The right is a review panel showing the workflow steps, status, and outcome. I explored visual styles with AI, landed on the selected direction, and pushed straightforward changes as PRs into the gamma environment.", images: [{ src: "/img/ai-assistant/AWS Assistant-wCLI.png", alt: "Three-panel view with terminal, chat, and review" }] },
           ],
         },
       },
@@ -267,23 +264,21 @@ export const projects = {
         navLabel: "04 Outcome",
         heading: "04 Outcome",
         headingAlign: "center",
-        summary: "A unified console for customers to set up and manage cloud infrastructure across three storage services.",
+        summary: "An intuitive agentic app that lives on top of the existing console, making AWS purpose-driven for newcomers and more efficient for power users.",
         content: [
           {
-            subheading: "Streamlined infrastructure setup",
-            text: "Storage admins can now set up their infrastructure directly within the AWS console. No more third-party applications needed.",
+            subheading: "Purpose-driven, not service-driven",
+            text: "New and casual customers can experiment with different AWS services simply by stating their purpose. The experience is organized around intent instead of services, so customers no longer need to know which service to use before they begin.",
             images: [
-              { src: "/img/sda/final-visual/createap.png", alt: "Infrastructure setup console" },
-              { src: "/img/sda/final-visual/createreviewap.png", alt: "Storage service configuration" },
+              { src: "/img/ai-assistant/AWS Assistant-start-noCLI.png", alt: "Purpose-driven chat and review experience" },
+              { src: "/img/ai-assistant/AWS Assistant-finish.jpg", alt: "Completed purpose-driven workflow" },
             ],
           },
           {
-            subheading: "Unified data operations",
-            text: "Developers can now view and manage all the data operations and security-related tasks in a single console. No more switching among storage services.",
+            subheading: "A conversational layer for power users",
+            text: "Power users keep the native terminal experience they rely on, now with an added conversational layer. They perform actions in the terminal and use chat for additional requests, completing their tasks more efficiently.",
             images: [
-              { src: "/img/sda/final-visual/fsxlist.png", alt: "Data operations dashboard" },
-              { src: "/img/sda/final-visual/fsxdetails.png", alt: "Security management console" },
-              { src: "/img/sda/final-visual/outcome2.png", alt: "Security management console" },
+              { src: "/img/ai-assistant/AWS Assistant-wCLI.png", alt: "Terminal and chat hybrid for power users" },
             ],
           },
         ],

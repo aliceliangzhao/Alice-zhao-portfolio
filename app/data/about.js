@@ -12,9 +12,9 @@ export const bio = {
 export const workExperience = [
   {
     time: "Sep 2020 — present",
-    title: "Lead UX Designer",
-    company: "Amazon Web Services",
-    description: "Designing AI-native experiences for AWS storage services. Launched 40+ features in 4 years, including 4 products from concept to launch.",
+    title: "UX Lead",
+    company: "Amazon Web Services + Alexa",
+    description: "Designing AI-native experiences for AWS storage services. UX lead on S3 Tables, Multi-Region Access Point, and Alexa Voice.",
     selectedWork: [
       { name: "AWS S3 Tables", href: "/projects/s3-tables" },
       { name: "Simplifying data access", href: "/projects/simplifying-data-access" },
@@ -27,7 +27,7 @@ export const workExperience = [
     time: "Jan 2020 — Sep 2020",
     title: "Sr. UX Designer",
     company: "Morgan Stanley",
-    description: " Led design across 20+ wealth management projects, unifying complex financial workflows into a cohesive experience. Reimagined the wealth management product ecosystem serving ~300,000 users and $1.3T in assets under management. Built design systems used by 50+ designers across four global orgs, contributing to a 14% adoption increase in three months.",
+    description: "Shaped the core UX and the design system of the wealth management portal that serves 300k users and manages $1.3T in assets under management.",
     selectedWork: [
       { name: "E*Trade integration", href: "https://www.morganstanley.com/press-releases/morgan-stanley-closes-acquisition-of-e-trade" },
       { name: "Wealth management toolkit", href: "https://www.morganstanley.com/press-releases/morgan-stanley-wealth-management-launches-racial-equity-investin" },
@@ -37,7 +37,7 @@ export const workExperience = [
     time: "Feb 2017 — Dec 2019",
     title: "UX Designer",
     company: "Insperity",
-    description: "Established the Axure Pattern Library for the IT & Application department and launched 5 major products in the HR Suite in 3 years, generating ~$15M in revenue and ~140% increase in product adoption. Optimized a 600+ page marketing ecosystem using data-informed insights, driving a 253% increase in customer engagement and a unified design system that reduced cross-functional development effort by three months.",
+    description: "Established the design system of the HR 360 Suite. Contributed to the UX of 4 new products that generated ~$15M in revenue in 1 year.",
     selectedWork: [
       { name: "Insperity HR 360 Suite", href: "https://www.insperity.com/our-products/hr360/" },
     ],
@@ -54,8 +54,8 @@ export const workExperience = [
   {
     time: "Sep 2014 — May 2016",
     title: "UX Designer",
-    company: "Purdue University",
-    description: "Partnered with the National Science Foundation to design and prototype a nationwide research portal, translating complex academic workflows into intuitive digital experiences.",
+    company: "Purdue University + NSF",
+    description: "Led the UX/UI design of the National Science Foundation research portal.",
     selectedWork: [
       { name: "National Science Foundation research portal", href: "https://www.researchgate.net/publication/304360109_Designing_for_STEM_Faculty_The_Use_of_Personas_for_Evaluating_and_Improving_Design" },
     ],
