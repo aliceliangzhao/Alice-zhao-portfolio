@@ -201,20 +201,17 @@ export const projects = {
     slug: "agent-opportunities",
     heroImage: "/img/ai-assistant/thumbnail.jpg",
     detailImage: "/img/ai-assistant/AWS Assistant.jpg",
-    projectTitle: { main: "AWS agentic\nexperience", sub: "Purpose over services" },
-    navTitle: "AWS agentic experience",
-    // NOTE: content is real (from the user's raw thinking, structured like
-    // s3-tables). Still PLACEHOLDER / pending review:
-    //  - title / value statement (navTitle, projectTitle)
+    projectTitle: { main: "Amazon Q\nassistant", sub: "Purpose over services" },
+    navTitle: "Amazon Q assistant",
+    // NOTE: still PLACEHOLDER / pending:
     //  - metrics: left empty on purpose (no real numbers yet -> bento hidden)
-    //  - product name (Amazon Q vs. generic), timeline, team size
     //  - most subsections have no image yet; real screenshots to be added.
     //    Available: /img/ai-assistant/AWS Assistant-*.{png,jpg} (names have spaces).
-    heroProblem: "The launched Amazon Q console needed to be more agentic and streamlined. Working from customer feedback, I partnered with product to find the workflows that would benefit most from an agentic flow, then designed an experience for two very different customers: new users exploring AWS, and power users who live in the terminal.",
+    heroProblem: "The launched Amazon Q console needed to be more agentic and streamlined. Working from customer feedback, I led design across a team of one PM and eight engineers to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who live in the terminal.",
     heroSolution: "The result is an agentic app layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
     impact: "Transforming AWS console interactions from manual, service-driven workflows to purpose-driven, agent-driven experiences.",
     type: "AWS",
-    year: "2025 - present",
+    year: "2026",
     role: "Lead UX Designer",
     tags: ["AI", "0 → 1"],
     // metrics intentionally empty until real numbers are available.
