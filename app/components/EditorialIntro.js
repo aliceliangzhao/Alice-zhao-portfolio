@@ -1,15 +1,17 @@
 import { intro } from "../data/about";
-import DotGridBackground from "./DotGridBackground";
+import ShapesGrid from "./ShapesGrid";
 import s from "./editorial.module.css";
 
-/* Homepage intro — one large paragraph: the lead in ink, the career history in
-   muted ink. Sits on the shared 12-col grid (cols 1-7 on desktop). A dot-grid
-   canvas fills the right half behind the text (desktop only). */
+/* Homepage hero — the intro paragraph (lead in ink, career history in muted ink)
+   over a full-viewport shapes-grid canvas. The section is the grid root; the copy
+   is punched out of the lattice line-by-line via data-grid-exclude="lines". The
+   hero is a touch under 100svh so the Selected work divider peeks at the bottom
+   as a scroll cue. */
 export default function EditorialIntro() {
   return (
-    <section className={`${s.intro} ${s.grid12}`}>
-      <DotGridBackground className={s.heroDots} />
-      <p>
+    <section className={`${s.intro} ${s.grid12}`} data-grid-root>
+      <ShapesGrid variant="fullscreen" className={s.heroGrid} />
+      <p data-grid-exclude="lines">
         {intro.lead}{" "}
         <span className={s.muted}>{intro.muted}</span>
       </p>

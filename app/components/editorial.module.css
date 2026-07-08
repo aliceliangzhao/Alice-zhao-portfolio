@@ -24,9 +24,15 @@
 /* --- Intro ---------------------------------------------------------------- */
 /* Sits below the sticky header; this margin gives the intro a little breathing
    room from the bar above it. */
-.intro { margin-top: var(--space-section-top); position: relative; }
+/* Hero — a touch under full viewport so the Selected work divider peeks at the
+   bottom as a scroll cue. The intro copy sits vertically centered over the grid. */
+.intro {
+  position: relative;
+  min-height: 86svh;
+  align-content: center;
+}
 .intro p {
-  position: relative;   /* lift the text above the dot-grid canvas */
+  position: relative;   /* lift the text above the shapes-grid canvas */
   z-index: 1;
   grid-column: 1 / 8;
   margin: 0;
@@ -36,25 +42,16 @@
   text-wrap: pretty;
 }
 
-/* Dot-grid canvas — fills the right half of the hero, behind the text. Bounded
-   by the intro section: it starts below the nav (the section's top margin) and
-   the Selected Work section's own top margin keeps a gap below, so the grid
-   never reaches the nav or the "Selected work" rule. Desktop only. */
-.heroDots {
+/* Full-viewport shapes-grid canvas, behind the hero copy. */
+.heroGrid {
   position: absolute;
-  /* bleed above/below the intro text into the section gaps (negative insets
-     don't affect layout, so Selected Work stays put). The bleed is < the
-     section gap, so it never reaches the nav or the Selected Work rule. */
-  top: calc(-1 * var(--space-hero-dots-bleed));
-  bottom: calc(-1 * var(--space-hero-dots-bleed));
-  left: 50%;
-  right: 0;          /* aligns to the page gutter (inside .grid12 padding) */
+  inset: 0;
   z-index: 0;
   pointer-events: none;
 }
 /* The canvas fills the wrapper; its bitmap size is set in JS, but its layout
    size is pinned to the wrapper so attribute writes can't drive a resize loop. */
-.heroDots canvas {
+.heroGrid canvas {
   display: block;
   width: 100%;
   height: 100%;
@@ -338,7 +335,6 @@
    ========================================================================= */
 /* Tablet: company meta stacks above its projects */
 @media (max-width: 900px) {
-  .heroDots { display: none; }
   .intro p { grid-column: 1 / 11; }
   .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
   .workMeta p { max-width: 48ch; }
