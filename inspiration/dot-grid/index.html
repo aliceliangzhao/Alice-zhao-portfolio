@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <title>Shapes Grid Hover Effect</title>
+    <link rel="stylesheet" href="./codepen.css" />
+  </head>
+  <body>
+    <section class="hero" data-grid-root>
+      <nav class="site-nav" aria-label="Primary" data-grid-exclude>
+        <div class="site-brand">placeholder name</div>
+        <div class="site-nav-links">
+          <a href="#">item1</a>
+          <a href="#">item2</a>
+          <a href="#">item 3</a>
+        </div>
+      </nav>
+
+      <div class="hero-stage">
+        <canvas id="grid" class="grid-canvas"></canvas>
+
+        <div class="overlay-text" data-grid-exclude>
+          this is a test to see how the effect looks like, and how the responsiveness works. this is a test to see how the effect looks like, and how the responsiveness works.this is a test to see how the effect looks like, and how the responsiveness works.this is a test to see how the effect looks like, and how the responsiveness works.
+        </div>
+
+        <div class="fallback">
+          <p>Canvas is unavailable in this browser.</p>
+        </div>
+      </div>
+    </section>
+
+    <main class="page-content">
+      <section class="component-demo" aria-labelledby="decorative-demo-heading">
+        <p class="demo-kicker" id="decorative-demo-heading">
+          Reusable Decorative Component
+        </p>
+
+        <div class="decorative-dot-label" data-dot-label>
+          <canvas class="decorative-dot-label__canvas"></canvas>
+          <div class="decorative-dot-label__text">previous work</div>
+          <div class="fallback decorative-dot-label__fallback">
+            <p>Canvas is unavailable in this browser.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="./codepen.js"></script>
+  </body>
+</html>
