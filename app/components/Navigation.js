@@ -232,7 +232,7 @@ export default function Navigation({ sections }) {
   }
 
   return (
-    <header ref={headerRef} className={styles.header}>
+    <header ref={headerRef} className={styles.header} data-grid-exclude-fixed>
       {/* brand — desktop, and mobile when there are no sections */}
       <Link ref={brandRef} href="/" className={styles.brand}>Alice Zhao is a UX lead @ AWS.</Link>
 

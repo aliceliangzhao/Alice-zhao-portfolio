@@ -58,10 +58,15 @@
   text-wrap: pretty;
 }
 
-/* Full-viewport shapes-grid canvas, behind the hero copy. */
+/* Full-viewport shapes-grid canvas. Extends up behind the (glass) nav so top-row
+   shapes have headroom to scale up without clipping at the canvas edge; the nav
+   region is excluded from the lattice in JS. */
 .heroGrid {
   position: absolute;
-  inset: 0;
+  top: calc(-1 * var(--nav-height));
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 0;
   pointer-events: none;
 }

@@ -202,7 +202,13 @@ function buildFullScreen(canvas, width, height) {
   const root = canvas.closest("[data-grid-root]") || document.body;
   const canvasRect = canvas.getBoundingClientRect();
   const exclusions = [];
-  for (const el of root.querySelectorAll("[data-grid-exclude]")) {
+  // Elements inside the grid root (hero copy: line-by-line; anything else: box),
+  // plus fixed/sticky elements outside it (the nav) that overlap the canvas.
+  const excludeEls = [
+    ...root.querySelectorAll("[data-grid-exclude]"),
+    ...document.querySelectorAll("[data-grid-exclude-fixed]"),
+  ];
+  for (const el of excludeEls) {
     const px = 40;
     const py = 26;
     if (el.getAttribute("data-grid-exclude") === "lines") {
