@@ -97,7 +97,7 @@
   grid-template-columns: repeat(8, 1fr);
   column-gap: var(--grid-gap);
 }
-html { scroll-behavior: auto; }
+html { scroll-behavior: smooth; }
 body {
   background: var(--bg);
   color: var(--ink);
@@ -108,6 +108,7 @@ body {
 }
 @media (prefers-reduced-motion: reduce) {
   body { cursor: auto; }
+  html { scroll-behavior: auto; }
 }
 
 @media (max-width: 900px) {
