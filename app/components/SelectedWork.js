@@ -32,7 +32,7 @@ function CaseStudyCard({ card }) {
       <div className={s.cardBody}>
         <h4 className={s.cardTitle}>
           {card.title}
-          <span className={s.cardArrow} aria-hidden="true">↗</span>
+          <span className={s.cardArrow} aria-hidden="true">&rarr;</span>
         </h4>
         <p className={s.cardSub}>{card.subtitle}</p>
         {card.tags.length > 0 && (
