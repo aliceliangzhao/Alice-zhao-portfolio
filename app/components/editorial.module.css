@@ -138,7 +138,7 @@
   top: var(--label-top, 50%);
   left: 0;
   transform: translateY(-50%);
-  font-size: var(--font-size-p-xs);
+  font-size: var(--font-size-p-s);   /* matches the hero "Selected work" label */
   font-weight: var(--font-weight-medium);
   color: var(--color-fg);
   white-space: nowrap;
