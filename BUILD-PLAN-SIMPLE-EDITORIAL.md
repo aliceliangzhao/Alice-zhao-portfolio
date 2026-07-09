@@ -5,6 +5,12 @@
 > Next.js app. It is specific to this style and this branch — it does **not**
 > apply to the `main` (card-style) or `style-v2` (halftone) branches.
 
+> **Status (updated 2026-07):** Nav, cursor, project detail page, and the full
+> **homepage rebuild** are done (see **§5a** — shapes-grid hero, Selected/Previous
+> work, Connect, dividers). Remaining work is **content** (real metrics/images/
+> copy) and the **cleanup** in §6. The rainbow shapes-grid on the hero/dividers is
+> an intentional override of the "one ink" rule — do not "fix" it to mono.
+
 ---
 
 ## 1. Context: three styles, one app
@@ -30,23 +36,31 @@ A near-monochrome editorial style. Reference prototype lives in
 as the **spec** for what we're building in React.
 
 Core characteristics:
-- **One ink (`#111`), one paper (`#fff`).** No accent hue anywhere except the
-  cursor lens. Secondary text is `#767676` (AA-safe).
+- **One ink (`#111`), one paper (`#fff`).** Secondary text is `#767676` (AA-safe).
+  **Exception — 2026 homepage rebuild:** the hero background and the section
+  dividers use a full-color "shapes grid" (rainbow palette). This is a deliberate
+  override of the mono rule, scoped to those surfaces; everything else stays
+  ink-on-paper. See **§5a** for the rebuild and rationale.
 - **Satoshi only**, carried across the whole system by weight/scale (400–900).
   Type set large; project titles reach ~96px.
 - **Flat sheet, hairline rules.** No shadows.
 - **Rounded corners are kept** (`--radius-card`/`--radius-image` = 20px). The
   prototype's "sharp corner everywhere" note is **dropped** — rounded is the
   default; go sharp only case-by-case.
-- **One signature motion** (the halftone dot-morph hero) + a quiet scroll cue.
-- **Blob-lens cursor** is the one sanctioned color on the page.
+- **Signature motion:** the homepage **shapes grid** (`ShapesGrid.js`) — a canvas
+  lattice of shapes that rest gray and reveal color on hover, with idle flashes.
+  Replaced the earlier planned halftone dot-morph hero. Quiet scroll cue at the
+  bottom of the hero ("Selected work ↓").
+- **Blob-lens cursor** is the one sanctioned color on the *rest* of the page.
 
 ## 3. Decisions already locked (do not re-litigate)
 
 - **Dark mode + the 6-color background picker are removed.** simple-editorial is
   single-ink. Don't reintroduce them.
-- **Nav IA matches the prototype:** Home / Work / About / Contact (Contact is a
-  dropdown of LinkedIn / Resume / Email).
+- **Nav IA (updated 2026):** **Work / About / Connect** (bold brand "Alice Zhao
+  is a UX lead @ AWS."). "Home" was removed; the "Contact" dropdown became a plain
+  **Connect** link to `/#connect` (the homepage Connect section). The mobile Menu
+  still exposes LinkedIn / Resume / Email.
 - **Rounded corners stay** (see above).
 - **Cursor:** the blob lens replaces the old `CursorTrail` globally.
 - Real contact links: LinkedIn `https://www.linkedin.com/in/liangzhaoux/`,
@@ -75,10 +89,15 @@ Port phases:
 | 0 | **Foundation** — new token layer | ✅ Done | `app/tokens.css` (imported first in `app/layout.js`) |
 | 1 | **Nav** (shared component) | ✅ Done | `app/components/Navigation.js` + `Navigation.module.css` |
 | 2 | **Cursor** — blob lens | ✅ Done | `app/components/BlobCursor.js` (wired in `layout.js`) |
-| 3 | **Homepage hero / intro** | ⬜ Next | rebuild from `simple-editorial/index.html` |
-| 4 | **Homepage selected work** | ⬜ | editorial rows (employer = row, projects in cols 4–12) |
-| 5 | **Homepage about** | ⬜ | |
-| 6 | **Project detail page** | ⬜ | re-skin `ProjectDetailClient.js` + `project.css` from `simple-editorial/project-s3-tables.html` |
+| 3 | **Homepage rebuild** (hero → connect) | ✅ Done — see **§5a** | `page.js` + editorial components |
+| 6 | **Project detail page** | ✅ Done (content ongoing) | `ProjectDetailClient.js` + `project.css` |
+
+> Note: steps 3–5 (hero / selected work / about) were merged into a single
+> **homepage rebuild** (§5a) that went well beyond the original prototype —
+> it introduced the shapes-grid hero, a Previous work section, and a Connect
+> section. The project detail page is skinned; remaining work there is **content**
+> (real copy/metrics/images per project, tracked in `app/data/projects.js` and
+> `app/data/project-context.md`).
 
 ### Step 1 — Nav: what was built (so you don't undo it)
 
@@ -104,27 +123,99 @@ has its own nav inside `HomepageScroll` until Step 3):
   text never jumps size or weight at the breakpoint.
 - Contact links always show the ↗ icon; `external` only controls `target=_blank`.
 
-### Steps 3–6 — approach
+## 5a. Homepage rebuild (2026) — what's built & why
 
-- **Rebuild the homepage from the prototype** rather than retrofitting the dense
-  existing `HomepageScroll` (structure changes bento → editorial rows). When the
-  homepage is rebuilt, switch it to use the shared `Navigation` and give it real
-  `#work` / `#about` anchors (the nav already links to them).
-- For the project page, the structure/data model stays (`projects.js`, section
-  model 01/02/03); re-skin surfaces to ink-on-paper, retype in Satoshi, remove
-  parchment texture.
+The homepage was rebuilt around an interactive **shapes-grid** motif. Reference
+for the effect: `inspiration/dot-grid/` (the codepen source it was ported from).
+Reference for the layout: `inspiration/Alice-zhao-portfolio-homepage.png`.
+
+**Section order** (`app/page.js`), each section after the hero preceded by a
+decorative divider:
+
+1. **Hero** (`EditorialIntro.js`) — full-viewport `ShapesGrid` behind the intro
+   copy; the "Selected work ↓" label is punched out of the same grid, pinned to
+   the bottom of the viewport as the scroll cue + `#work` anchor.
+2. **Selected work** (`SelectedWork.js`) — one AWS meta block (`currentWork`)
+   beside a **single column** of the 3 case-study cards (from `projectOrder`).
+3. **Previous work** (`PreviousWork.js`) — big text-link rows per company
+   (`previousWork`).
+4. **About** (`EditorialAbout.js`) + photo marquee (`PhotoMarquee.js`).
+5. **Connect** (`Connect.js`) — "Let's get in touch!" + a right-half 2×2 grid of
+   contact links (`connectLinks`), each spanning 3 of the 12 columns (subgrid).
+6. **Footer** (`Footer.js`).
+
+**Section dividers** (`SectionDivider.js`) sit above Previous work / About /
+Connect (Selected work's label lives in the hero). The divider owns the section
+spacing (`.dividerWrap`); the section it precedes drops its own top margin via
+`.sectionFlush`.
+
+### ShapesGrid (`app/components/ShapesGrid.js`) — the engine
+
+Canvas + `requestAnimationFrame` (no animation lib), same React pattern as the
+older `DotGridBackground` (which still powers the project-page bottom band).
+
+- **Two variants:** `fullscreen` (hero) and `decorative` (the labeled divider
+  strip, 4 rows, label on the last row).
+- **Palette is a deliberate rainbow** (`PALETTE` const) — the sanctioned override
+  of the mono rule. Idle/resting color comes from the `--color-dot-grid` token so
+  the background stays transparent over paper.
+- **Behavior matrix (rules §):** desktop = hover reveal + idle color flashes;
+  touch (coarse pointer) = idle only, no hover; `prefers-reduced-motion` = one
+  static gray frame; `IntersectionObserver` pauses the loop offscreen.
+- **Tuning knobs in `CONFIG`:** `gap` (lattice pitch, 32px), `restScale`
+  (resting dot size, 0.22), `radiusVmin` (hover radius), `maxHoverScale`, idle
+  timing. Change these to retune density/size/energy.
+- **Nav clip fix:** the hero canvas extends *up behind the glass nav*
+  (`.heroGrid { top: -nav-height }`) so hovered top-row shapes grow clip-free.
+  The nav is excluded from the lattice via `data-grid-exclude-fixed`, and
+  `buildFullScreen` **phases the lattice** (`offsetY`) so the first visible row
+  sits a nav's-top-padding below the nav — keeping the nav↔dots gap even.
+  Hero copy is excluded line-by-line via `data-grid-exclude="lines"`.
+
+### Homepage data model (`app/data/about.js`)
+
+Split into a **`// LIVE`** block (homepage: `intro`, `bio`, `currentWork`,
+`previousWork`, `connectLinks`) and a **`// LEGACY`** block (only the `/about`
+page + `Tools.js`: `workExperience`, `designPhilosophy`, `processSteps`,
+`toolsHeading`, `tools`) — cleanup candidates when `/about` is rebuilt. Case-study
+cards are single-sourced from `app/data/projects.js` (`projects` + `projectOrder`).
+
+### Hover / interaction language (homepage)
+
+Consistent across cards, previous-work links, and contact links: **text greys to
+`--color-muted`** and a **horizontal → arrow reveals** (fade + slide) on hover.
+No underline-on-hover anywhere (removed); `ExternalLink`'s persistent underline
+stays. In-page anchor jumps smooth-scroll (`html { scroll-behavior: smooth }`,
+auto under reduced motion).
+
+### Project detail page
+
+Structure/data model stays (`projects.js`, section model 01/02/03); surfaces are
+skinned to ink-on-paper Satoshi. Bottom of the page reuses `SelectedWork`
+(`projectSlugs` variant) + a `DotGridBackground` band above the footer.
 
 ## 6. Cleanup owed before publish
 
+- **Dead `href="#"` links** to replace: Previous work "Insperity" (`about.js`
+  `previousWork`), and any placeholder in `projects.js`. The nav's `/#connect`
+  and `#work` are now live anchors.
+- **Content still placeholder:** `agent-opportunities` (Amazon Q assistant) has
+  real narrative but **no metrics** (bento hidden) and most subsection **images
+  missing**; `previousWork` copy is being finalized by Alice. Avatar photo and
+  `resume.pdf` still needed.
+- **Legacy `/about` page**: everything under the `// LEGACY` banner in `about.js`
+  + `app/about/page.js` + `Tools.js` (and the `tools` import in `projects.js`)
+  come out together once `/about` is rebuilt or dropped.
+- **Orphan tokens** to sweep: `--space-hero-dots-bleed` (old hero) and any
+  card-surface tokens only the removed note-cards used.
 - Remove dead components once their pages are rebuilt: `PaperTexture`,
   `WaveBackground`, `HeroVisual` (SVG comps), parchment color tokens, the legacy
   tokens in `globals.css`.
 - Old `data-cursor="label"` attributes (for the removed CursorTrail) are inert;
-  remove as pages are rebuilt. The blob lens reads `data-cursor-target` /
-  `data-cursor-hide` / `data-cursor-dark`.
+  remove as pages are rebuilt.
 - Rewrite the steering docs (`DESIGN.md`, `design-brief.md`, `CLAUDE.md`) to the
-  simple-editorial direction so they stop pointing at parchment.
-- Flag/remove dead `href="#"` links before deploy.
+  simple-editorial direction so they stop pointing at parchment (they still
+  describe the old cartography look).
 
 ## 7. Build & deploy
 
@@ -133,6 +224,10 @@ has its own nav inside `HomepageScroll` until Step 3):
 - Deploy: output goes to `docs/` on `main`; custom domain serves from there.
   Publishing simple-editorial = merge `style-simple-editorial` → `main`, build,
   push. `style-card` preserves the old look, so nothing is lost.
+- **Remote moved:** `origin` is now
+  `https://github.com/aliceliangzhao/Alice-zhao-portfolio.git` (was `miyakelly/…`).
+- **Commit convention in effect:** commit after every green build with a clear,
+  scoped message; the branch history is the step-by-step record.
 
 ## 8. AGENTS.md still applies
 
