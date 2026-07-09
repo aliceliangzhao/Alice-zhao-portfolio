@@ -21,6 +21,7 @@
   --color-bg: #fff;            /* page background */
   --color-link: var(--color-fg);
   --color-divider: #e0e0e0;    /* light-grey hairline (e.g. under the section label) */
+  --space-divider-height: clamp(8rem, 15vw, 11rem);  /* decorative shapes-strip section divider */
 
   /* --- Typography -------------------------------------------------------- */
   --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;

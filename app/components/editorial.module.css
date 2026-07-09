@@ -75,8 +75,41 @@
   background: var(--color-divider);   /* full-width in the column flow */
 }
 
+/* --- Decorative divider (shapes strip + label) ---------------------------- */
+/* Spans the content width; the label sits on the left of the last shape row.
+   --label-top is written by ShapesGrid so the label lands on that row. */
+.divider {
+  grid-column: 1 / 13;
+  position: relative;
+  width: 100%;
+  min-height: var(--space-divider-height);
+  overflow: hidden;
+}
+.divider canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.divider :global(.shapes-grid-label) {
+  position: absolute;
+  top: var(--label-top, 50%);
+  left: 0;
+  transform: translateY(-50%);
+  font-size: var(--font-size-p-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* --- Selected work -------------------------------------------------------- */
 .work { margin-top: var(--space-section-top); }
+/* Homepage: the divider is the transition from the hero, so no big top gap —
+   this lets the divider peek at the bottom of the hero viewport. */
+.workHome { margin-top: 0; }
+.workHome .workRow:first-of-type { margin-top: clamp(1.5rem, 4vw, 3rem); }
 
 /* each company is a row on the same 12-col grid */
 .workRow { row-gap: 1.25rem; align-items: start; }
