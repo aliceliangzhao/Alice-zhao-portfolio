@@ -336,22 +336,27 @@
   margin-top: var(--space-section-top);
   scroll-margin-top: 2rem;
   align-items: start;
-  row-gap: clamp(1.5rem, 4vw, 2.5rem);
+  row-gap: 0;   /* contacts sit in row 2, flush to the heading's bottom edge */
 }
 .connectHeading {
   grid-column: 1 / 7;
+  grid-row: 1;
   margin: 0;
-  font-size: var(--font-size-p-xl);
+  font-size: var(--font-size-p-xl);   /* unchanged title size */
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
 }
+/* Right half; each contact spans 3 of the 12 columns (subgrid keeps them
+   aligned to the page grid). Row 2 → the block's top meets the title's bottom. */
 .connectLinks {
   grid-column: 7 / 13;
+  grid-row: 2;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: clamp(1.5rem, 3vw, 2.5rem) var(--space-gap);
+  grid-template-columns: subgrid;
+  row-gap: clamp(2.5rem, 6vw, 5rem);
 }
 .connectItem {
+  grid-column: span 3;
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
@@ -379,8 +384,16 @@
   .workMeta p { max-width: 48ch; }
   .workProjectsSingle { grid-column: 1 / 13; }
   .prevProjects { grid-column: 1 / 13; }
-  .connectHeading { grid-column: 1 / 13; }
-  .connectLinks { grid-column: 1 / 13; }
+  /* Connect stacks: heading over a normal 2-col link grid, with a real gap */
+  .connect { row-gap: clamp(1.5rem, 5vw, 2.5rem); }
+  .connectHeading { grid-column: 1 / 13; grid-row: auto; }
+  .connectLinks {
+    grid-column: 1 / 13;
+    grid-row: auto;
+    grid-template-columns: 1fr 1fr;
+    row-gap: clamp(1.75rem, 5vw, 2.5rem);
+  }
+  .connectItem { grid-column: auto; }
   .aboutLabel { grid-column: 1 / 13; }
   .aboutText { grid-column: 1 / 13; }
 }
