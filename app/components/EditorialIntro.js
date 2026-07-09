@@ -15,6 +15,11 @@ export default function EditorialIntro() {
         {intro.lead}{" "}
         <span className={s.muted}>{intro.muted}</span>
       </p>
+      {/* Part of the hero grid, pinned to the bottom of the viewport: the
+          Selected work label doubles as the scroll cue and the section heading. */}
+      <a className={s.heroWorkLabel} href="#work" data-grid-exclude>
+        Selected work
+      </a>
     </section>
   );
 }

@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { workExperience } from "../data/about";
 import { projects } from "../data/projects";
-import SectionDivider from "./SectionDivider";
 import s from "./editorial.module.css";
 
 /* ↗ external-link glyph */
@@ -172,7 +171,6 @@ export default function SelectedWork({ projectSlugs }) {
 
   return (
     <section id="work" className={`${s.work} ${s.workHome}`}>
-      <SectionDivider label="Selected work" />
       {workExperience.map((job) => (
         <WorkRow key={job.company} job={job} />
       ))}

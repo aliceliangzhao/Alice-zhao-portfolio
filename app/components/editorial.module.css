@@ -28,8 +28,22 @@
    bottom as a scroll cue. The intro copy sits vertically centered over the grid. */
 .intro {
   position: relative;
-  min-height: 86svh;
+  /* fill the viewport below the sticky nav, so the Selected work label pins to
+     the bottom edge of the first screen */
+  min-height: calc(100svh - var(--nav-height));
   align-content: center;
+}
+/* Selected work label — punched out of the hero grid, pinned bottom-left at the
+   page gutter. Doubles as the scroll cue and the jump link to the work cards. */
+.heroWorkLabel {
+  position: absolute;
+  left: var(--space-pad);
+  bottom: clamp(1.5rem, 4vw, 3rem);
+  z-index: 1;
+  font-size: var(--font-size-p-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-fg);
+  text-decoration: none;
 }
 .intro p {
   position: relative;   /* lift the text above the shapes-grid canvas */
