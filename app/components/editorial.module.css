@@ -246,7 +246,9 @@
   font-size: var(--font-size-p-l);   /* matches the hero intro text */
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-tight);
+  transition: color 0.2s ease;
 }
+.workCard:hover .cardTitle { color: var(--color-muted); }   /* text goes a bit greyer */
 /* ↗ arrow: hidden and nudged left at rest, slides in beside the title on hover */
 .cardArrow {
   display: inline-block;
@@ -371,13 +373,13 @@
 .connectLabel {
   font-size: var(--font-size-p-s);
   font-weight: var(--font-weight-bold);
+  transition: color 0.2s ease;
 }
+.connectItem:hover .connectLabel { color: var(--color-muted); }   /* title goes a bit greyer */
 .connectValue {
   font-size: var(--font-size-p-xs);
   color: var(--color-muted);
-  transition: color 0.2s ease;
 }
-.connectItem:hover .connectValue { color: var(--color-fg); }
 
 /* =========================================================================
    Responsive
@@ -413,7 +415,8 @@
 @media (prefers-reduced-motion: reduce) {
   .heroWorkArrow { animation: none; }
   .prevArrow { transition: none; }
-  .connectValue { transition: none; }
+  .connectLabel { transition: none; }
+  .cardTitle { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */
   /* keep the arrow as an affordance, but appear instantly (no slide) */
