@@ -376,6 +376,15 @@
   transition: color 0.2s ease;
 }
 .connectItem:hover .connectLabel { color: var(--color-muted); }   /* title goes a bit greyer */
+/* arrow hidden by default, slides + fades in on hover (matches the cards) */
+.connectArrow {
+  display: inline-block;
+  margin-left: 0.3em;
+  opacity: 0;
+  transform: translateX(-0.25em);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.connectItem:hover .connectArrow { opacity: 1; transform: translateX(0); }
 .connectValue {
   font-size: var(--font-size-p-xs);
   color: var(--color-muted);
@@ -415,7 +424,7 @@
 @media (prefers-reduced-motion: reduce) {
   .heroWorkArrow { animation: none; }
   .prevArrow { transition: none; }
-  .connectLabel { transition: none; }
+  .connectLabel, .connectArrow { transition: none; }
   .cardTitle { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */

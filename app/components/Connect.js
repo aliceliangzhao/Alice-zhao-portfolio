@@ -14,7 +14,10 @@ export default function Connect() {
           const props = external ? { target: "_blank", rel: "noopener noreferrer" } : {};
           return (
             <a key={link.label} className={s.connectItem} href={link.href} {...props}>
-              <span className={s.connectLabel}>{link.label}</span>
+              <span className={s.connectLabel}>
+                {link.label}
+                <span className={s.connectArrow} aria-hidden="true">&#8599;</span>
+              </span>
               <span className={s.connectValue}>{link.value}</span>
             </a>
           );
