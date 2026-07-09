@@ -235,7 +235,7 @@
   text-decoration: none;
   font-size: var(--font-size-p-s);
 }
-.pd-back:hover { color: var(--color-fg); text-decoration: underline; }
+.pd-back:hover { color: var(--color-fg); }
 
 /* =========================================================================
    Outcome — style-card cinematic treatment (kept by request)

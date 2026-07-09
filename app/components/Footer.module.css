@@ -41,10 +41,6 @@
   color: var(--color-fg);
   text-decoration: none;
 }
-.metaRow a:hover {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 
 /* Mobile: copyright on top, links beneath, both left-aligned. */
 @media (max-width: 900px) {

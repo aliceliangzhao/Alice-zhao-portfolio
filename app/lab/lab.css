@@ -44,10 +44,6 @@
   text-decoration: none;
   cursor: pointer;
 }
-.lab-card-link:hover .lab-card-title {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 
 .lab-card-title {
   font-size: 13px;

@@ -50,7 +50,6 @@
   color: var(--color-fg);
   text-decoration: none;
 }
-.heroWorkLabel:hover { text-decoration: underline; }
 /* the ↓ gently bobs as a scroll cue (disabled under reduced motion below) */
 .heroWorkArrow {
   display: inline-block;
@@ -219,7 +218,6 @@
   text-decoration: none;
 }
 .prevProjects .prevLink:first-child { padding-top: 0; }
-.prevLink:hover { text-decoration: underline; }
 .prevArrow {
   display: inline-block;
   margin-left: 0.4em;
@@ -348,7 +346,6 @@
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
 }
-.noteCard:hover .noteTitle { text-decoration: underline; }
 .noteMeta {
   display: flex;
   align-items: center;
