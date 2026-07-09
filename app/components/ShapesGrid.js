@@ -48,7 +48,7 @@ const CONFIG = {
   activityDecay: 0.93,
   speedIn: 0.5,
   speedOut: 0.6,
-  restScale: 0.09,
+  restScale: 0.22,   /* resting (default) shape size; higher = bigger dots at rest */
   minHoverScale: 1,
   maxHoverScale: 3,
   starPointsMin: 4,
