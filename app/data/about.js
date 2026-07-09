@@ -1,3 +1,8 @@
+// =============================================================================
+// LIVE — data referenced by the new (simple-editorial) homepage:
+//   intro (hero) · bio (About) · currentWork (Selected work) · previousWork
+// =============================================================================
+
 export const intro = {
   lead: "Currently leading the UX for AWS AI and storage agentic experience.",
   muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, the National Science Foundation, and more.",
@@ -40,6 +45,12 @@ export const previousWork = [
     projects: [{ title: "Insperity HR 360 Suite", href: "#" }],
   },
 ];
+
+// =============================================================================
+// LEGACY — only consumed by the standalone /about page (app/about/page.js) and
+// Tools.js. Cleanup candidates once the About page is rebuilt/removed:
+//   workExperience · designPhilosophy · processSteps · toolsHeading · tools
+// =============================================================================
 
 export const workExperience = [
   {
