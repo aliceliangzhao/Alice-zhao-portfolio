@@ -32,6 +32,8 @@
      the bottom edge of the first screen */
   min-height: calc(100svh - var(--nav-height));
   align-content: center;
+  /* nudge the centered intro up a touch so top/bottom spacing reads even */
+  padding-bottom: clamp(2.5rem, 7vh, 5rem);
 }
 /* Selected work label — punched out of the hero grid, pinned bottom-left at the
    page gutter. Doubles as the scroll cue and the jump link to the work cards. */
