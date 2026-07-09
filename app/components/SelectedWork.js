@@ -26,7 +26,7 @@ function CaseStudyCard({ card, featured }) {
           src={card.thumb}
           alt=""
           fill
-          sizes={featured ? "(max-width: 900px) 100vw, 66vw" : "(max-width: 900px) 50vw, 33vw"}
+          sizes="(max-width: 900px) 100vw, 66vw"
           priority={featured}
         />
       </span>
