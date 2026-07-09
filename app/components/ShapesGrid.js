@@ -208,25 +208,33 @@ function buildFullScreen(canvas, width, height) {
     ...root.querySelectorAll("[data-grid-exclude]"),
     ...document.querySelectorAll("[data-grid-exclude-fixed]"),
   ];
+  let navBottom = 0;   // nav's bottom edge in canvas-local coords
+  let navPadTop = 0;   // nav's own top padding, mirrored as the gap below it
   for (const el of excludeEls) {
-    const px = 40;
-    const py = 26;
     if (el.getAttribute("data-grid-exclude") === "lines") {
-      for (const lr of lineRects(el)) exclusions.push(expand(toLocal(lr, canvasRect), px, py));
+      for (const lr of lineRects(el)) exclusions.push(expand(toLocal(lr, canvasRect), 40, 26));
       continue;
     }
     const r = el.getBoundingClientRect();
     if (!r.width || !r.height) continue;
-    exclusions.push(expand(toLocal(r, canvasRect), 20, 16));
+    const fixed = el.hasAttribute("data-grid-exclude-fixed");
+    // tighter padding on the nav so it doesn't over-exclude the first row below it
+    exclusions.push(expand(toLocal(r, canvasRect), fixed ? 8 : 20, fixed ? 6 : 16));
+    if (fixed) {
+      navBottom = r.bottom - canvasRect.top;
+      navPadTop = parseFloat(getComputedStyle(el).paddingTop) || 0;
+    }
   }
 
   const gap = CONFIG.gap;
   const cols = Math.floor(width / gap);
-  const rows = Math.ceil(height / gap) + 1;
+  const rows = Math.ceil(height / gap) + 2;
   const offsetX = (width - (cols - 1) * gap) / 2;
-  // Top-anchor vertically (not centered) so the first row sits right below the
-  // hero top; the gap under the nav then equals the header's bottom padding.
-  const offsetY = 0;
+  // Phase the lattice so a row lands exactly a nav's-top-padding below the nav
+  // bottom: the gap under the nav then mirrors the nav's own top spacing. The
+  // canvas extends behind the nav (CSS), so shapes still grow clip-free.
+  const target = navBottom + navPadTop;
+  const offsetY = navBottom ? (((target % gap) + gap) % gap) : 0;
   const shapes = [];
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
