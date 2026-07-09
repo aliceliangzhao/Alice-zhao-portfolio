@@ -18,16 +18,15 @@ function projectToCard(project, href) {
   };
 }
 
-function CaseStudyCard({ card, featured }) {
+function CaseStudyCard({ card }) {
   return (
-    <Link className={`${s.workCard}${featured ? ` ${s.feature}` : ""}`} href={card.href}>
+    <Link className={s.workCard} href={card.href}>
       <span className={s.thumb}>
         <Image
           src={card.thumb}
           alt=""
           fill
           sizes="(max-width: 900px) 100vw, 66vw"
-          priority={featured}
         />
       </span>
       <div className={s.cardBody}>
@@ -68,7 +67,7 @@ function MoreWork({ slugs }) {
         </p>
         <div className={s.workProjectsFull}>
           {cards.map((card) => (
-            <CaseStudyCard key={card.href} card={card} featured={false} />
+            <CaseStudyCard key={card.href} card={card} />
           ))}
         </div>
       </div>
@@ -96,7 +95,7 @@ export default function SelectedWork({ projectSlugs }) {
         </div>
         <div className={s.workProjectsSingle}>
           {cards.map((card) => (
-            <CaseStudyCard key={card.href} card={card} featured={false} />
+            <CaseStudyCard key={card.href} card={card} />
           ))}
         </div>
       </article>

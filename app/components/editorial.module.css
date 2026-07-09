@@ -169,18 +169,6 @@
   line-height: 1.55;
 }
 
-/* projects: cols 4-12, a 2-up grid with a 20px column gap. The featured (first)
-   card spans both columns; the rest flow two-per-row beneath it. Title size is
-   uniform across all cards. */
-.workProjects {
-  grid-column: 4 / 13;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: var(--space-project-col-gap);   /* 20px */
-  row-gap: clamp(1.25rem, 2.5vw, 2rem);
-}
-.workCard.feature { grid-column: 1 / -1; }
-
 /* Project-page "more work": cards span the full width (no company-meta column),
    two-up on desktop, single-column on mobile. */
 .workProjectsFull {
@@ -241,7 +229,6 @@
   object-position: top left;
   transition: transform 0.6s cubic-bezier(0.2, 0, 0.1, 1);
 }
-.workCard.feature .thumb { aspect-ratio: 21 / 9; }
 .workCard:hover .thumb img { transform: scale(1.04); }
 /* Text block under the thumb. One knob for the whole group's outer spacing:
    margin-top = thumb-to-title gap, margin-bottom = space below the tags. The
@@ -290,88 +277,6 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
   white-space: nowrap;
-}
-
-/* --- Secondary work: external links without a project page ---------------- */
-/* Work that shipped as a public launch/article rather than a case-study page.
-   A horizontal card: thumb on the left; on the right, the title pinned to the
-   top, then the role bottom-left and the external-link icon bottom-right. The
-   whole card is one link that opens the external page in a new tab. */
-.workNotes {
-  grid-column: 4 / 13;
-  margin-top: clamp(1.5rem, 3vw, 2.5rem);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: var(--space-project-col-gap);   /* 20px, same as the cards */
-  row-gap: clamp(1rem, 2vw, 1.5rem);
-}
-/* when a row has no case-study cards above, the notes start the cols 4-12 track */
-.workNotes.flush { margin-top: 0; }
-/* a filled, rounded panel grouping the image + content */
-.noteCard {
-  display: flex;
-  gap: var(--space-card-gap);
-  padding: var(--space-card-inset);
-  background: var(--color-card-surface);
-  border-radius: var(--radius-card);
-  text-decoration: none;
-  color: inherit;
-}
-.noteThumb {
-  flex: none;
-  width: clamp(96px, 13vw, 132px);
-  background: var(--color-card-placeholder);
-  border-radius: var(--radius-image-nested);
-  overflow: hidden;
-  transition: opacity 0.3s ease;
-}
-.noteThumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-.noteCard:hover .noteThumb { opacity: 0.88; }
-.noteBody {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 0.75rem;
-  min-height: clamp(112px, 13vw, 148px);
-}
-.noteTitle {
-  margin: 0;
-  font-size: var(--font-size-p-s);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-tight);
-}
-.noteMeta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-}
-.noteRole { font-size: var(--font-size-p-xs); color: var(--color-muted); }
-
-/* external-link icon (↗) */
-.ext {
-  width: 0.82em; height: 0.82em;
-  flex: none;
-  stroke: currentColor;
-  stroke-width: 1.6;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  color: var(--color-muted);
-}
-.noteExt { width: 1em; height: 1em; }
-
-/* visually-hidden helper for the "opens in a new tab" cue */
-.vh {
-  position: absolute; width: 1px; height: 1px;
-  margin: -1px; padding: 0; border: 0;
-  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;
 }
 
 /* --- About ---------------------------------------------------------------- */
@@ -434,10 +339,8 @@
   .intro p { grid-column: 1 / 11; }
   .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
   .workMeta p { max-width: 48ch; }
-  .workProjects { grid-column: 1 / 13; }
   .workProjectsSingle { grid-column: 1 / 13; }
   .prevProjects { grid-column: 1 / 13; }
-  .workNotes { grid-column: 1 / 13; }
   .aboutLabel { grid-column: 1 / 13; }
   .aboutText { grid-column: 1 / 13; }
 }
@@ -445,17 +348,13 @@
 @media (max-width: 640px) {
   .work { scroll-margin-top: 4.5rem; }
   .intro p { grid-column: 1 / 13; }
-  .workProjects { grid-template-columns: 1fr; }
   .workProjectsFull { grid-template-columns: 1fr; }
-  .workCard.feature .thumb { aspect-ratio: 16 / 9; }
-  .workNotes { grid-template-columns: 1fr; }
 }
 
 /* Respect reduced motion: no hover transitions, no marquee scroll */
 @media (prefers-reduced-motion: reduce) {
   .heroWorkArrow { animation: none; }
   .prevArrow { transition: none; }
-  .noteThumb { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */
   /* keep the arrow as an affordance, but appear instantly (no slide) */
