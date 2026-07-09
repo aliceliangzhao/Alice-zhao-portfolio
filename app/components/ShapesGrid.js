@@ -216,9 +216,11 @@ function buildFullScreen(canvas, width, height) {
 
   const gap = CONFIG.gap;
   const cols = Math.floor(width / gap);
-  const rows = Math.floor(height / gap);
+  const rows = Math.ceil(height / gap) + 1;
   const offsetX = (width - (cols - 1) * gap) / 2;
-  const offsetY = (height - (rows - 1) * gap) / 2;
+  // Top-anchor vertically (not centered) so the first row sits right below the
+  // hero top; the gap under the nav then equals the header's bottom padding.
+  const offsetY = 0;
   const shapes = [];
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {

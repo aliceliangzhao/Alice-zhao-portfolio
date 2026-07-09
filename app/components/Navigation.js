@@ -25,11 +25,12 @@ import styles from "./Navigation.module.css";
    rendered (the page title now lives in the page's own <h1>, not the header). */
 
 const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  // These homepage anchors get real targets when the homepage Work/About
-  // sections are rebuilt (migration steps 4-5); until then they land at the top.
+  // These homepage anchors get real targets when the homepage sections are
+  // rebuilt; Connect lands at the top until its section ships (dev-time dead
+  // anchor — flag before deploy).
   { label: "Work", href: "/#work" },
   { label: "About", href: "/#about" },
+  { label: "Connect", href: "/#connect" },
 ];
 
 const CONTACT_LINKS = [
@@ -61,12 +62,10 @@ export default function Navigation({ sections }) {
   const hasSections = Array.isArray(sections) && sections.length > 0;
 
   const [activeSection, setActiveSection] = useState(null);
-  const [contactOpen, setContactOpen] = useState(false);   // desktop Contact dropdown
   const [sectionDropOpen, setSectionDropOpen] = useState(false); // mobile section jumper
   const [menuOpen, setMenuOpen] = useState(false);         // mobile Menu
 
   const headerRef = useRef(null);
-  const contactRef = useRef(null);
   const sectionDropRef = useRef(null);
   const menuRef = useRef(null);
   // measured to decide the desktop-inline vs compact-dropdown layout
@@ -160,7 +159,7 @@ export default function Navigation({ sections }) {
     if (!header) return;
     let lastY = window.scrollY, ticking = false;
     const STEP = 8; // ignore sub-pixel jitter
-    const anyOpen = () => sectionDropOpen || menuOpen || contactOpen;
+    const anyOpen = () => sectionDropOpen || menuOpen;
 
     function onScroll() {
       const y = window.scrollY;
@@ -184,7 +183,7 @@ export default function Navigation({ sections }) {
     }
     window.addEventListener("scroll", onScrollRaf, { passive: true });
     return () => window.removeEventListener("scroll", onScrollRaf);
-  }, [sectionDropOpen, menuOpen, contactOpen]);
+  }, [sectionDropOpen, menuOpen]);
 
   // a panel being open keeps the bar solid (glass is only for the collapsed,
   // resurfaced state)
@@ -195,12 +194,11 @@ export default function Navigation({ sections }) {
   // --- close dropdowns on outside-click / Escape ---------------------------
   useEffect(() => {
     function onDown(e) {
-      if (contactRef.current && !contactRef.current.contains(e.target)) setContactOpen(false);
       if (sectionDropRef.current && !sectionDropRef.current.contains(e.target)) setSectionDropOpen(false);
       if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false);
     }
     function onKey(e) {
-      if (e.key === "Escape") { setContactOpen(false); setSectionDropOpen(false); setMenuOpen(false); }
+      if (e.key === "Escape") { setSectionDropOpen(false); setMenuOpen(false); }
     }
     document.addEventListener("mousedown", onDown);
     document.addEventListener("keydown", onKey);
@@ -236,7 +234,7 @@ export default function Navigation({ sections }) {
   return (
     <header ref={headerRef} className={styles.header}>
       {/* brand — desktop, and mobile when there are no sections */}
-      <Link ref={brandRef} href="/" className={styles.brand}>Alice Zhao is a UX lead @ Amazon.</Link>
+      <Link ref={brandRef} href="/" className={styles.brand}>Alice Zhao is a UX lead @ AWS.</Link>
 
       {/* desktop phase labels */}
       {hasSections && (
@@ -260,21 +258,6 @@ export default function Navigation({ sections }) {
         {NAV_LINKS.map((l) => (
           <Link key={l.label} href={l.href}>{l.label}</Link>
         ))}
-        <div className={styles.contact} ref={contactRef}>
-          <button
-            className={`${styles.contactToggle}${contactOpen ? ` ${styles.contactOpen}` : ""}`}
-            onClick={() => setContactOpen((o) => !o)}
-            aria-expanded={contactOpen}
-          >
-            Contact
-            <Caret />
-          </button>
-          {contactOpen && (
-            <div className={styles.contactMenu}>
-              {CONTACT_LINKS.map(renderContactLink)}
-            </div>
-          )}
-        </div>
       </nav>
 
       {/* mobile: section jumper (only when sections exist) */}

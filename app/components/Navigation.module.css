@@ -34,7 +34,7 @@
 .brand {
   color: var(--color-fg);
   text-decoration: none;
-  font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-bold);
   white-space: nowrap;
   flex-shrink: 0;
 }
