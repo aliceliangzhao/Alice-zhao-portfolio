@@ -6,7 +6,6 @@ import s from "./editorial.module.css";
 export default function EditorialAbout() {
   return (
     <section id="about" className={`${s.about} ${s.grid12} ${s.sectionFlush}`}>
-      <p className={s.aboutLabel}>[ <i>about me</i> ]</p>
       <p className={s.aboutText}>
         {bio.heading} <span className={s.muted}>{bio.personal}</span>
       </p>
