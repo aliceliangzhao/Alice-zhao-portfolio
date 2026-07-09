@@ -206,12 +206,17 @@
   text-decoration: none;
 }
 .prevProjects .prevLink:first-child { padding-top: 0; }
+.prevLink { transition: color 0.2s ease; }
+.prevLink:hover { color: var(--color-muted); }   /* text goes a bit greyer */
+/* arrow hidden by default, slides + fades in on hover */
 .prevArrow {
   display: inline-block;
   margin-left: 0.4em;
-  transition: transform 0.2s ease;
+  opacity: 0;
+  transform: translateX(-0.25em);
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
-.prevLink:hover .prevArrow { transform: translateX(0.25em); }
+.prevLink:hover .prevArrow { opacity: 1; transform: translateX(0); }
 
 /* a project card: thumb + title + subtitle */
 .workCard { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
