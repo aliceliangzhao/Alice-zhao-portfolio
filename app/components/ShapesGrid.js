@@ -42,7 +42,7 @@ const PALETTE = [
 ];
 
 const CONFIG = {
-  gap: 40,
+  gap: 32,
   shapeSize: 0.38,
   radiusVmin: 30,        // hover influence radius, % of min(w,h)
   activityDecay: 0.93,
