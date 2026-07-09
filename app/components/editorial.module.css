@@ -195,6 +195,38 @@
    push the title out of view — use a landscape ratio so each card reads whole */
 .workProjectsFull .thumb { aspect-ratio: 16 / 9; }
 
+/* Homepage Selected work: a single column of full-width case-study cards
+   (cols 4-12), each with a wide banner thumb. */
+.workProjectsSingle {
+  grid-column: 4 / 13;
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: clamp(1.5rem, 3.5vw, 3rem);
+}
+.workProjectsSingle .thumb { aspect-ratio: 12 / 5; }
+
+/* Previous work: big text-link rows per company (cols 4-12). Each link is a
+   full-width block with a hairline below; the → sits inline after the title. */
+.prevProjects { grid-column: 4 / 13; }
+.prevLink {
+  display: block;
+  padding: clamp(1rem, 2vw, 1.5rem) 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: var(--font-size-p-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-tight);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.prevProjects .prevLink:first-child { padding-top: 0; }
+.prevLink:hover { text-decoration: underline; }
+.prevArrow {
+  display: inline-block;
+  margin-left: 0.4em;
+  transition: transform 0.2s ease;
+}
+.prevLink:hover .prevArrow { transform: translateX(0.25em); }
+
 /* a project card: thumb + title + subtitle */
 .workCard { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
 .thumb {
@@ -406,6 +438,8 @@
   .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
   .workMeta p { max-width: 48ch; }
   .workProjects { grid-column: 1 / 13; }
+  .workProjectsSingle { grid-column: 1 / 13; }
+  .prevProjects { grid-column: 1 / 13; }
   .workNotes { grid-column: 1 / 13; }
   .aboutLabel { grid-column: 1 / 13; }
   .aboutText { grid-column: 1 / 13; }
@@ -423,6 +457,7 @@
 /* Respect reduced motion: no hover transitions, no marquee scroll */
 @media (prefers-reduced-motion: reduce) {
   .heroWorkArrow { animation: none; }
+  .prevArrow { transition: none; }
   .noteThumb { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */

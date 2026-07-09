@@ -1,6 +1,6 @@
 export const intro = {
   lead: "Currently leading the UX for AWS AI and storage agentic experience.",
-  muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and the National Science Foundation.",
+  muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, the National Science Foundation, and more.",
 };
 
 export const bio = {
@@ -8,6 +8,38 @@ export const bio = {
   personal: "Outside of work, I love to explore nature and capture everyday moments through photography.",
   image: "/img/aboutMe/alice-liang.jpg",
 };
+
+// Homepage "Selected work": the current-role meta shown beside the case-study
+// cards (the cards themselves come from projects.js via projectOrder).
+export const currentWork = {
+  company: "Amazon Web Services",
+  time: "2021 - current",
+  description:
+    "Leading the UX for S3 products and designing AI-native experiences for AWS console. Led UX for S3 Tables and SLG from concept to launch, driving a 10% week-over-week storage increase and over 500 TB of data stored.",
+};
+
+// Homepage "Previous work": earlier roles as big text-link rows. PLACEHOLDER
+// content (Alice to provide final copy/links). Scales by adding array items.
+export const previousWork = [
+  {
+    company: "Amazon Alexa",
+    time: "2020 - 2021",
+    projects: [{ title: "Product name", href: "#" }],
+  },
+  {
+    company: "Morgan Stanley",
+    time: "2019 - 2020",
+    projects: [
+      { title: "E*Trade integration", href: "#" },
+      { title: "Wealth management internal portal", href: "#" },
+    ],
+  },
+  {
+    company: "Insperity",
+    time: "2019 - 2020",
+    projects: [{ title: "Insperity HR 360 Suite", href: "#" }],
+  },
+];
 
 export const workExperience = [
   {
