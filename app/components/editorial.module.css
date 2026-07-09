@@ -331,6 +331,44 @@
   to   { transform: translateX(0); }
 }
 
+/* --- Connect: closing contact section ------------------------------------- */
+.connect {
+  margin-top: var(--space-section-top);
+  scroll-margin-top: 2rem;
+  align-items: start;
+  row-gap: clamp(1.5rem, 4vw, 2.5rem);
+}
+.connectHeading {
+  grid-column: 1 / 7;
+  margin: 0;
+  font-size: var(--font-size-p-xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+.connectLinks {
+  grid-column: 7 / 13;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 3vw, 2.5rem) var(--space-gap);
+}
+.connectItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  text-decoration: none;
+  color: inherit;
+}
+.connectLabel {
+  font-size: var(--font-size-p-s);
+  font-weight: var(--font-weight-bold);
+}
+.connectValue {
+  font-size: var(--font-size-p-xs);
+  color: var(--color-muted);
+  transition: color 0.2s ease;
+}
+.connectItem:hover .connectValue { color: var(--color-fg); }
+
 /* =========================================================================
    Responsive
    ========================================================================= */
@@ -341,6 +379,8 @@
   .workMeta p { max-width: 48ch; }
   .workProjectsSingle { grid-column: 1 / 13; }
   .prevProjects { grid-column: 1 / 13; }
+  .connectHeading { grid-column: 1 / 13; }
+  .connectLinks { grid-column: 1 / 13; }
   .aboutLabel { grid-column: 1 / 13; }
   .aboutText { grid-column: 1 / 13; }
 }
@@ -355,6 +395,7 @@
 @media (prefers-reduced-motion: reduce) {
   .heroWorkArrow { animation: none; }
   .prevArrow { transition: none; }
+  .connectValue { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */
   /* keep the arrow as an affordance, but appear instantly (no slide) */

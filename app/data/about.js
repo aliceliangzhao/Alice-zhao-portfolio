@@ -20,7 +20,7 @@ export const currentWork = {
   company: "Amazon Web Services",
   time: "2021 - current",
   description:
-    "Leading the UX for S3 products and designing AI-native experiences for AWS console. Led UX for S3 Tables and SLG from concept to launch, driving a 10% week-over-week storage increase and over 500 TB of data stored.",
+    "Leading the UX for the AWS AI-native database experiences. Led UX for S3 Tables and SLG from concept to launch, driving a 10% WoW storage increase.",
 };
 
 // Homepage "Previous work": earlier roles as big text-link rows. PLACEHOLDER
@@ -29,21 +29,39 @@ export const previousWork = [
   {
     company: "Amazon Alexa",
     time: "2020 - 2021",
-    projects: [{ title: "Product name", href: "#" }],
+    projects: [{ title: "Alexa+", href: "https://www.aboutamazon.com/news/devices/amazon-new-echo-devices-alexa-plus" }],
   },
   {
     company: "Morgan Stanley",
     time: "2019 - 2020",
     projects: [
-      { title: "E*Trade integration", href: "#" },
-      { title: "Wealth management internal portal", href: "#" },
+      { title: "E*Trade enhanced digital experience", href: "https://www.morganstanley.com/press-releases/e-trade-unveils-digital-experience-for-stock-plan-participants" },
+      { title: "Wealth management platform", href: "https://www.businesswire.com/news/home/20201029006018/en/Morgan-Stanley-Honored-with-Three-2020-Money-Management-InstituteBarrons-Industry-Awards-for-Commitment-to-Social-Justice-Digital-Innovation-and-Wealth-Manager-Platform-of-the-Year" },
     ],
   },
   {
     company: "Insperity",
-    time: "2019 - 2020",
+    time: "2017 - 2020",
     projects: [{ title: "Insperity HR 360 Suite", href: "#" }],
   },
+  {
+    company: "Siemens",
+    time: "2017",
+    projects: [{ title: "Teamcenter PLM software", href: "https://www.siemens.com/en-us/products/teamcenter/" }],
+  },
+  {
+    company: "Purdue University",
+    time: "2015-2017",
+    projects: [{ title: "The National Science Foundation research portal", href: "https://link.springer.com/chapter/10.1007/978-3-319-40247-5_37" }],
+  },
+];
+
+// Homepage "Connect": contact links (label + shown value + href).
+export const connectLinks = [
+  { label: "Email", value: "liangzhao0801@gmail.com", href: "mailto:liangzhao0801@gmail.com" },
+  { label: "LinkedIn", value: "/in/liangzhaoux", href: "https://www.linkedin.com/in/liangzhaoux" },
+  { label: "Codepen", value: "codepen.io/liangzhao0801", href: "https://codepen.io/liangzhao0801" },
+  { label: "Github", value: "github.com/aliceliangzhao", href: "https://github.com/aliceliangzhao" },
 ];
 
 // =============================================================================
