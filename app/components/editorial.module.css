@@ -42,10 +42,23 @@
   left: var(--space-pad);
   bottom: clamp(1.5rem, 4vw, 3rem);
   z-index: 1;
-  font-size: var(--font-size-p-xs);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--font-size-p-s);
   font-weight: var(--font-weight-medium);
   color: var(--color-fg);
   text-decoration: none;
+}
+.heroWorkLabel:hover { text-decoration: underline; }
+/* the ↓ gently bobs as a scroll cue (disabled under reduced motion below) */
+.heroWorkArrow {
+  display: inline-block;
+  animation: heroWorkBob 1.5s ease-in-out infinite;
+}
+@keyframes heroWorkBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(0.3em); }
 }
 .intro p {
   position: relative;   /* lift the text above the shapes-grid canvas */
@@ -409,6 +422,7 @@
 
 /* Respect reduced motion: no hover transitions, no marquee scroll */
 @media (prefers-reduced-motion: reduce) {
+  .heroWorkArrow { animation: none; }
   .noteThumb { transition: none; }
   .thumb img { transition: none; }
   .workCard:hover .thumb img { transform: none; }   /* no zoom */

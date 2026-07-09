@@ -19,6 +19,7 @@ export default function EditorialIntro() {
           Selected work label doubles as the scroll cue and the section heading. */}
       <a className={s.heroWorkLabel} href="#work" data-grid-exclude>
         Selected work
+        <span className={s.heroWorkArrow} aria-hidden="true">&darr;</span>
       </a>
     </section>
   );
