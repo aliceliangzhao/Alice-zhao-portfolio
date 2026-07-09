@@ -228,13 +228,15 @@ function buildFullScreen(canvas, width, height) {
 
   const gap = CONFIG.gap;
   const cols = Math.floor(width / gap);
-  const rows = Math.ceil(height / gap) + 2;
   const offsetX = (width - (cols - 1) * gap) / 2;
   // Phase the lattice so a row lands exactly a nav's-top-padding below the nav
   // bottom: the gap under the nav then mirrors the nav's own top spacing. The
   // canvas extends behind the nav (CSS), so shapes still grow clip-free.
   const target = navBottom + navPadTop;
   const offsetY = navBottom ? (((target % gap) + gap) % gap) : 0;
+  // Stop a full row short of the bottom edge so the last row is never clipped —
+  // the bottom just gets a bit more breathing room instead of a cut-off line.
+  const rows = Math.max(0, Math.floor((height - gap - offsetY) / gap) + 1);
   const shapes = [];
   for (let row = 0; row < rows; row += 1) {
     for (let col = 0; col < cols; col += 1) {
