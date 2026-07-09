@@ -109,6 +109,14 @@
 }
 
 /* --- Decorative divider (shapes strip + label) ---------------------------- */
+/* Wrapper carries the section spacing: a section-top gap above (from the
+   previous section) and a smaller gap below (to this section's content). The
+   section it precedes zeroes its own top margin via .sectionFlush. */
+.dividerWrap {
+  margin-top: var(--space-section-top);
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
 /* Spans the content width; the label sits on the left of the last shape row.
    --label-top is written by ShapesGrid so the label lands on that row. */
 .divider {
@@ -389,6 +397,11 @@
   font-size: var(--font-size-p-xs);
   color: var(--color-muted);
 }
+
+/* A section preceded by a decorative divider drops its own top margin — the
+   divider wrapper (.dividerWrap) owns the spacing. Placed after the section
+   rules so it wins on source order. */
+.sectionFlush { margin-top: 0; }
 
 /* =========================================================================
    Responsive

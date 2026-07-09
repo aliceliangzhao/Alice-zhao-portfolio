@@ -5,6 +5,7 @@ import PreviousWork from "./components/PreviousWork";
 import EditorialAbout from "./components/EditorialAbout";
 import PhotoMarquee from "./components/PhotoMarquee";
 import Connect from "./components/Connect";
+import SectionDivider from "./components/SectionDivider";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -14,9 +15,12 @@ export default function Home() {
       <main>
         <EditorialIntro />
         <SelectedWork />
+        <SectionDivider label="Previous work" />
         <PreviousWork />
+        <SectionDivider label="About" />
         <EditorialAbout />
         <PhotoMarquee />
+        <SectionDivider label="Connect" />
         <Connect />
       </main>
       <Footer />

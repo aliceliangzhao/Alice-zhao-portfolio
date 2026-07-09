@@ -7,7 +7,7 @@ import s from "./editorial.module.css";
    the label aligns with the page gutter. Reused at each section break. */
 export default function SectionDivider({ label }) {
   return (
-    <div className={s.grid12}>
+    <div className={`${s.grid12} ${s.dividerWrap}`}>
       <ShapesGrid variant="decorative" label={label} className={s.divider} />
     </div>
   );

@@ -18,7 +18,7 @@ function ProjectLink({ project }) {
 export default function PreviousWork() {
   if (!previousWork.length) return null;
   return (
-    <section id="previous-work" className={s.work}>
+    <section id="previous-work" className={`${s.work} ${s.sectionFlush}`}>
       {previousWork.map((company) => (
         <article key={company.company} className={`${s.workRow} ${s.grid12}`}>
           <div className={s.workMeta}>

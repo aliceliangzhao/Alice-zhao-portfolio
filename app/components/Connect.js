@@ -6,7 +6,7 @@ import s from "./editorial.module.css";
    right. Data-driven from about.js `connectLinks`. */
 export default function Connect() {
   return (
-    <section id="connect" className={`${s.connect} ${s.grid12}`}>
+    <section id="connect" className={`${s.connect} ${s.grid12} ${s.sectionFlush}`}>
       <h2 className={s.connectHeading}>Let&apos;s get in touch!</h2>
       <div className={s.connectLinks}>
         {connectLinks.map((link) => {
