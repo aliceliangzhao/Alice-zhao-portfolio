@@ -1,5 +1,5 @@
 export const intro = {
-  lead: "Currently leading the UX of AWS S3 and exploring the future of AWS agentic experience.",
+  lead: "Currently leading the UX for AWS AI and storage agentic experience.",
   muted: "Previously built design systems and enterprise applications at Morgan Stanley, Siemens, and the National Science Foundation.",
 };
 

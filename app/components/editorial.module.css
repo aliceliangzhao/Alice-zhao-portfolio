@@ -34,9 +34,9 @@
 .intro p {
   position: relative;   /* lift the text above the shapes-grid canvas */
   z-index: 1;
-  grid-column: 1 / 8;
+  grid-column: 1 / 9;
   margin: 0;
-  font-size: var(--font-size-p-l);
+  font-size: var(--font-size-p-xl);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-base);
   text-wrap: pretty;
