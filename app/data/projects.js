@@ -23,8 +23,8 @@ export const projects = {
     sections: [
       {
         id: "problem",
-        navLabel: "01  Who and why",
-        heading: "01  Who and why.",
+        navLabel: "01 Who and why",
+        heading: "01 Who and why",
         content: {
           lead: "Two personas, three separate consoles, and constant context-switching revealed the need for a unified data access experience.",
           subsections: [
@@ -37,7 +37,7 @@ export const projects = {
       {
         id: "scoping",
         navLabel: "02 Product scoping",
-        heading: "02 Product scoping.",
+        heading: "02 Product scoping",
         content: {
           lead: "I mapped the user journey into prioritized stories that drove a scope decision: what ships at launch vs. what waits. This aligned the team on the three flows that mattered most.",
           subsections: [
@@ -48,8 +48,8 @@ export const projects = {
       },
       {
         id: "design-iteration",
-        navLabel: "03 Design iteration",
-        heading: "03 Design iteration.",
+        navLabel: "03 Design evolution",
+        heading: "03 Design evolution",
         content: {
           lead: "Internal testing exposed a critical flaw: stringing multiple API calls caused partial failures with no clear recovery path. I advocated for a UX pattern that surfaces all required steps during creation, resolving both the usability and durability issues. Follow-up testing validated the pattern.",
           subsections: [
@@ -92,9 +92,9 @@ export const projects = {
   "s3-tables": {
     slug: "s3-tables",
     heroImage: "/img/s3tables/thumbnail.jpg",
-    detailImage: "/img/s3tables/top.jpg",
-    projectTitle: { main: "AWS S3 Tables", sub: "0→1 in 8 weeks" },
-    navTitle: "AWS S3 Tables: 0 → 1 in 8 weeks",
+    detailImage: "/img/s3tables/project-page-thumbnail.jpg",
+    projectTitle: { main: "AWS S3 Table: turn big data into insights in one click" },
+    navTitle: "AWS S3 Table: turn big data into insights in one click",
     heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
     heroSolution: "S3 Tables, featured in {link:the 2024 AWS CEO keynote}, handles infrastructure automatically, providing a seamless console experience that lets teams turn big data into insights in seconds.",
     impact: "I led the UX of S3 Tables, a seamless console experience that turns big data into insights in seconds.",
@@ -115,40 +115,43 @@ export const projects = {
     sections: [
       {
         id: "problem",
-        navLabel: "01  Who and why",
-        heading: "01  Who and why.",
+        navLabel: "01 Who, why, and what",
+        heading: "01 Who, why, and what",
         content: {
-          lead: "20+ interviews revealed that customers {img:/img/s3tables/customers-inline-img/netflix.jpg,/img/s3tables/customers-inline-img/bmw.jpg,/img/s3tables/customers-inline-img/mcdonlad.jpg,/img/s3tables/customers-inline-img/nasdaq.jpg,/img/s3tables/customers-inline-img/siemens.jpg,/img/s3tables/customers-inline-img/3m.jpg} don't want to store structured data in unstructured storage while maintaining custom infrastructure. They need a solution to streamline storage operations so teams can focus on data querying.",
+          lead: "20+ interviews revealed that customers {img:/img/s3tables/customers-inline-img/netflix.jpg,/img/s3tables/customers-inline-img/bmw.jpg,/img/s3tables/customers-inline-img/mcdonlad.jpg,/img/s3tables/customers-inline-img/nasdaq.jpg,/img/s3tables/customers-inline-img/siemens.jpg,/img/s3tables/customers-inline-img/3m.jpg} don't want to store structured data in unstructured storage while maintaining custom infrastructure. They need a solution to streamline storage operations so teams can focus on data querying. I documented the existing user journey and its major pain points, proposed an optimized journey flow, and defined the console's information architecture. I then adapted the AWS JTBD framework to give the team a shared language for strategic scope trade-offs, categorized every user action and API detail into 6 workflows, and led the team to align on the product launch plan in one week.",
           subsections: [
-            { label: "Research", text: "I used internal AI tools to synthesize transcripts from 20+ enterprise customer interviews, and the outcome revealed who we are designing for and their respective pain points.", images:[{ src: "/img/s3tables/problem/research-process.png", alt: "Research", noBorder: true}]},
+            { label: "Research", text: "While working with 1 researcher and 3 PMs, I used internal AI tools to synthesize transcripts from 20+ enterprise customer interviews, and the outcome revealed who we are designing for and their respective pain points.", images:[{ src: "/img/s3tables/problem/research.jpg", alt: "Research", noBorder: true}]},
             { label: "Target personas", text: "Data engineers maintain storage systems daily. Strategic leads evaluate infrastructure costs and reliability.", images: [{ src: "/img/s3tables/problem/p-data-engineer.png", alt: "Data engineer persona", noBorder: true }, { src: "/img/s3tables/problem/p-strategic-lead.png", alt: "Strategic lead persona", noBorder: true }] },
-            { label: "Pain points", text: "Millions wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/problem-1.png", alt: "Problem 1", noBorder: true }, { src: "/img/s3tables/problem/problem-2.png", alt: "Problem 2", noBorder: true }] },
-            { label: "User journey", text: "I mapped the user journey into phases to surface the highest-friction tasks, guiding the team to align on priorities to act on.", images: [{ src: "/img/s3tables/problem/user-journey.png", alt: "User journey", noBorder: true }] },
+            { label: "Existing user journey with pain points", text: "I mapped the user journey into phases to surface the highest-friction tasks, guiding the team to align on priorities to act on. The user journey shows that millions are wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/user-journey.gif", alt: "Problem 1", noBorder: true }] },
+            { label: "JTBD Framework", text: "I first worked with the team to identify all user stories based on the JTBD framework, then mapped each story with its console steps, preconditions, and APIs to six groups: Create, List, View, Manage, Audit, and Delete.", images: [{ src: "/img/s3tables/scoping/JTBDframework.jpg", alt: "JTBD framework", noBorder: true }] },
+            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap.", images: [{ src: "/img/s3tables/scoping/action-plan.jpg", alt: "Action plan", noBorder: true }] },
           ],
         },
       },
       {
         id: "scoping",
-        navLabel: "02 Product scoping",
-        heading: "02 Product scoping.",
+        navLabel: "02 Define the foundational user flow and IA",
+        heading: "02 Define the foundational user flow and IA",
         content: {
-          lead: "I adapted the AWS JTBD framework to give the team a shared language for strategic scope trade-offs. We categorized every user action and API details into 6 workflows and aligned on a launch plan in one week.",
+          lead: "With scope locked, I turned the optimized journey into the console's structure. I defined an information architecture that groups tasks the way customers think, drafted the end-to-end flow, then tested and refined it until the path from setup to query was clear.",
           subsections: [
-            { label: "JTBD Framework", text: "I first worked with the team to identify all user stories based on the JTBD framework, then mapped each story with its console steps, preconditions, and APIs to six groups: Create, List, View, Manage, Audit, and Delete.", images: [{ src: "/img/s3tables/scoping/JTBDframework.jpg", alt: "JTBD framework", noBorder: true }] },
-            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap.", images: [{ src: "/img/s3tables/scoping/scoping-graph.jpg", alt: "Action plan", noBorder: true }] },
+            { label: "User journey optimization", text: "Building on the documented journey and its pain points, I reorganized the necessary actions into logical phases and eliminated steps that S3 Tables could automate or replace.", images: [{ src: "/img/s3tables/problem/user-journey-optimization.png", alt: "Optimized user journey", noBorder: true }] },
+            { label: "Console information architecture", text: "I ran two workshops with the PM and engineering teams to define and align on the console's information architecture.", images: [{ src: "/img/s3tables/scoping/console-ia.jpg", alt: "Console information architecture", noBorder: true }] },
+            { label: "User flow exploration", text: "Grounded in the ideal journey and the defined IA, I explored several console flow options. Quick testing with internal teams surfaced where the experience felt fragmented, and I gathered feedback on the specific breakpoints.", images: [{ src: "/img/s3tables/scoping/console-flow-issue.jpg", alt: "User flow exploration", noBorder: true }] },
+            { label: "User flow optimization", text: "I revised the flows and console steps based on that feedback, introducing a streamlined experience that directly addressed the customer pain points.", images: [{ src: "/img/s3tables/scoping/console-flow-optimization.jpg", alt: "User flow optimization", noBorder: true }] },
           ],
         },
       },
       {
         id: "design-iteration",
-        navLabel: "03 Design Iteration",
-        heading: "03 Design Iteration.",
+        navLabel: "03 Design evolution",
+        heading: "03 Design evolution",
         content: {
           lead: "Integration across multiple services needs to be seamless. After testing three options, I persuaded the team to combine integration with table bucket creation as a default-on setting. 97% of customers never turned it off.",
           subsections: [
-            { label: "Exploration", text: "I tested three integration models: a multi-step wizard that walked through each service, a fragmented approach with separate configuration pages, and a single-page create flow with integration built in.", images: [{ src: "/img/s3tables/design-iteration/s3table-iteration.jpg", alt: "Exploration" }] },
+            { label: "Design ideation", text: "I tested three integration models: a multi-step wizard that walked through each service, a fragmented approach with separate configuration pages, and a single-page create flow with integration built in.", images: [{ src: "/img/s3tables/design-iteration/design-ideation.jpg", alt: "Exploration" }] },
             { label: "Trade-offs", text: "The wizard added friction to what should feel instant. The fragmented model scattered a single decision across multiple pages. Customer research showed most users' end goal was querying, so bundling integration into table bucket creation matched their mental model.", images: [{ src: "/img/s3tables/design-iteration/s3table-iteration-tradeoffs.jpg", alt: "Trade-offs" }] },
-            { label: "Decision", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/decision-new.png", alt: "Decision", noBorder: true }] },
+            { label: "Visual language exploration", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/decision-new.png", alt: "Decision", noBorder: true }] },
           ],
         },
       },
@@ -219,8 +222,8 @@ export const projects = {
     sections: [
       {
         id: "problem",
-        navLabel: "01  Who and why",
-        heading: "01  Who and why.",
+        navLabel: "01 Who and why",
+        heading: "01 Who and why",
         content: {
           lead: "Customer feedback on the launched Amazon Q console pointed to one gap: the experience was service-driven and manual when customers wanted it to be agentic and streamlined. I partnered with product to consolidate usage data and find the workflows that would benefit most from an agentic flow.",
           subsections: [
@@ -233,7 +236,7 @@ export const projects = {
       {
         id: "scoping",
         navLabel: "02 Product scoping",
-        heading: "02 Product scoping.",
+        heading: "02 Product scoping",
         content: {
           lead: "I turned the research into a shared product definition and a system design the team could build on, aligning product and engineering before any pixels were drawn.",
           subsections: [
@@ -245,8 +248,8 @@ export const projects = {
       },
       {
         id: "design-iteration",
-        navLabel: "03 Design Iteration",
-        heading: "03 Design Iteration.",
+        navLabel: "03 Design evolution",
+        heading: "03 Design evolution",
         content: {
           lead: "The core challenge was serving two very different customers in one experience without splitting it into two products. I explored layouts with AI design tools and landed on a three-panel view that lets each customer type work the way they prefer.",
           subsections: [

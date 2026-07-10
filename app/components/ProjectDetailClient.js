@@ -1,12 +1,12 @@
 "use client";
 
-import { useLayoutEffect, useRef } from "react";
+import { Fragment, useLayoutEffect, useRef } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import MetricsBento from "./MetricsBento";
 import ExternalLink from "./ExternalLink";
 import InlineImageLoop from "./InlineImageLoop";
-import SectionTabs from "./SectionTabs";
+import SectionDivider from "./SectionDivider";
 import SelectedWork from "./SelectedWork";
 import DotGridBackground from "./DotGridBackground";
 import { projectOrder } from "../data/projects";
@@ -41,8 +41,9 @@ function HeroText({ text, externalLink }) {
 // Split a heading like "01  Who and why." into its leading number and the rest
 // so the number can be set in a muted weight, like the prototype.
 function SectionHeading({ heading }) {
-  const m = heading.match(/^(\d+)\s+(.*)$/);
-  if (!m) return <>{heading}</>;
+  const clean = heading.replace(/\.\s*$/, ""); // no trailing period on section titles
+  const m = clean.match(/^(\d+)\s+(.*)$/);
+  if (!m) return <>{clean}</>;
   return (
     <>
       <span className="pd-num">{m[1]}</span>
@@ -51,19 +52,50 @@ function SectionHeading({ heading }) {
   );
 }
 
-function Section({ section }) {
+// One subsection: a full-width header (bold label + centered hairline) over a
+// grid body — description in cols 1-3, image(s) in cols 5-12 (col 4 is an empty
+// gutter). Subsections are listed down the page, not tabbed.
+function Subsection({ sub }) {
+  return (
+    <div className="pd-sub">
+      <div className="pd-sub-head">
+        <h3 className="pd-sub-label">{sub.label}</h3>
+        <span className="pd-sub-rule" aria-hidden="true" />
+      </div>
+      <div className="pd-sub-body pd-grid">
+        <div className="pd-sub-desc">
+          {sub.text && <p>{sub.text}</p>}
+        </div>
+        <div className="pd-sub-media">
+          {(sub.images || []).map((img, j) => (
+            <img
+              key={j}
+              className={`pd-media${img.noBorder ? " pd-media--no-border" : ""}`}
+              src={img.src}
+              alt={img.alt}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Section({ section, flush }) {
   const subsections = section.content?.subsections || [];
   const lead = section.content?.lead;
 
   return (
-    <section id={section.id} className="pd-section">
-      <header className="pd-section-head pd-grid">
+    <section id={section.id} className={`pd-section${flush ? " pd-section--flush" : ""}`}>
+      <header className={`pd-section-head pd-grid${section.headingAlign === "center" ? " pd-section-head--center" : ""}`}>
         <h2><SectionHeading heading={section.heading} /></h2>
-        {lead && <p>{lead}</p>}
+        {lead && <p><HeroText text={lead} /></p>}
       </header>
 
       {subsections.length > 0 && (
-        <SectionTabs sectionId={section.id} subsections={subsections} />
+        <div className="pd-subs">
+          {subsections.map((sub, i) => <Subsection key={i} sub={sub} />)}
+        </div>
       )}
     </section>
   );
@@ -174,13 +206,13 @@ function OutcomeZigzag({ content }) {
   );
 }
 
-function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt }) {
+function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt, flush }) {
   const content = section.content;
   const blocks = Array.isArray(content) ? content : null;
 
   return (
-    <section id={section.id} className="pd-section">
-      <header className="pd-section-head pd-grid">
+    <section id={section.id} className={`pd-section${flush ? " pd-section--flush" : ""}`}>
+      <header className={`pd-section-head pd-grid${section.headingAlign === "center" ? " pd-section-head--center" : ""}`}>
         <h2><SectionHeading heading={section.heading} /></h2>
         {section.summary && <p>{section.summary}</p>}
       </header>
@@ -259,20 +291,25 @@ export default function ProjectDetailClient({ project }) {
           </section>
         )}
 
-        {/* Sections — outcome keeps the style-card cinematic zigzag/reveal */}
-        {sections.map((section) =>
-          section.id === "outcome" ? (
-            <OutcomeSection
-              key={section.id}
-              section={section}
-              metrics={project.metrics}
-              metricsImage={project.metricsImage}
-              metricsImageAlt={project.navTitle}
-            />
-          ) : (
-            <Section key={section.id} section={section} />
-          )
-        )}
+        {/* Sections — a shapes-grid divider sits between each one (not before the
+            first; the hero band already precedes it). Outcome keeps the
+            style-card cinematic zigzag/reveal. */}
+        {sections.map((section, i) => (
+          <Fragment key={section.id}>
+            {i > 0 && <SectionDivider symmetric />}
+            {section.id === "outcome" ? (
+              <OutcomeSection
+                section={section}
+                metrics={project.metrics}
+                metricsImage={project.metricsImage}
+                metricsImageAlt={project.navTitle}
+                flush={i > 0}
+              />
+            ) : (
+              <Section section={section} flush={i > 0} />
+            )}
+          </Fragment>
+        ))}
 
         {!comingSoon && otherSlugs.length > 0 && (
           <SelectedWork projectSlugs={otherSlugs} />

@@ -116,6 +116,12 @@
   margin-top: var(--space-section-top);
   margin-bottom: clamp(0.5rem, 1.5vw, 1.25rem);
 }
+/* Project pages: equal spacing above and below, so the divider reads as centered
+   between the two sections rather than introducing the one below it. */
+.dividerWrapSymmetric {
+  margin-top: var(--space-rhythm-xl);
+  margin-bottom: var(--space-rhythm-xl);
+}
 
 /* Spans the content width; the label sits on the left of the last shape row.
    --label-top is written by ShapesGrid so the label lands on that row. */

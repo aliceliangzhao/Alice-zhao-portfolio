@@ -23,7 +23,7 @@
 
 /* --- Lead: title + meta + intro ----------------------------------------- */
 .pd-lead {
-  margin-top: clamp(2rem, 6vw, 4.5rem);
+  margin-top: var(--space-page-top);
   row-gap: 0;
   scroll-margin-top: 5rem;
 }
@@ -73,7 +73,7 @@
   grid-column: 1 / 13;
   width: 100%;
   height: auto;
-  border-radius: var(--radius-image);
+  border-radius: var(--radius-image-nested);   /* 10px — matches the in-section images */
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
@@ -82,11 +82,14 @@
   margin-top: var(--space-between-sections);
   scroll-margin-top: 5rem;
 }
+/* a section preceded by a shapes-grid divider drops its own top margin — the
+   divider wrapper owns the between-section spacing. */
+.pd-section--flush { margin-top: 0; }
 .pd-section-head { margin-bottom: var(--space-heading-to-body); }
 .pd-section-head h2 {
   grid-column: 1 / 9;
   margin: 0;
-  font-family: var(--f-display);   /* EB Garamond serif */
+  font-family: var(--font-sans);   /* Satoshi, same as the rest of the page */
   font-size: var(--font-size-h2);
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
@@ -105,82 +108,54 @@
   text-wrap: pretty;
 }
 
-/* --- Tabbed sections -----------------------------------------------------
-   Desktop: a tab bar with a sliding underline, one panel shown at a time.
-   Mobile (<=640): the tab bar hides and every panel stacks as a labelled list.
-   ------------------------------------------------------------------------- */
-.pd-tabwrap { /* groups the tab bar + panels */ }
+/* Centered heading + lead (e.g. the Outcome section) */
+.pd-section-head--center h2,
+.pd-section-head--center p {
+  grid-column: 1 / 13;
+  text-align: center;
+}
 
-.pd-tabs {
-  position: relative;            /* anchors the sliding underline */
+/* --- Subsections: a stacked list ----------------------------------------
+   Each subsection is a full-width header (bold label + a centered hairline
+   that fills the rest of the row) over a grid body: the description in
+   cols 1-3, the image(s) in cols 5-12 (col 4 is an empty gutter). All
+   subsections are listed down the page. ----------------------------------- */
+.pd-sub + .pd-sub { margin-top: var(--space-between-subsections); }
+
+/* header row: bold label on the left, hairline filling the rest, both
+   vertically centered on each other. Sits on the page gutters. */
+.pd-sub-head {
   display: flex;
-  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: baseline;   /* the rule aligns to the label's text baseline (its visual bottom) */
+  gap: 1rem;
   padding-inline: var(--space-pad);
-  border-bottom: 1px solid var(--color-fg);
-  overflow-x: auto;              /* many tabs -> swipe sideways, never clip */
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  margin-bottom: var(--space-title-to-desc);   /* tight: label sits close to its content */
 }
-.pd-tabs::-webkit-scrollbar { display: none; }
-.pd-tab {
-  appearance: none;
-  background: none;
-  border: none;
-  flex: none;
-  padding: 0 0 0.7rem;
-  font-family: inherit;
-  font-size: var(--font-size-p-s);
-  color: var(--color-muted);
-  white-space: nowrap;
-  cursor: pointer;
-  transition: color 0.2s ease;
+.pd-sub-label {
+  margin: 0;
+  font-size: var(--font-size-h3);       /* one step below the section title */
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  white-space: nowrap;                  /* keep on one line so the rule fills the rest */
 }
-.pd-tab:hover { color: var(--color-fg); }
-.pd-tab--active { color: var(--color-fg); }
-.pd-tab:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 3px; }
-.pd-tab-underline {
-  position: absolute;
-  bottom: -1px;                  /* sit on the 1px rule */
-  left: 0;
-  height: 2px;
-  width: 0;
-  background: var(--color-fg);
-  transform: translateX(0);
-  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1),
-              width 0.28s cubic-bezier(0.22, 1, 0.36, 1);
-  pointer-events: none;
+.pd-sub-rule {
+  flex: 1;
+  height: 0;
+  border-top: 1px solid var(--color-divider);
 }
 
-/* panels */
-.pd-panels { margin-top: var(--space-heading-to-body); }
-.pd-panel {
-  grid-template-columns: repeat(var(--grid-cols), 1fr);
-  column-gap: var(--space-gap);
-  padding-inline: var(--space-pad);
-  align-items: start;
-}
-.pd-panel:not([hidden]) { display: grid; }       /* desktop: only the active panel */
-.pd-panel[data-active="true"] { animation: pd-panel-enter 0.25s ease-out; }
-@keyframes pd-panel-enter {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.pd-panel-caption { grid-column: 1 / 4; }
-.pd-panel-label {
-  display: none;                 /* desktop: the tab shows the label */
-  margin: 0 0 var(--space-label-to-text);
-  font-size: var(--font-size-p-s);
-  font-weight: var(--font-weight-bold);
-}
-.pd-panels--static .pd-panel-label { display: block; }  /* single subsection */
-.pd-panel-text {
+/* body: description cols 1-3, media cols 5-12 (col 4 left empty) */
+.pd-sub-body { align-items: start; }
+.pd-sub-desc { grid-column: 1 / 4; }
+.pd-sub-desc p {
   margin: 0;
-  font-size: var(--font-size-p-s);
+  font-size: var(--font-size-p-s);      /* same size as the label, but regular weight */
+  font-weight: var(--font-weight-regular);
   line-height: var(--line-height-base);
   color: var(--color-fg);
 }
-.pd-panel-media {
-  grid-column: 4 / 13;
+.pd-sub-media {
+  grid-column: 5 / 13;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-card-gap);
@@ -194,8 +169,10 @@
   border-radius: var(--radius-image-nested);   /* 10px */
   border: 1px solid #ececec;
 }
-/* images flagged noBorder in the data (already framed in the source artwork) */
-.pd-media--no-border { border: none; }
+/* images flagged noBorder in the data are already framed in the source artwork,
+   so we neither add a border nor round them — our radius would clip the frame's
+   own corners. */
+.pd-media--no-border { border: none; border-radius: 0; }
 
 /* --- Outcome metrics: full-width wrapper for the bento (MetricsBento) ----- */
 .pd-metrics {
@@ -292,7 +269,7 @@
 }
 .zigzag-right .zigzag-images { grid-column: 3 / 7; grid-row: 1; }
 .zigzag-images { display: flex; flex-direction: column; gap: var(--grid-gap); }
-.zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-image); }
+.zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-image-nested); }
 
 .zigzag-reveal-stage {
   --reveal-extra: 115vh;
@@ -341,31 +318,19 @@
   .pd-intro { grid-column: 1 / 13; }
   .pd-section-head h2,
   .pd-section-head p { grid-column: 1 / 13; }
-  /* panel caption stacks above its media */
-  .pd-panel-caption { grid-column: 1 / 13; }
-  .pd-panel-media { grid-column: 1 / 13; }
+  /* description stacks above its media */
+  .pd-sub-desc { grid-column: 1 / 13; margin-bottom: var(--space-block-stack); }
+  .pd-sub-media { grid-column: 1 / 13; }
 }
 
-/* Mobile: drop the tabs entirely and list every subsection down the page,
-   each headed by its label. */
+/* Mobile: stack a subsection's images rather than squeezing them side-by-side. */
 @media (max-width: 640px) {
-  .pd-tabs { display: none; }
-  .pd-panels { margin-top: 0; }
-  .pd-panel { display: grid; }            /* show all panels (overrides [hidden]) */
-  .pd-panel-label { display: block; }
-  .pd-panel + .pd-panel { margin-top: clamp(2.5rem, 8vw, 3.5rem); }
-  /* stack a subsection's images on mobile rather than squeezing them side-by-side */
-  .pd-panel-media { flex-direction: column; }
+  .pd-sub-media { flex-direction: column; }
   .pd-media { flex: none; width: 100%; }
-  /* no per-panel entrance animation when they're all listed */
-  .pd-panel[data-active="true"] { animation: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pd-section { scroll-margin-top: 5rem; }
-  /* tabs: underline snaps, panels swap with no fade */
-  .pd-tab-underline { transition: none; }
-  .pd-panel[data-active="true"] { animation: none; }
   /* outcome reveal: no pin/expand, just show the image at rest */
   .zigzag-reveal-stage { min-height: auto; }
   .zigzag-reveal-pin { position: static; height: auto; }

@@ -47,7 +47,7 @@
 
 .value {
   font-family: var(--f-display);        /* EB Garamond serif accent */
-  font-size: var(--font-size-h2);
+  font-size: var(--font-size-p-xl);     /* metric numbers — independent of the section-title scale */
   font-weight: 400;
   letter-spacing: -0.02em;
   line-height: 1;

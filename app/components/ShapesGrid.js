@@ -267,7 +267,10 @@ function buildDecorative(wrapper, width, height) {
   const shapes = [];
   for (let row = 0; row < rows; row += 1) {
     const y = vInset + rowStep * row;
-    const startX = row === rows - 1 ? Math.max(inset, labelLeft + labelWidth + labelGap) : inset;
+    // the last row clears the label only when there IS one; label-less
+    // dividers keep every row left-aligned at the same inset.
+    const startX =
+      row === rows - 1 && label ? Math.max(inset, labelLeft + labelWidth + labelGap) : inset;
     for (let x = startX; x <= width - inset; x += gap) shapes.push(createShape(x, y, pick(TYPES)));
   }
   return shapes;

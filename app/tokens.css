@@ -42,9 +42,13 @@
   --font-size-p-xs:  clamp(0.8125rem, 0.5vw + 0.6875rem, 1rem);  /* 13–16px — nav links */
   --font-size-p-2xs: clamp(0.6875rem, 0.25vw + 0.6rem, 0.8125rem); /* 11–13px — uppercase tags */
 
-  /* Semantic headings — alias into the scale, never hold a raw value. */
-  --font-size-h1: var(--font-size-p-2xl);  /* page / project title */
-  --font-size-h2: var(--font-size-p-xl);   /* section title */
+  /* Semantic headings — alias into the scale, never hold a raw value.
+     Rule: each level is exactly ONE scale step below the one above it, so the
+     title hierarchy stays proportional. To resize, move h1 and step h2/h3 to
+     the next scale steps below it (keep them consecutive). */
+  --font-size-h1: var(--font-size-p-xl);   /* page / project title */
+  --font-size-h2: var(--font-size-p-l);    /* section title — one step below h1 */
+  --font-size-h3: var(--font-size-p-m);    /* subsection title — one step below h2 */
 
   --line-height-base: 1.32;
   --line-height-tight: 1.08;   /* big project titles */
@@ -91,10 +95,16 @@
 
   /* Semantic aliases — use THESE in stylesheets. */
   --space-between-sections: var(--space-rhythm-2xl); /* numbered section 01 -> 02 */
-  --space-heading-to-body:  var(--space-rhythm-l);   /* section head -> its content */
+  --space-between-subsections: var(--space-rhythm-xl); /* one subsection -> the next */
+  --space-heading-to-body:  var(--space-rhythm-xl);  /* section head (title + description) -> the subsections below */
   --space-block-stack:      var(--space-rhythm-m);   /* stacked content blocks */
   --space-title-to-desc:    var(--space-rhythm-s);   /* a title/label -> its description */
   --space-label-to-text:    var(--space-rhythm-xs);  /* a tight caption label -> its text */
+
+  /* Gap from the sticky nav down to a page/project title. A bespoke page-top
+     offset, kept separate from the rhythm steps above (which are content-to-
+     content). Sits below the nav's own reserved height. */
+  --space-page-top: clamp(3.75rem, 8vw, 6.5rem);
 
   /* --- Project cards ----------------------------------------------------- */
   --color-card-placeholder: #d9d9d9; /* image placeholder fill */
