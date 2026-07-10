@@ -123,12 +123,14 @@
   margin-bottom: var(--space-rhythm-xl);
 }
 
-/* Spans the content width; the label sits on the left of the last shape row.
-   --label-top is written by ShapesGrid so the label lands on that row. */
+/* Full-bleed to the container edges (matching the hero shapes grid), breaking
+   out of the page gutter so the lattice hugs the screen edge the same way. The
+   label is pinned back at the gutter below. --label-top is written by ShapesGrid
+   so the label lands on the last shape row. */
 .divider {
   grid-column: 1 / 13;
   position: relative;
-  width: 100%;
+  margin-inline: calc(-1 * var(--space-pad));
   min-height: var(--space-divider-height);
   overflow: hidden;
 }
@@ -142,7 +144,7 @@
 .divider :global(.shapes-grid-label) {
   position: absolute;
   top: var(--label-top, 50%);
-  left: 0;
+  left: var(--space-pad);
   transform: translateY(-50%);
   font-size: var(--font-size-p-s);   /* matches the hero "Selected work" label */
   font-weight: var(--font-weight-medium);

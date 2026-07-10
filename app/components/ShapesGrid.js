@@ -257,21 +257,30 @@ function buildDecorative(wrapper, width, height) {
   const labelWidth = labelRect?.width || 0;
   const labelLeft = labelRect ? labelRect.left - rootRect.left : 0;
   const labelGap = gap * 0.75;
-  const inset = gap * 0.5;
   const vInset = Math.min(height * 0.18, gap * 1.1);
   const rows = 4;
   const rowStep = rows > 1 ? (height - vInset * 2) / (rows - 1) : 0;
   const lastRowY = vInset + rowStep * (rows - 1);
   wrapper.style.setProperty("--label-top", `${Math.round(lastRowY)}px`);
 
+  // Same column phasing as the fullscreen hero grid: fill the full (now
+  // full-bleed) width and center the lattice, so divider columns line up
+  // with the hero's and hug the screen edge identically.
+  const cols = Math.floor(width / gap);
+  const offsetX = (width - (cols - 1) * gap) / 2;
+  const labelClear = label ? labelLeft + labelWidth + labelGap : 0;
+
   const shapes = [];
   for (let row = 0; row < rows; row += 1) {
     const y = vInset + rowStep * row;
     // the last row clears the label only when there IS one; label-less
-    // dividers keep every row left-aligned at the same inset.
-    const startX =
-      row === rows - 1 && label ? Math.max(inset, labelLeft + labelWidth + labelGap) : inset;
-    for (let x = startX; x <= width - inset; x += gap) shapes.push(createShape(x, y, pick(TYPES)));
+    // dividers keep every column.
+    const clearLast = row === rows - 1 && label;
+    for (let col = 0; col < cols; col += 1) {
+      const x = offsetX + col * gap;
+      if (clearLast && x < labelClear) continue;
+      shapes.push(createShape(x, y, pick(TYPES)));
+    }
   }
   return shapes;
 }
