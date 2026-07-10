@@ -74,6 +74,28 @@
   --space-card-gap: clamp(0.75rem, 1.2vw, 1rem); /* gap inside a card */
   --space-project-col-gap: 1.25rem;  /* 20px — fixed gap between the two project columns */
 
+  /* --- Vertical rhythm --------------------------------------------------- */
+  /* A single scale for the vertical GAPS between stacked content (as opposed
+     to the layout-chrome spacing above: gutters, header, nav). Two layers,
+     same pattern as the type scale: primitive steps hold the raw values;
+     semantic aliases name the RELATIONSHIP and are what stylesheets reach for.
+     Never point a component at a raw clamp() — alias, then use the alias.
+     Larger steps are fluid (scale with viewport); the two tightest are fixed,
+     since a sub-1rem gap doesn't need to grow on big screens. */
+  --space-rhythm-2xl: clamp(3.5rem, 8vw, 7rem);      /* major page break */
+  --space-rhythm-xl:  clamp(2.5rem, 6vw, 5rem);      /* large band (reserved) */
+  --space-rhythm-l:   clamp(1.75rem, 3.5vw, 2.75rem);/* a heading block to its content */
+  --space-rhythm-m:   clamp(1.5rem, 3vw, 2.25rem);   /* one stacked block to the next */
+  --space-rhythm-s:   0.9rem;                         /* a label to the text right below it */
+  --space-rhythm-xs:  0.5rem;                         /* tightest label-to-text pairing */
+
+  /* Semantic aliases — use THESE in stylesheets. */
+  --space-between-sections: var(--space-rhythm-2xl); /* numbered section 01 -> 02 */
+  --space-heading-to-body:  var(--space-rhythm-l);   /* section head -> its content */
+  --space-block-stack:      var(--space-rhythm-m);   /* stacked content blocks */
+  --space-title-to-desc:    var(--space-rhythm-s);   /* a title/label -> its description */
+  --space-label-to-text:    var(--space-rhythm-xs);  /* a tight caption label -> its text */
+
   /* --- Project cards ----------------------------------------------------- */
   --color-card-placeholder: #d9d9d9; /* image placeholder fill */
   --color-card-surface: #efefef;     /* light-grey fill behind a secondary-work card */
