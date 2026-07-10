@@ -327,7 +327,7 @@
 }
 .marqueeTrack {
   display: flex;
-  gap: var(--space-gap);
+  gap: var(--space-card-gap);
   width: max-content;
   /* moving from -50% to 0 carries the duplicated content rightward (L->R) */
   animation: marquee-ltr 45s linear infinite;

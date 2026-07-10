@@ -111,7 +111,7 @@
   --color-card-surface: #efefef;     /* light-grey fill behind a secondary-work card */
   --color-dot-grid: #b4b0a6;         /* warm grey hero dot-grid; subtle so it sits behind text */
   --project-image-aspect: 1 / 0.82;  /* image card placeholder ratio */
-  --radius-image: 20px;              /* rounded corners on a standalone image placeholder */
+  --radius-image: 10px;              /* rounded corners on images, site-wide (matches the project pages) */
   --radius-card: 20px;               /* rounded corners on a card container */
   --radius-image-nested: 10px;       /* image inside a padded card: smaller so its
                                         curve stays concentric with the container's */
