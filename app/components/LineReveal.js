@@ -34,7 +34,8 @@ function buildTokens(heading, lead, insertBreak) {
   for (const seg of segments) {
     const imgMatch = seg.match(/^\{img:([^}]+)\}$/);
     if (imgMatch) {
-      tokens.push({ type: "img", srcs: imgMatch[1].split(",") });
+      // strip any {img:...|url} suffix; this reveal has no link, just the srcs
+      tokens.push({ type: "img", srcs: imgMatch[1].split("|")[0].split(",") });
       continue;
     }
     if (seg === "{img}") {

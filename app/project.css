@@ -52,6 +52,30 @@
 }
 .pd-meta li { display: flex; gap: 1rem; }
 .pd-meta li + li::before { content: "//"; opacity: 0.6; }
+
+/* Capability tag pills — same design as the homepage cards (shared tokens). */
+.pd-tags {
+  grid-column: 1 / 11;
+  margin: var(--space-title-to-desc) 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-tag-gap);
+}
+.pd-tag {
+  padding: var(--space-tag-py) var(--space-tag-px);
+  background: var(--color-tag-bg);
+  color: var(--color-tag-fg);
+  border-radius: var(--radius-tag);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-p-2xs);
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
 .pd-intro {
   grid-column: 1 / 9;
   margin-top: var(--space-block-stack);

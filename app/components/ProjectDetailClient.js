@@ -19,20 +19,30 @@ import { projectOrder } from "../data/projects";
 // --- inline content tokens ------------------------------------------------
 // The hero copy embeds {link:label} (an external link) and {img:a,b,c} (an
 // inline image loop). Parse them into components; everything else is text.
+// Tokens: {img:src1,src2} and {link:label}. Either may carry its own URL after
+// a pipe ({img:...|url}, {link:label|url}); without one it falls back to the
+// project's externalLink.
 function HeroText({ text, externalLink }) {
   const parts = text.split(/(\{img(?::[^}]*)?\}|\{link:[^}]+\})/g);
   return parts.map((part, i) => {
     const imgMatch = part.match(/^\{img:([^}]+)\}$/);
     if (imgMatch) {
-      const loop = <InlineImageLoop key={i} srcs={imgMatch[1].split(",")} />;
-      if (externalLink) {
-        return <ExternalLink key={i} href={externalLink.url} hideIcon dataCursor={externalLink.cursor}>{loop}</ExternalLink>;
+      const [srcs, url] = imgMatch[1].split("|");
+      const loop = <InlineImageLoop key={i} srcs={srcs.split(",")} />;
+      const href = url || externalLink?.url;
+      if (href) {
+        return <ExternalLink key={i} href={href} hideIcon dataCursor={externalLink?.cursor}>{loop}</ExternalLink>;
       }
       return loop;
     }
     const linkMatch = part.match(/^\{link:([^}]+)\}$/);
-    if (linkMatch && externalLink) {
-      return <ExternalLink key={i} href={externalLink.url} dataCursor={externalLink.cursor}>{linkMatch[1]}</ExternalLink>;
+    if (linkMatch) {
+      const [label, url] = linkMatch[1].split("|");
+      const href = url || externalLink?.url;
+      if (href) {
+        return <ExternalLink key={i} href={href} dataCursor={externalLink?.cursor}>{label}</ExternalLink>;
+      }
+      return label;
     }
     return part;
   });
@@ -237,7 +247,9 @@ function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt, flush
 export default function ProjectDetailClient({ project }) {
   const comingSoon = !!project.comingSoon;
   const sections = comingSoon ? [] : (project.sections || []);
-  const meta = [project.role, project.year, ...(project.tags || [])].filter(Boolean);
+  const meta = [project.role].filter(Boolean);
+  // year gets the same pill treatment as the capability tags, shown first
+  const pills = [project.year, ...(project.tags || [])].filter(Boolean);
   // the other case studies, for the "more work" section above the footer
   const otherSlugs = projectOrder.filter((slug) => slug !== project.slug);
 
@@ -268,6 +280,11 @@ export default function ProjectDetailClient({ project }) {
           {meta.length > 0 && (
             <ul className="pd-meta">
               {meta.map((m, i) => <li key={i}>{m}</li>)}
+            </ul>
+          )}
+          {pills.length > 0 && (
+            <ul className="pd-tags">
+              {pills.map((t, i) => <li key={i} className="pd-tag">{t}</li>)}
             </ul>
           )}
           {comingSoon ? (

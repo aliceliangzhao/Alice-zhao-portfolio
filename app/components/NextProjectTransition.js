@@ -9,20 +9,29 @@ import InlineImageLoop from "./InlineImageLoop";
 import ExternalLink from "./ExternalLink";
 import styles from "./NextProjectTransition.module.css";
 
+// Tokens may carry their own URL after a pipe ({img:...|url}, {link:label|url});
+// without one they fall back to the project's externalLink.
 function ParsedHeroText({ text, externalLink }) {
   const parts = text.split(/(\{img(?::[^}]*)?\}|\{link:[^}]+\})/g);
   return parts.map((part, i) => {
     const imgMatch = part.match(/^\{img:([^}]+)\}$/);
     if (imgMatch) {
-      const loop = <InlineImageLoop key={i} srcs={imgMatch[1].split(",")} />;
-      if (externalLink) {
-        return <ExternalLink key={i} href={externalLink.url} hideIcon>{loop}</ExternalLink>;
+      const [srcs, url] = imgMatch[1].split("|");
+      const loop = <InlineImageLoop key={i} srcs={srcs.split(",")} />;
+      const href = url || externalLink?.url;
+      if (href) {
+        return <ExternalLink key={i} href={href} hideIcon>{loop}</ExternalLink>;
       }
       return loop;
     }
     const linkMatch = part.match(/^\{link:([^}]+)\}$/);
-    if (linkMatch && externalLink) {
-      return <ExternalLink key={i} href={externalLink.url}>{linkMatch[1]}</ExternalLink>;
+    if (linkMatch) {
+      const [label, url] = linkMatch[1].split("|");
+      const href = url || externalLink?.url;
+      if (href) {
+        return <ExternalLink key={i} href={href}>{label}</ExternalLink>;
+      }
+      return label;
     }
     return part;
   });

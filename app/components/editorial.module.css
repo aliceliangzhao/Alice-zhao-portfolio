@@ -215,7 +215,7 @@
   display: block;
   padding: clamp(1rem, 2vw, 1.5rem) 0;
   border-bottom: 1px solid var(--color-divider);
-  font-size: var(--font-size-p-xl);
+  font-size: var(--font-size-p-l);   /* matches the Selected work card title */
   font-weight: var(--font-weight-medium);
   line-height: var(--line-height-tight);
   color: var(--color-fg);
@@ -223,7 +223,7 @@
 }
 .prevProjects .prevLink:first-child { padding-top: 0; }
 .prevLink { transition: color 0.2s ease; }
-.prevLink:hover { color: var(--color-muted); }   /* text goes a bit greyer */
+.prevLink:hover { color: var(--color-muted-strong); }   /* text goes a bit greyer */
 /* arrow hidden by default, slides + fades in on hover */
 .prevArrow {
   display: inline-block;
@@ -264,7 +264,7 @@
   line-height: var(--line-height-tight);
   transition: color 0.2s ease;
 }
-.workCard:hover .cardTitle { color: var(--color-muted); }   /* text goes a bit greyer */
+.workCard:hover .cardTitle { color: var(--color-muted-strong); }   /* text goes a bit greyer */
 /* ↗ arrow: hidden and nudged left at rest, slides in beside the title on hover */
 .cardArrow {
   display: inline-block;
@@ -283,8 +283,8 @@
   color: var(--color-muted);
 }
 
-/* Capability tags: sharp-cornered beige rectangles, uppercase, smallest type.
-   Sit in a wrapping row under the card subtitle. */
+/* Capability tags: rounded pills with a 10% accent fill + accent mono label,
+   uppercase, smallest type. Sit in a wrapping row under the card subtitle. */
 .tags {
   margin: 0.75rem 0 0;   /* gap above tags; bottom spacing lives on .cardBody */
   display: flex;
@@ -295,6 +295,8 @@
   padding: var(--space-tag-py) var(--space-tag-px);
   background: var(--color-tag-bg);
   color: var(--color-tag-fg);
+  border-radius: var(--radius-tag);
+  font-family: var(--font-mono);
   font-size: var(--font-size-p-2xs);
   line-height: 1;
   text-transform: uppercase;
@@ -391,7 +393,7 @@
   font-weight: var(--font-weight-bold);
   transition: color 0.2s ease;
 }
-.connectItem:hover .connectLabel { color: var(--color-muted); }   /* title goes a bit greyer */
+.connectItem:hover .connectLabel { color: var(--color-muted-strong); }   /* title goes a bit greyer */
 /* arrow hidden by default, slides + fades in on hover (matches the cards) */
 .connectArrow {
   display: inline-block;

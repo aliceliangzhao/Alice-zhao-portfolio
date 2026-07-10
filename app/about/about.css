@@ -4,7 +4,7 @@
 }
 
 .about-section {
-  padding: 6rem 0;
+  padding: var(--space-between-sections) 0;   /* shares the project pages' vertical rhythm */
   transition: border-color 0.2s;
 }
 
@@ -62,7 +62,7 @@
 
 .experience-list {
   grid-column: 1 / -1;
-  margin-top: 2rem;
+  margin-top: var(--space-heading-to-body);   /* section heading -> its content */
 }
 
 .experience-entry {
@@ -105,7 +105,7 @@
 }
 
 .experience-description {
-  margin-top: 1rem;
+  margin-top: var(--space-title-to-desc);   /* title -> description */
   font-size: var(--t-p);
   font-weight: 400;
   line-height: 1.4;
@@ -125,7 +125,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: -0.01em;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--space-title-to-desc);   /* label -> its list */
 }
 
 .experience-work-list {
@@ -165,7 +165,7 @@
 /* ── Process section ── */
 
 .process-heading {
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-heading-to-body);   /* section heading -> its content */
 }
 
 .process-steps {

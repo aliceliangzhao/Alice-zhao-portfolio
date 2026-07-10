@@ -18,14 +18,17 @@
   --color-muted: #767676;      /* secondary / de-emphasized text. AA floor (>=4.5:1 on paper).
                                   Note: the prototype shipped #9b9b9b, which its own rules
                                   deprecate for failing AA; #767676 is the accessible value. */
+  --color-muted-strong: #4a4a4a; /* darker hover grey (between fg and muted) */
   --color-bg: #fff;            /* page background */
   --color-link: var(--color-fg);
   --color-divider: #e0e0e0;    /* light-grey hairline (e.g. under the section label) */
+  --color-accent: #2936CF;     /* the one accent — saturated indigo */
   --space-divider-height: clamp(8rem, 15vw, 11rem);  /* decorative shapes-strip section divider */
 
   /* --- Typography -------------------------------------------------------- */
   --font-sans: "Satoshi", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-display: "Satoshi", "Helvetica Neue", "Arial Black", Arial, sans-serif;
+  --font-mono: "IBM Plex Mono", "SF Mono", "Fira Code", ui-monospace, monospace;   /* tags, code motifs */
 
   /* Type is fluid: clamp(min, preferred[vw-based], max), in rem so it respects
      the user's browser font-size setting (1rem = 16px default). The max equals
@@ -70,7 +73,7 @@
   --space-nav-gap: clamp(0.875rem, 1.6vw, 1.375rem);  /* gap between nav links */
   --space-hero-bottom: 0.625rem;   /* the name sits attached to the screen bottom */
   --space-cue-bottom: clamp(1rem, 2vw, 1.625rem); /* scroll cue offset from bottom */
-  --space-section-top: clamp(4rem, 9vw, 7.5rem); /* gap above the project list */
+  --space-section-top: var(--space-between-sections); /* section-to-section gap; shares the project pages' vertical rhythm */
   --space-hero-dots-bleed: clamp(3.6rem, 6.5vw, 5.6rem); /* how far the hero dot-grid extends above/below the intro text (~one extra dot row each side vs. the text); kept < section-top so it clears the nav and the Selected Work rule */
   --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer name block */
   --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);    /* footer legal-row vertical padding */
@@ -113,6 +116,7 @@
   --project-image-aspect: 1 / 0.82;  /* image card placeholder ratio */
   --radius-image: 10px;              /* rounded corners on images, site-wide (matches the project pages) */
   --radius-card: 20px;               /* rounded corners on a card container */
+  --radius-tag: 6px;                 /* rounded corners on a capability tag pill */
   --radius-image-nested: 10px;       /* image inside a padded card: smaller so its
                                         curve stays concentric with the container's */
   --space-card-inset: clamp(1rem, 1.8vw, 1.5rem); /* padding inside a filled card container */
@@ -121,12 +125,12 @@
   /* Capability labels under a project card: sharp-cornered beige rectangles,
      uppercase, smallest type. Warm sepia fill + ink to match the parchment
      direction; the text tone clears AA contrast on the beige. */
-  --color-tag-bg: #e3dfd5;       /* low-saturation beige fill */
+  --color-tag-bg: color-mix(in srgb, var(--color-accent) 10%, transparent); /* 10% accent fill */
   --color-metric-fill: #e3dfd5;  /* outcome metric card fill (warm beige) */
   --color-metric-spacer: #f1ede4; /* outcome bento spacer card (lighter warm tint) */
-  --color-tag-fg: #57534a;       /* warm dark taupe label, AA-safe on the beige */
+  --color-tag-fg: var(--color-accent); /* accent label on the 10% accent fill */
   --space-tag-py: 8px;           /* tag padding, top/bottom */
-  --space-tag-px: 20px;          /* tag padding, left/right */
+  --space-tag-px: 16px;           /* tag padding, left/right */
   --space-tag-gap: 12px;         /* gap between adjacent tags */
 
   /* --- Grid -------------------------------------------------------------- */

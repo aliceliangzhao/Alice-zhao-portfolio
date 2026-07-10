@@ -95,7 +95,7 @@ export const projects = {
     detailImage: "/img/s3tables/project-page-thumbnail.jpg",
     projectTitle: { main: "AWS S3 Table: turn big data into insights in one click" },
     navTitle: "AWS S3 Table: turn big data into insights in one click",
-    heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg} to eliminate that complexity, from concept to launch in 8 weeks.",
+    heroProblem: "Customers were spending millions building and maintaining complex infrastructure for AI/ML workloads. I led a 20-person team to design S3 Tables, a new product {img:/img/s3tables/customers-inline-img/hero-text/000.jpg,/img/s3tables/customers-inline-img/hero-text/101.jpg,/img/s3tables/customers-inline-img/hero-text/102.jpg|https://aws.amazon.com/s3/features/tables/} to eliminate that complexity, from concept to launch in 8 weeks.",
     heroSolution: "S3 Tables, featured in {link:the 2024 AWS CEO keynote}, handles infrastructure automatically, providing a seamless console experience that lets teams turn big data into insights in seconds.",
     impact: "I led the UX of S3 Tables, a seamless console experience that turns big data into insights in seconds.",
     type: "AWS",
@@ -290,8 +290,8 @@ export const projects = {
 
 export const projectOrder = [
   "s3-tables",
-  "simplifying-data-access",
   "agent-opportunities",
+  "simplifying-data-access",
 ];
 
 export function getProject(slug) {
