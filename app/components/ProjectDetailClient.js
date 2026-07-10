@@ -241,6 +241,21 @@ export default function ProjectDetailClient({ project }) {
   // the other case studies, for the "more work" section above the footer
   const otherSlugs = projectOrder.filter((slug) => slug !== project.slug);
 
+  // Next 16's router *maintains* scroll position across navigations, so a
+  // project opened from a scrolled-down homepage would land mid-page, below the
+  // title. Force the top on entry (keyed on slug so it also fires when moving
+  // between projects), skipping hash deep-links. We flip off the global smooth
+  // scroll for the jump so it snaps instantly instead of animating from the
+  // inherited offset.
+  useLayoutEffect(() => {
+    if (window.location.hash) return;
+    const html = document.documentElement;
+    const prev = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto";
+    window.scrollTo(0, 0);
+    html.style.scrollBehavior = prev;
+  }, [project.slug]);
+
   return (
     <>
       {/* no phase labels in the nav for a coming-soon project */}
