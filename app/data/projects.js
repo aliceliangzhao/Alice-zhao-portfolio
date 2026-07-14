@@ -233,28 +233,27 @@ export const projects = {
       },
       {
         id: "scoping",
-        navLabel: "02 Define the agentic experience and backend design",
-        heading: "02 Define the agentic experience and backend design",
+        navLabel: "02 Define the foundational experience",
+        heading: "02 Define the foundational experience",
         content: {
           lead: "Grounded in customer feedback, I designed an agentic experience matched to how customers actually think, and partnered with engineering on a backend structure that could scale with it.",
           subsections: [
             { label: "Design process", text: "I drove the design with multiple AI design agents and skills, partnering with the engineering team to define the backend design and review prototypes.", images: [{ src: "/img/ai-assistant/design-evolution/design-process.png", alt: "Design process" }] },
-            { label: "Building blocks and layout", text: "I captured the core building blocks that let every action happen in one place, then assembled them into a layout that flows seamlessly within a single panel.", images: [{ srcs: ["/img/ai-assistant/design-evolution/1.jpg", "/img/ai-assistant/design-evolution/2.jpg"], alt: "Building blocks and panel layout" }] },
-            { label: "Motion and interaction", text: "I then designed the motion for how customers interact with the interface, expanding and collapsing panels to fit their needs. Power users can expand the terminal panel, and anyone can expand or collapse the output panel depending on where they are in a flow.", images: [{ srcs: ["/img/ai-assistant/design-evolution/flow.gif"], alt: "Panel expand and collapse motion" }] },
+            { label: "Identify building blocks and define interface layout", text: "The core challenge was serving two very different customers in one experience without splitting it into two products. I captured the core building blocks and placed each in its right spot, assembling them into a three-panel layout: a terminal on the left for power users, a chat panel in the middle for natural language, and a review panel on the right for workflow steps, status, and output, so each customer type can work the way they prefer, all in one place.", images: [{ srcs: ["/img/ai-assistant/design-evolution/1.jpg", "/img/ai-assistant/design-evolution/2.jpg"], alt: "Building blocks and three-panel layout" }] },
+            { label: "Motion and interaction", text: "I then designed the motion for how customers interact with the interface, expanding and collapsing panels to fit their needs. Power users can expand the terminal panel, more advanced users can expand the agent list, and anyone can expand or collapse the output panel depending on where they are in a flow.", images: [{ srcs: ["/img/ai-assistant/design-evolution/flow.gif"], alt: "Panel expand and collapse motion" }] },
             { label: "Backend structure and syntax", text: "In parallel, I partnered with the engineering team to define the backend structure and syntax, mapping the most common actions to the right components so the interface and the system stay in sync.", images: [{ srcs: ["/img/ai-assistant/design-evolution/backend-1.jpg", "/img/ai-assistant/design-evolution/backend-2.jpg", "/img/ai-assistant/design-evolution/backend-3.jpg"], alt: "Backend structure and syntax" }] },
           ],
         },
       },
       {
         id: "design-iteration",
-        navLabel: "03 Design evolution",
-        heading: "03 Design evolution",
+        navLabel: "03 Detailed design and visual exploration",
+        heading: "03 Detailed design and visual exploration",
         content: {
-          lead: "The core challenge was serving two very different customers in one experience without splitting it into two products. I explored layouts with AI design tools and landed on a three-panel view that lets each customer type work the way they prefer.",
+          lead: "With the functional layout in place, I refined the visual design down to the last detail, partnering with the AWS design system team and AI tools.",
           subsections: [
-            { label: "Planning", text: "I used the requirement document as the starting point and a planning skill to create design, product, and task documents. This gave the AI design tools the right context and clear next steps, which I reviewed to keep the plan aligned with the direction I had in mind." },
-            { label: "Exploration", text: "Working with awscx-mcp and our internal design agent, I studied how each customer type wanted to work. New and casual users prefer to start on the left with a chat input, then move right to view, confirm, and manage the output. Power users prefer a hybrid of terminal and chat, mostly using the terminal for actions and chat for additional requests.", images: [{ src: "/img/ai-assistant/AWS Assistant-start.png", alt: "Casual user chat-first flow" }] },
-            { label: "Decision", text: "I designed a three-panel view that serves both. The left panel is a terminal for calling APIs, collapsed by default. The middle is a chat panel for natural language. The right is a review panel showing the workflow steps, status, and outcome. I explored visual styles with AI, landed on the selected direction, and pushed straightforward changes as PRs into the gamma environment.", images: [{ src: "/img/ai-assistant/AWS Assistant-wCLI.png", alt: "Three-panel view with terminal, chat, and review" }] },
+            { label: "Visual exploration", text: "I worked with the AWS design system team to explore visual styles and the overall look and feel. The design builds on the existing AWS design system, updated to match the more agentic, conversational feel of the experience.", images: [{ src: "/img/ai-assistant/design-evolution/1.jpg", alt: "Visual exploration" }] },
+            { label: "Component fine-tuning", text: "I then used AI tools to fine-tune the design components, refining the smallest details so the experience felt polished and cohesive.", images: [{ src: "/img/ai-assistant/design-evolution/1.jpg", alt: "Component fine-tuning" }] },
           ],
         },
       },
