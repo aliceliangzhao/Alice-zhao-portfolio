@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useLayoutEffect, useRef } from "react";
+import { Fragment, useLayoutEffect, useEffect, useState, useRef } from "react";
 import Navigation from "./Navigation";
 import Footer from "./Footer";
 import MetricsBento from "./MetricsBento";
@@ -63,6 +63,35 @@ function SectionHeading({ heading }) {
 }
 
 // One subsection: a full-width header (bold label + centered hairline) over a
+// A subsection image with `srcs: [a, b]` crossfades: the first image sits in
+// flow (sets the box), the second overlays and loops its opacity 0->1->0, so it
+// reads as a -> b -> a. The loop is CSS-only and pauses under reduced motion.
+function CrossfadeImage({ srcs, alt, noBorder }) {
+  const [active, setActive] = useState(0);
+  useEffect(() => {
+    if (srcs.length < 2) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id = setInterval(() => setActive((a) => (a + 1) % srcs.length), 1600);
+    return () => clearInterval(id);
+  }, [srcs.length]);
+  return (
+    <div className={`pd-media pd-crossfade${noBorder ? " pd-media--no-border" : ""}`}>
+      {srcs.map((src, i) => (
+        <img
+          key={i}
+          // the first image is in flow (sets the box); the rest overlay it and
+          // cross-fade in turn via the .is-active opacity toggle
+          data-base={i === 0 ? "" : undefined}
+          className={`pd-crossfade-img${i === active ? " is-active" : ""}`}
+          src={src}
+          alt={i === 0 ? alt : ""}
+          aria-hidden={i === 0 ? undefined : "true"}
+        />
+      ))}
+    </div>
+  );
+}
+
 // grid body — description in cols 1-3, image(s) in cols 5-12 (col 4 is an empty
 // gutter). Subsections are listed down the page, not tabbed.
 function Subsection({ sub }) {
@@ -77,14 +106,23 @@ function Subsection({ sub }) {
           {sub.text && <p>{sub.text}</p>}
         </div>
         <div className="pd-sub-media">
-          {(sub.images || []).map((img, j) => (
-            <img
-              key={j}
-              className={`pd-media${img.noBorder ? " pd-media--no-border" : ""}`}
-              src={img.src}
-              alt={img.alt}
-            />
-          ))}
+          {(sub.images || []).map((img, j) => {
+            // noBorder defaults to true (border/radius off); opt into a frame
+            // with noBorder: false on the image.
+            const noBorder = img.noBorder !== false;
+            // 2+ srcs -> crossfade animation; 1 image (src or single-element
+            // srcs) -> a plain static image.
+            return img.srcs?.length > 1 ? (
+              <CrossfadeImage key={j} srcs={img.srcs} alt={img.alt} noBorder={noBorder} />
+            ) : (
+              <img
+                key={j}
+                className={`pd-media${noBorder ? " pd-media--no-border" : ""}`}
+                src={img.src || img.srcs?.[0]}
+                alt={img.alt}
+              />
+            );
+          })}
         </div>
       </div>
     </div>

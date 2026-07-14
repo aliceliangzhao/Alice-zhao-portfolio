@@ -127,7 +127,7 @@
 .pd-section-head p {
   grid-column: 1 / 9;
   margin: var(--space-title-to-desc) 0 0;
-  font-size: var(--font-size-p-s);
+  font-size: var(--font-size-p-m);
   color: var(--color-fg);
   text-wrap: pretty;
 }
@@ -135,9 +135,10 @@
 /* Centered heading + lead (e.g. the Outcome section) */
 .pd-section-head--center h2,
 .pd-section-head--center p {
-  grid-column: 1 / 13;
   text-align: center;
 }
+.pd-section-head--center h2 { grid-column: 1 / 13; }
+.pd-section-head--center p { grid-column: 2 / 12; }   /* description fills cols 2-11 */
 
 /* --- Subsections: a stacked list ----------------------------------------
    Each subsection is a full-width header (bold label + a centered hairline
@@ -197,6 +198,36 @@
    so we neither add a border nor round them — our radius would clip the frame's
    own corners. */
 .pd-media--no-border { border: none; border-radius: 0; }
+
+/* Crossfade media: the first image (in flow, full column width) sets the box;
+   every image overlays it, centered at the shared box height keeping its natural
+   width, and the active one fades to full opacity. JS advances the active index,
+   so any number of images cross-fade in a loop, and images of different widths
+   swap cleanly with no crop (side gaps show the page). */
+.pd-crossfade { position: relative; overflow: hidden; text-align: center; }
+.pd-crossfade-img {
+  display: block;
+  opacity: 0;
+  transition: opacity 0.4s ease-in-out;
+}
+.pd-crossfade-img.is-active { opacity: 1; }
+.pd-crossfade-img[data-base] {           /* first image: in flow, sets the box */
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+.pd-crossfade-img:not([data-base]) {     /* overlays: centered at the box height */
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: auto;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pd-crossfade-img { transition: none; opacity: 0; }
+  .pd-crossfade-img[data-base] { opacity: 1; }   /* show only the first image */
+}
 
 /* --- Outcome metrics: full-width wrapper for the bento (MetricsBento) ----- */
 .pd-metrics {
