@@ -181,6 +181,11 @@ function OutcomeZigzag({ content }) {
       stage.style.setProperty("--reveal-base-h", `${baseHeight}px`);
       stage.style.setProperty("--reveal-distance", `${revealDistance}px`);
       stage.style.setProperty("--reveal-extra", `${revealDistance + holdDistance}px`);
+      // At full expansion the frame is 100vh tall but its layout box is only
+      // baseHeight, so it overflows ~(vh - baseHeight)/2 below the pin. Reserve
+      // that as clearance so the next section isn't covered (desktop only).
+      const clearance = window.innerWidth > 900 ? Math.max(0, (viewportHeight - baseHeight) / 2) + 32 : 0;
+      stage.style.marginBottom = `${clearance}px`;
       update();
     }
 
