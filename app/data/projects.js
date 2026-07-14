@@ -12,7 +12,7 @@ export const projects = {
     impact: "A unified console experience for infrastructure setup and data access across 3 storage services",
     type: "AWS",
     year: "2024",
-    tags: ["Sole designer", "Cloud infrastructure", "0 → 1"],
+    tags: ["Sole designer", "Cloud infrastructure", "from concept to launch", "API"],
     metricsImage: "/img/sda/final-visual/createap.png",
     metrics: [
       { value: 34, suffix: "%", label: "Customers adoption" },
@@ -210,12 +210,12 @@ export const projects = {
     //  - metrics: left empty on purpose (no real numbers yet -> bento hidden)
     //  - most subsections have no image yet; real screenshots to be added.
     //    Available: /img/ai-assistant/AWS Assistant-*.{png,jpg} (names have spaces).
-    heroProblem: "When the {link:Amazon Q console|https://aws.amazon.com/q/} launched in early 2025, its functionality was limited and service-driven: customers still had to know which service to use and work through it manually. What they needed was a natural-language experience driven by intent, not by service. I led design across a team of one PM and eight engineers to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who live in the terminal.",
-    heroSolution: "The result is an agentic app layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
+    heroProblem: "When the {link:Amazon Q console|https://aws.amazon.com/q/} launched in early 2025, its functionality was limited and service-driven: customers still had to know which service to use and work through it manually. What they needed was a natural-language experience driven by intent, not by service. I led design in close cross-functional collaboration with a small core team to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who live in the terminal.",
+    heroSolution: "The result is an agentic application layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
     impact: "Transforming AWS console interactions from manual, service-driven workflows to purpose-driven, agent-driven experiences.",
     type: "AWS",
     year: "2026",
-    tags: ["Lead UX Designer", "AI", "0 → 1"],
+    tags: ["Lead UX Designer", "AI", "From concept to launch"],
     // metrics intentionally empty until real numbers are available.
     metrics: [],
     sections: [
