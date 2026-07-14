@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { currentWork } from "../data/about";
 import { projects, projectOrder } from "../data/projects";
+import SectionDivider from "./SectionDivider";
 import s from "./editorial.module.css";
 
 /* Shape a project record into the card data used by CaseStudyCard. Single
@@ -64,19 +65,16 @@ function MoreWork({ slugs }) {
   if (cards.length === 0) return null;
 
   return (
-    <section className={s.work}>
-      <div className={s.grid12}>
-        <p className={s.sectionLabel}>
-          <span className={s.sectionLabelText}>Selected work</span>
-          <span className={s.sectionRule} aria-hidden="true" />
-        </p>
+    <>
+      <SectionDivider label="Selected work" />
+      <section className={`${s.work} ${s.grid12} ${s.sectionFlush}`}>
         <div className={s.workProjectsFull}>
           {cards.map((card) => (
             <CaseStudyCard key={card.href} card={card} />
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
 

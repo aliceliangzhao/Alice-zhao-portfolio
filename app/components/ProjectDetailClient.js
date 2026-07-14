@@ -8,7 +8,6 @@ import ExternalLink from "./ExternalLink";
 import InlineImageLoop from "./InlineImageLoop";
 import SectionDivider from "./SectionDivider";
 import SelectedWork from "./SelectedWork";
-import DotGridBackground from "./DotGridBackground";
 import { projectOrder } from "../data/projects";
 
 /* Project detail page — simple-editorial style.
@@ -390,11 +389,6 @@ export default function ProjectDetailClient({ project }) {
           <SelectedWork projectSlugs={otherSlugs} />
         )}
       </main>
-
-      {/* dotted band fills the gap between the work section and the footer */}
-      <div className="pd-dot-gap" aria-hidden="true">
-        <DotGridBackground className="pd-dot-gap-fill" />
-      </div>
 
       <Footer />
     </>

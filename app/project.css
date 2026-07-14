@@ -234,27 +234,6 @@
   grid-column: 1 / 13;
 }
 
-/* --- Dotted gap: a band of the interactive hero dot-grid between the
-   "more work" section and the footer. The band IS the gap, so the footer's
-   own top margin is dropped right after it. --------------------------------- */
-.pd-dot-gap {
-  position: relative;
-  width: 100%;
-  height: clamp(80px, 12vw, 120px);
-  overflow: hidden;
-}
-.pd-dot-gap-fill {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-.pd-dot-gap-fill canvas {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.pd-dot-gap + footer { margin-top: 0; }
-
 /* --- Footer: back link --------------------------------------------------- */
 .pd-footer {
   margin-top: clamp(4rem, 9vw, 8rem);
@@ -349,6 +328,9 @@
   will-change: transform, width, height;
 }
 .zigzag-reveal-img { width: 100%; height: 100%; display: block; object-fit: cover; }
+/* The final (reveal) block's text scrolls away with the page instead of staying
+   pinned behind the expanding image. */
+.outcome-zigzag .zigzag-row:last-child .zigzag-text { position: static; }
 
 /* =========================================================================
    Responsive
@@ -363,8 +345,12 @@
   .zigzag-right .zigzag-text { position: static; grid-column: unset; }
   .zigzag-left .zigzag-images,
   .zigzag-right .zigzag-images { grid-column: unset; grid-row: unset; }
-  .zigzag-reveal-stage { min-height: calc(var(--reveal-base-h, 320px) + var(--reveal-extra, 110vh)); }
-  .zigzag-reveal-pin { top: max(var(--nav-height), calc((100vh - var(--reveal-base-h, 320px)) / 2)); }
+  /* disable the pin/expand reveal on mobile — show the last image at rest so the
+     Selected work divider below flows normally */
+  .zigzag-reveal-stage { min-height: auto; }
+  .zigzag-reveal-pin { position: static; height: auto; }
+  .zigzag-reveal-frame { width: 100%; height: auto; transform: none; will-change: auto; }
+  .zigzag-reveal-img { height: auto; }
 }
 
 @media (max-width: 900px) {

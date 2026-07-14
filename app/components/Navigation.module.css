@@ -228,15 +228,10 @@
   font-size: var(--font-size-p-s);
   font-weight: var(--font-weight-regular);
 }
-/* filled-square current marker; hidden but space kept when not current */
-.mDot {
-  width: 0.5em;
-  height: 0.5em;
-  flex: none;
-  background: var(--color-fg);
-  visibility: hidden;
-}
-.mItemCurrent .mDot { visibility: visible; }
+/* current marker removed from the dropdown so the labels left-align with the
+   toggle/main nav at the page gutter (the toggle already names the current
+   section). */
+.mDot { display: none; }
 
 /* =========================================================================
    Compact layout (JS-driven). When the inline brand + phase labels + menu
