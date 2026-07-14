@@ -9,10 +9,10 @@ import s from "./editorial.module.css";
    `symmetric` gives equal top/bottom spacing (project pages, where the divider
    sits centered between two sections); the default is the homepage's asymmetric
    spacing (a large gap above, a small gap into the section it introduces). */
-export default function SectionDivider({ label, symmetric = false }) {
+export default function SectionDivider({ label, symmetric = false, id }) {
   const wrap = symmetric ? `${s.dividerWrap} ${s.dividerWrapSymmetric}` : s.dividerWrap;
   return (
-    <div className={`${s.grid12} ${wrap}`}>
+    <div id={id} className={`${s.grid12} ${wrap}`}>
       <ShapesGrid variant="decorative" label={label} className={s.divider} />
     </div>
   );

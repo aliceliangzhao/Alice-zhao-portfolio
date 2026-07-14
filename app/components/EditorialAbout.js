@@ -1,13 +1,14 @@
 import { bio } from "../data/about";
+import InlineHeroText from "./InlineHeroText";
 import s from "./editorial.module.css";
 
 /* About — a bracketed label beside a large two-tone statement (ink lead +
    muted personal line). Copy comes from about.js (bio). */
 export default function EditorialAbout() {
   return (
-    <section id="about" className={`${s.about} ${s.grid12} ${s.sectionFlush}`}>
+    <section className={`${s.about} ${s.grid12} ${s.sectionFlush}`}>
       <p className={s.aboutText}>
-        {bio.heading} <span className={s.muted}>{bio.personal}</span>
+        <InlineHeroText text={bio.heading} /> <span className={s.muted}>{bio.personal}</span>
       </p>
     </section>
   );

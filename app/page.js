@@ -17,10 +17,10 @@ export default function Home() {
         <SelectedWork />
         <SectionDivider label="Previous work" />
         <PreviousWork />
-        <SectionDivider label="About" />
+        <SectionDivider label="About" id="about" />
         <EditorialAbout />
         <PhotoMarquee />
-        <SectionDivider label="Connect" />
+        <SectionDivider label="Connect" id="connect" />
         <Connect />
       </main>
       <Footer />

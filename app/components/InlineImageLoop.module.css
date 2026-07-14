@@ -2,7 +2,10 @@
   display: inline-block;
   width: 2.5em;
   height: 1.2em;
+  /* middle centers on the x-height; nudge up so the tall pill reads centered on
+     cap-height text (e.g. all-caps "AWS") rather than hanging below the line */
   vertical-align: middle;
+  transform: translateY(-0.1em);
   position: relative;
   overflow: hidden;
   margin: 0 0.15em;

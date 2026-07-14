@@ -18,16 +18,21 @@ function projectToCard(project, href) {
   };
 }
 
-function CaseStudyCard({ card }) {
+function CaseStudyCard({ card, natural }) {
   return (
     <Link className={s.workCard} href={card.href}>
-      <span className={s.thumb}>
-        <Image
-          src={card.thumb}
-          alt=""
-          fill
-          sizes="(max-width: 900px) 100vw, 66vw"
-        />
+      <span className={`${s.thumb}${natural ? ` ${s.thumbNatural}` : ""}`}>
+        {natural ? (
+          // homepage: show the whole thumbnail at its natural height (no crop)
+          <img src={card.thumb} alt="" loading="lazy" />
+        ) : (
+          <Image
+            src={card.thumb}
+            alt=""
+            fill
+            sizes="(max-width: 900px) 100vw, 66vw"
+          />
+        )}
       </span>
       <div className={s.cardBody}>
         <h4 className={s.cardTitle}>
@@ -95,7 +100,7 @@ export default function SelectedWork({ projectSlugs }) {
         </div>
         <div className={s.workProjectsSingle}>
           {cards.map((card) => (
-            <CaseStudyCard key={card.href} card={card} />
+            <CaseStudyCard key={card.href} card={card} natural />
           ))}
         </div>
       </article>

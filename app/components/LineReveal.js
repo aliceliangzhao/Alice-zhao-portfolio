@@ -2,40 +2,19 @@
 
 import { useLayoutEffect, useEffect, useRef, useState, useMemo } from "react";
 import InlineImageLoop from "./InlineImageLoop";
+import ExternalLink from "./ExternalLink";
 import styles from "./LineReveal.module.css";
 
-function buildTokens(heading, lead, insertBreak) {
-  const tokens = [];
-
-  const numMatch = heading.match(/^(\d+[_.]?\s*)/);
-  if (numMatch) {
-    tokens.push({ type: "heading-num", text: numMatch[1] });
-    const rest = heading.slice(numMatch[1].length);
-    const words = rest.split(/( )/);
-    for (const w of words) {
-      if (w === " ") tokens.push({ type: "space" });
-      else if (w) tokens.push({ type: "heading", text: w });
-    }
-  } else {
-    const words = heading.split(/( )/);
-    for (const w of words) {
-      if (w === " ") tokens.push({ type: "space" });
-      else if (w) tokens.push({ type: "heading", text: w });
-    }
-  }
-
-  if (insertBreak) {
-    tokens.push({ type: "break" });
-  } else {
-    tokens.push({ type: "space" });
-  }
-
-  const segments = lead.split(/(\{img(?::[^}]*)?\})/g);
+// Turn a string into tokens, extracting inline {img:...} loops (which may carry
+// an optional |url link) before splitting the rest into words. `wordType` tags
+// the plain words as "heading" or "lead".
+function pushSegmentTokens(str, wordType, tokens) {
+  const segments = str.split(/(\{img(?::[^}]*)?\})/g);
   for (const seg of segments) {
     const imgMatch = seg.match(/^\{img:([^}]+)\}$/);
     if (imgMatch) {
-      // strip any {img:...|url} suffix; this reveal has no link, just the srcs
-      tokens.push({ type: "img", srcs: imgMatch[1].split("|")[0].split(",") });
+      const [srcs, href] = imgMatch[1].split("|");
+      tokens.push({ type: "img", srcs: srcs.split(","), href });
       continue;
     }
     if (seg === "{img}") {
@@ -46,11 +25,37 @@ function buildTokens(heading, lead, insertBreak) {
     const words = cleaned.split(/( )/);
     for (const w of words) {
       if (w === " ") tokens.push({ type: "space" });
-      else if (w) tokens.push({ type: "lead", text: w });
+      else if (w) tokens.push({ type: wordType, text: w });
     }
   }
+}
+
+function buildTokens(heading, lead, insertBreak) {
+  const tokens = [];
+
+  const numMatch = heading.match(/^(\d+[_.]?\s*)/);
+  if (numMatch) {
+    tokens.push({ type: "heading-num", text: numMatch[1] });
+    pushSegmentTokens(heading.slice(numMatch[1].length), "heading", tokens);
+  } else {
+    pushSegmentTokens(heading, "heading", tokens);
+  }
+
+  if (insertBreak) {
+    tokens.push({ type: "break" });
+  } else {
+    tokens.push({ type: "space" });
+  }
+
+  pushSegmentTokens(lead, "lead", tokens);
 
   return tokens;
+}
+
+// Render an {img} token: the looping strip, wrapped in a link when it has one.
+function renderImgLoop(t) {
+  const loop = <InlineImageLoop srcs={t.srcs} />;
+  return t.href ? <ExternalLink href={t.href} hideIcon>{loop}</ExternalLink> : loop;
 }
 
 export default function LineReveal({ heading, lead, align, plain, stagger = 130 }) {
@@ -127,7 +132,7 @@ export default function LineReveal({ heading, lead, align, plain, stagger = 130 
           );
           if (t.type === "img") return (
             <span key={i} data-i={i} style={{ display: "inline" }}>
-              <InlineImageLoop srcs={t.srcs} />
+              {renderImgLoop(t)}
             </span>
           );
           if (t.type === "placeholder") return (
@@ -156,7 +161,7 @@ export default function LineReveal({ heading, lead, align, plain, stagger = 130 
               if (t.type === "heading") return (
                 <span key={j} className={headingCls}>{t.text}</span>
               );
-              if (t.type === "img") return <InlineImageLoop key={j} srcs={t.srcs} />;
+              if (t.type === "img") return <span key={j}>{renderImgLoop(t)}</span>;
               if (t.type === "placeholder") return <span key={j} className="inline-img" />;
               return <span key={j} className={leadCls}>{t.text}</span>;
             })}

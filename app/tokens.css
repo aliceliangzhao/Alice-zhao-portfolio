@@ -74,6 +74,7 @@
   --space-hero-bottom: 0.625rem;   /* the name sits attached to the screen bottom */
   --space-cue-bottom: clamp(1rem, 2vw, 1.625rem); /* scroll cue offset from bottom */
   --space-section-top: var(--space-between-sections); /* section-to-section gap; shares the project pages' vertical rhythm */
+  --space-between-section-divider: var(--space-rhythm-l); /* equal gap above and below a deco divider (and hero -> first work row); on the rhythm scale */
   --space-hero-dots-bleed: clamp(3.6rem, 6.5vw, 5.6rem); /* how far the hero dot-grid extends above/below the intro text (~one extra dot row each side vs. the text); kept < section-top so it clears the nav and the Selected Work rule */
   --space-footer-top: clamp(6rem, 12vw, 11.25rem);  /* gap above the footer name block */
   --space-footer-y: clamp(1rem, 1.8vw, 1.375rem);    /* footer legal-row vertical padding */

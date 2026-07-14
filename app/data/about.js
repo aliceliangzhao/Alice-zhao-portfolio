@@ -9,7 +9,7 @@ export const intro = {
 };
 
 export const bio = {
-  heading: "I'm Alice (Liang) Zhao, a UX Lead at AWS, where I work on the storage agentic experiences. I enjoy turning complex products and technologies into intuitive and customer-focused experience.",
+  heading: "I'm Alice (Liang) Zhao, a UX Lead at Amazon {img:/img/aboutMe/aws-logo/1.jpg,/img/aboutMe/aws-logo/2.jpg,/img/aboutMe/aws-logo/3.jpg,/img/aboutMe/aws-logo/4.jpg,/img/aboutMe/aws-logo/5.jpg,/img/aboutMe/aws-logo/6.jpg|https://aws.amazon.com/}, where I work on the storage agentic experience. I enjoy turning complex products and technologies into intuitive and customer-focused experience.",
   personal: "Outside of work, I love to explore nature and capture everyday moments through photography.",
   image: "/img/aboutMe/alice-liang.jpg",
 };
@@ -33,7 +33,7 @@ export const previousWork = [
   },
   {
     company: "Morgan Stanley",
-    time: "2019 - 2020",
+    time: "2020",
     projects: [
       { title: "E*Trade enhanced digital experience", href: "https://www.morganstanley.com/press-releases/e-trade-unveils-digital-experience-for-stock-plan-participants" },
       { title: "Wealth management platform", href: "https://www.businesswire.com/news/home/20201029006018/en/Morgan-Stanley-Honored-with-Three-2020-Money-Management-InstituteBarrons-Industry-Awards-for-Commitment-to-Social-Justice-Digital-Innovation-and-Wealth-Manager-Platform-of-the-Year" },
@@ -42,7 +42,10 @@ export const previousWork = [
   {
     company: "Insperity",
     time: "2017 - 2020",
-    projects: [{ title: "Insperity HR 360 Suite", href: "#" }],
+    projects: [
+      { title: "Insperity HR 360 Suite", href: "https://www.insperity.com/our-products/hr360/" },
+      { title: "Insperity official website", href: "https://www.insperity.com/"}
+    ],
   },
   {
     company: "Siemens",
@@ -101,6 +104,7 @@ export const workExperience = [
     description: "Established the design system of the HR 360 Suite. Contributed to the UX of 4 new products that generated ~$15M in revenue in 1 year.",
     selectedWork: [
       { name: "Insperity HR 360 Suite", href: "https://www.insperity.com/our-products/hr360/" },
+      { name: "Insperity.com", href: "https://www.insperity.com/" },
     ],
   },
   {
