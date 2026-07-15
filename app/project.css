@@ -265,6 +265,21 @@
   line-height: var(--line-height-base);
 }
 
+/* Closing strategic statement: the About section's two-tone editorial type
+   (ink lead + muted tail), spanning cols 3-10, as a text-only finish. */
+.pd-outcome-statement {
+  grid-column: 3 / 11;
+  /* symmetric breathing room: top = --space-section-top; bottom tops up the
+     following divider's own top margin so the gap below equals the gap above */
+  margin: var(--space-section-top) 0 calc(var(--space-section-top) - var(--space-between-section-divider));
+  font-size: clamp(1.375rem, 1.8vw + 0.75rem, 2.25rem);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  text-wrap: pretty;
+}
+.pd-outcome-statement .pd-muted { color: var(--color-muted); }
+
 .subsection-label {
   font-size: var(--t-label);
   text-transform: uppercase;
@@ -382,6 +397,7 @@
   .pd-intro { grid-column: 1 / 13; }
   .pd-section-head h2,
   .pd-section-head p { grid-column: 1 / 13; }
+  .pd-outcome-statement { grid-column: 1 / 13; }
   /* description stacks above its media: no cap-height nudge needed */
   .pd-sub-desc { grid-column: 1 / 13; margin-bottom: var(--space-block-stack); }
   .pd-sub-media { grid-column: 1 / 13; margin-top: 0; }

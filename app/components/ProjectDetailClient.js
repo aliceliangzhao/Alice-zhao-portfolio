@@ -336,6 +336,17 @@ function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt, flush
       ) : content?.summary ? (
         <div className="pd-grid"><p className="pd-outcome-summary">{content.summary}</p></div>
       ) : null}
+
+      {/* optional closing statement: About-style two-tone type (ink lead + muted
+          tail), spanning cols 3-10, as a text-only strategic finish */}
+      {section.closingStatement && (
+        <div className="pd-grid">
+          <p className="pd-outcome-statement">
+            {section.closingStatement.lead}{" "}
+            <span className="pd-muted">{section.closingStatement.muted}</span>
+          </p>
+        </div>
+      )}
     </section>
   );
 }
