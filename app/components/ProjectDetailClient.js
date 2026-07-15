@@ -245,6 +245,8 @@ function OutcomeZigzag({ content, cinematicReveal = true }) {
       frame.style.setProperty("--reveal-frame-h", `${baseHeight + (vh - baseHeight) * eased}px`);
       frame.style.setProperty("--reveal-frame-x", `${-rect.left * eased}px`);
       frame.style.setProperty("--reveal-frame-y", `${-stickyTop * eased}px`);
+      // corner radius fades from rounded (rest) to square (full-bleed)
+      frame.style.setProperty("--reveal-progress", eased);
     }
 
     let loopId = 0;

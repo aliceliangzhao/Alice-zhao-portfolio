@@ -342,6 +342,8 @@
   height: var(--reveal-frame-h, var(--reveal-base-h, auto));
   aspect-ratio: var(--reveal-ratio, 16 / 9);
   overflow: hidden;
+  /* rounded at rest (progress 0), squaring off to full-bleed as it expands */
+  border-radius: calc(var(--radius-m) * (1 - var(--reveal-progress, 0)));
   transform: translate3d(var(--reveal-frame-x, 0), var(--reveal-frame-y, 0), 0);
   transform-origin: top left;
   will-change: transform, width, height;
