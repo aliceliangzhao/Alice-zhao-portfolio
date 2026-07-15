@@ -332,7 +332,9 @@
 
 /* --- Photo marquee: full-bleed, loops left-to-right, pauses on hover ------- */
 .marquee {
-  margin-top: var(--space-section-top);
+  /* the strip belongs to the About section: a large band under the text, but
+     less than a full section break */
+  margin-top: var(--space-rhythm-xl);
   width: 100%;
   overflow: hidden;
 }

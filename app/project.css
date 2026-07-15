@@ -185,6 +185,9 @@
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-card-gap);
+  /* nudge the media down by the description's first-line leading so its top
+     edge lines up with the text's cap height, not the text's box top */
+  margin-top: calc((var(--line-height-base) - 1) / 2 * var(--font-size-p-s));
 }
 .pd-media {
   flex: 1 1 0;       /* images share the column width equally */
@@ -305,7 +308,14 @@
   align-self: start;
 }
 .zigzag-right .zigzag-images { grid-column: 1 / 9; grid-row: 1; }
-.zigzag-images { display: flex; flex-direction: column; gap: var(--grid-gap); }
+.zigzag-images {
+  display: flex;
+  flex-direction: column;
+  gap: var(--grid-gap);
+  /* match the media top to the label's cap height (same leading nudge as the
+     numbered subsections, sized off the label) */
+  margin-top: calc((var(--line-height-base) - 1) / 2 * var(--t-label));
+}
 /* Static images carry the light hairline; animated media (crossfade "gifs" and
    videos) stay borderless. */
 .zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-m); border: 1px solid var(--color-image-border); }
@@ -355,7 +365,7 @@
   .zigzag-left .zigzag-text,
   .zigzag-right .zigzag-text { position: static; grid-column: unset; }
   .zigzag-left .zigzag-images,
-  .zigzag-right .zigzag-images { grid-column: unset; grid-row: unset; }
+  .zigzag-right .zigzag-images { grid-column: unset; grid-row: unset; margin-top: 0; }
   /* disable the pin/expand reveal on mobile — show the last image at rest so the
      Selected work divider below flows normally */
   .zigzag-reveal-stage { min-height: auto; }
@@ -370,9 +380,9 @@
   .pd-intro { grid-column: 1 / 13; }
   .pd-section-head h2,
   .pd-section-head p { grid-column: 1 / 13; }
-  /* description stacks above its media */
+  /* description stacks above its media: no cap-height nudge needed */
   .pd-sub-desc { grid-column: 1 / 13; margin-bottom: var(--space-block-stack); }
-  .pd-sub-media { grid-column: 1 / 13; }
+  .pd-sub-media { grid-column: 1 / 13; margin-top: 0; }
 }
 
 /* Mobile: stack a subsection's images rather than squeezing them side-by-side. */

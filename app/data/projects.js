@@ -15,10 +15,10 @@ export const projects = {
     tags: ["Sole designer", "Cloud infrastructure", "from concept to launch", "API"],
     metricsImage: "/img/sda/final-visual/createap.png",
     metrics: [
-      { value: 34, suffix: "%", label: "Customers adoption" },
+      { value: 34, suffix: "%", label: "Customers adoption in the first 3 months" },
       { value: 90, suffix: "%", label: "Customer satisfaction rate" },
       { value: 194, suffix: "%", label: "MoM growth in 6 months" },
-      { value: 79, suffix: "%", label: "Success rate" },
+      { value: 79, suffix: "%", label: "Access Point creation success rate" },
     ],
     sections: [
       {
@@ -101,7 +101,7 @@ export const projects = {
     type: "AWS",
     year: "2024",
     tags: ["Design lead", "From concept to launch", "Cloud infrastructure"],
-    metricsImage: "/img/s3tables/final-visual/newUI/tb-list.png",
+    metricsImage: "/img/s3tables/final-visual/metricsImage.png",
     externalLink: {
       url: "https://www.youtube.com/watch?v=eztA5VYH2nM",
       cursor: "BIGGGGG launch of the year",
@@ -207,18 +207,19 @@ export const projects = {
     heroVideo: "/img/ai-assistant/visual/defaultview.mp4",
     projectTitle: { main: "Amazon Q\nassistant", sub: "Purpose over services" },
     navTitle: "Amazon Q assistant",
-    // NOTE: still PLACEHOLDER / pending:
-    //  - metrics: left empty on purpose (no real numbers yet -> bento hidden)
-    //  - most subsections have no image yet; real screenshots to be added.
-    //    Available: /img/ai-assistant/AWS Assistant-*.{png,jpg} (names have spaces).
+    metricsImage: "/img/ai-assistant/visual/metricsImage.png",
+    metrics: [
+      { value: 1000, suffix: "+", label: "Workflow completed in 1 month" },
+      { value: 20, suffix: "%", label: "Time to finish reduced" },
+      { value: 10, suffix: "%", label: "AWS services integration completed in 1 month" },
+      { value: 80, suffix: "%", label: "Console CSAT" },
+    ],
     heroProblem: "After launching the {link:Amazon Q console|https://aws.amazon.com/q/} in early 2025, customer feedback revealed that its functionality was limited and service-driven. What customers needed was a natural-language experience driven by intent, not by service. I led design in close cross-functional collaboration with a small core team to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who prefer a CLI/SDK experience.",
     heroSolution: "The result is an agentic application layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
     impact: "Transforming AWS console interactions from manual, service-driven workflows to purpose-driven, agent-driven experiences.",
     type: "AWS",
     year: "2026",
     tags: ["Lead UX Designer", "AI", "From concept to launch"],
-    // metrics intentionally empty until real numbers are available.
-    metrics: [],
     sections: [
       {
         id: "problem",

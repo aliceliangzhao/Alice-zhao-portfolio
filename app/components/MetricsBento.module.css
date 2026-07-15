@@ -57,7 +57,7 @@
 .label {
   font-size: var(--font-size-p-xs);
   line-height: 1.4;
-  color: var(--color-muted);
+  color: var(--color-muted-strong);
 }
 
 /* Tablet: 3 columns; the two outer spacers drop, the image moves to row 2. */

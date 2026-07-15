@@ -126,8 +126,10 @@
      uppercase, smallest type. Warm sepia fill + ink to match the parchment
      direction; the text tone clears AA contrast on the beige. */
   --color-tag-bg: color-mix(in srgb, var(--color-accent) 10%, transparent); /* 10% accent fill */
-  --color-metric-fill: #e3dfd5;  /* outcome metric card fill (warm beige) */
-  --color-metric-spacer: #f1ede4; /* outcome bento spacer card (lighter warm tint) */
+  /* outcome metric cards: the accent (indigo) at reduced opacity — clearly
+     branded but soft, with dark ink text. Spacers/image bg a fainter tint. */
+  --color-metric-fill: color-mix(in srgb, var(--color-accent) 25%, #fff);   /* soft indigo card */
+  --color-metric-spacer: color-mix(in srgb, var(--color-accent) 10%, #fff); /* fainter indigo spacer / image bg / hover reveal */
   --color-tag-fg: var(--color-accent); /* accent label on the 10% accent fill */
   --space-tag-py: 8px;           /* tag padding, top/bottom */
   --space-tag-px: 16px;           /* tag padding, left/right */
