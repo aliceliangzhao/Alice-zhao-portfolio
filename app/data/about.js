@@ -60,11 +60,14 @@ export const previousWork = [
 ];
 
 // Homepage "Connect": contact links (label + shown value + href).
+// Order fills the 2-up grid left-to-right, top-to-bottom.
 export const connectLinks = [
-  { label: "Email", value: "liangzhao0801@gmail.com", href: "mailto:liangzhao0801@gmail.com" },
   { label: "LinkedIn", value: "/in/liangzhaoux", href: "https://www.linkedin.com/in/liangzhaoux" },
-  { label: "Codepen", value: "codepen.io/liangzhao0801", href: "https://codepen.io/liangzhao0801" },
+  { label: "Resume", value: "download here", href: "https://drive.google.com/file/d/1mJRSpRVt-9k0j9rOz154nCsfPWPXsa4D/view" },
+  { label: "Email", value: "liangzhao0801@gmail.com", href: "mailto:liangzhao0801@gmail.com" },
   { label: "Github", value: "github.com/aliceliangzhao", href: "https://github.com/aliceliangzhao" },
+  { label: "Codepen", value: "codepen.io/liangzhao0801", href: "https://codepen.io/liangzhao0801" },
+  { label: "Dribbble", value: "dribbble.com/aliceliangzhao", href: "https://dribbble.com/aliceliangzhao" },
 ];
 
 // =============================================================================

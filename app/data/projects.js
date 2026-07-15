@@ -124,7 +124,7 @@ export const projects = {
             { label: "Target personas", text: "Data engineers maintain storage systems daily. Strategic leads evaluate infrastructure costs and reliability.", images: [{ src: "/img/s3tables/problem/p-data-engineer.png", alt: "Data engineer persona" }, { src: "/img/s3tables/problem/p-strategic-lead.png", alt: "Strategic lead persona" }] },
             { label: "Existing user journey with pain points", text: "I mapped the user journey into phases to surface the highest-friction tasks, guiding the team to align on priorities to act on. The user journey shows that millions are wasted on custom infrastructure and integration with query engines, while no native way to keep structured data up-to-date.", images: [{ src: "/img/s3tables/problem/user-journey.gif", alt: "Problem 1" }] },
             { label: "JTBD Framework", text: "I first worked with the team to identify all user stories based on the JTBD framework, then mapped each story with its console steps, preconditions, and APIs to six groups: Create, List, View, Manage, Audit, and Delete.", images: [{ src: "/img/s3tables/scoping/JTBDframework.jpg", alt: "JTBD framework" }] },
-            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap.", images: [{ src: "/img/s3tables/scoping/action-plan.jpg", alt: "Action plan" }] },
+            { label: "Action plan", text: "The framework allowed the team to align on a prioritized action plan with defined APIs, known limitations, and console impact, turning an ambiguous product space into a concrete roadmap. From there, we scoped the first launch to Create and Integrate.", images: [{ src: "/img/s3tables/scoping/action-plan.jpg", alt: "Action plan" }] },
           ],
         },
       },
@@ -135,10 +135,10 @@ export const projects = {
         content: {
           lead: "With scope locked, I turned the optimized journey into the console's structure. I defined an information architecture that groups tasks the way customers think, drafted the end-to-end flow, then tested and refined it until the path from setup to query was clear.",
           subsections: [
-            { label: "User journey optimization", text: "Building on the documented journey and its pain points, I reorganized the necessary actions into logical phases and eliminated steps that S3 Tables could automate or replace.", images: [{ srcs: ["/img/s3tables/problem/user-journey-problem.jpg", "/img/s3tables/problem/user-journey-optimization.jpg"], alt: "Optimized user journey" }] },
+            { label: "User journey optimization", text: "Building on the documented journey and its pain points, I reorganized the necessary actions into logical phases, cutting the journey from 4 milestones to 3 and removing 6 user actions that S3 Tables could automate.", images: [{ srcs: ["/img/s3tables/problem/user-journey-problem.jpg", "/img/s3tables/problem/user-journey-optimization.jpg"], alt: "Optimized user journey" }] },
             { label: "Console information architecture", text: "I ran two workshops with the PM and engineering teams to define and align on the console's information architecture.", images: [{ src: "/img/s3tables/scoping/console-ia.jpg", alt: "Console information architecture" }] },
-            { label: "User flow exploration", text: "Grounded in the ideal journey and the defined IA, I explored several console flow options. Quick testing with internal teams surfaced where the experience felt fragmented, and I gathered feedback on the specific breakpoints.", images: [{ srcs: ["/img/s3tables/scoping/console-flow-issue.jpg", "/img/s3tables/scoping/console-flow-issue-2.jpg"], alt: "User flow exploration" }] },
-            { label: "User flow optimization", text: "I revised the flows and console steps based on that feedback, introducing a streamlined experience that directly addressed the customer pain points.", images: [{ src: "/img/s3tables/scoping/console-flow-optimization.jpg", alt: "User flow optimization" }] },
+            { label: "Console flow exploration", text: "Grounded in the ideal journey and the defined IA, I explored several console flow options. Testing with internal teams surfaced the core issue: separate integration steps made the flow confusing and fragile. Testers often didn't know where to set up the right permissions or which services to integrate with, and they wanted S3 to handle integration and permissions together.", images: [{ srcs: ["/img/s3tables/scoping/console-flow-issue.jpg", "/img/s3tables/scoping/console-flow-issue-2.jpg"], alt: "User flow exploration" }] },
+            { label: "User flow optimization", text: "Acting on that feedback, I combined the separate integration steps into one, merging integration, permission setup, and resource creation into a single consolidated flow. Customers now complete several actions in one pass, cutting configuration time drastically for a more cohesive console experience.", images: [{ src: "/img/s3tables/scoping/console-flow-optimization.jpg", alt: "User flow optimization" }] },
           ],
         },
       },
@@ -151,7 +151,7 @@ export const projects = {
           subsections: [
             { label: "Design ideation", text: "I tested three integration models: a multi-step wizard that walked through each service, a fragmented approach with separate configuration pages, and a single-page create flow with integration built in.", images: [{ src: "/img/s3tables/design-iteration/design-ideation.jpg", alt: "Exploration" }] },
             { label: "Trade-offs", text: "The wizard added friction to what should feel instant. The fragmented model scattered a single decision across multiple pages. Customer research showed most users' end goal was querying, so bundling integration into table bucket creation matched their mental model.", images: [{ src: "/img/s3tables/design-iteration/s3table-iteration-tradeoffs.jpg", alt: "Trade-offs" }] },
-            { label: "Visual language exploration", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/decision-new.png", alt: "Decision" }] },
+            { label: "Visual language exploration", text: "I proposed combining integration into the create flow as a default-on checkbox. One click replaces what used to require configuring multiple services independently. The team aligned quickly once the testing data backed it up.", images: [{ src: "/img/s3tables/design-iteration/ui-component-change.jpg", alt: "Decision" }] },
           ],
         },
       },
@@ -204,13 +204,14 @@ export const projects = {
     slug: "agent-opportunities",
     heroImage: "/img/ai-assistant/thumbnail.jpg",
     detailImage: "/img/ai-assistant/visual/b-l.png",
+    heroVideo: "/img/ai-assistant/visual/defaultview.mp4",
     projectTitle: { main: "Amazon Q\nassistant", sub: "Purpose over services" },
     navTitle: "Amazon Q assistant",
     // NOTE: still PLACEHOLDER / pending:
     //  - metrics: left empty on purpose (no real numbers yet -> bento hidden)
     //  - most subsections have no image yet; real screenshots to be added.
     //    Available: /img/ai-assistant/AWS Assistant-*.{png,jpg} (names have spaces).
-    heroProblem: "When the {link:Amazon Q console|https://aws.amazon.com/q/} launched in early 2025, its functionality was limited and service-driven: customers still had to know which service to use and work through it manually. What they needed was a natural-language experience driven by intent, not by service. I led design in close cross-functional collaboration with a small core team to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who live in the terminal.",
+    heroProblem: "After launching the {link:Amazon Q console|https://aws.amazon.com/q/} in early 2025, customer feedback revealed that its functionality was limited and service-driven. What customers needed was a natural-language experience driven by intent, not by service. I led design in close cross-functional collaboration with a small core team to find the workflows that would benefit most from an agentic flow, then shaped the experience in three weeks for two very different customers: new users exploring AWS, and power users who prefer a CLI/SDK experience.",
     heroSolution: "The result is an agentic application layered on the existing console. A three-panel experience lets new customers work by purpose instead of by service, while power users keep their native terminal and gain a conversational layer that speeds up their workflows.",
     impact: "Transforming AWS console interactions from manual, service-driven workflows to purpose-driven, agent-driven experiences.",
     type: "AWS",
@@ -224,7 +225,7 @@ export const projects = {
         navLabel: "01 Who and why",
         heading: "01 Who and why",
         content: {
-          lead: "Customer feedback on the launched Amazon Q console pointed to one gap: the experience was service-driven and manual when customers wanted it to be agentic and streamlined. I partnered with product to consolidate usage data and find the workflows that would benefit most from an agentic flow.",
+          lead: "Customer feedback pointed to one gap: the experience was service-driven and manual when customers wanted it to be agentic and guided. I partnered with product to consolidate usage data and find the workflows that would benefit most from an agentic flow.",
           subsections: [
             { label: "Research process", text: "Fully embracing the AI tools, I built a research knowledge base and used a research agent to pull from it alongside trustworthy external sources and internal persona reports. The agent generated a product requirement document that I reviewed and refined with the product team.", images: [{ srcs: ["/img/ai-assistant/research/research-process.png"], alt: "Research process" }] },
             { label: "Target customers and their pain points", text: "Two customer types shaped every decision. New and casual users want to state a purpose and explore AWS services through conversation. Power users live in the terminal and want conversational help layered on top, not a replacement. On the other hand, the console was organized around services rather than intent, so customers had to know which service to use before they could start. Common workflows were manual and fragmented, with no agentic path to complete them end to end.", images: [{ srcs: ["/img/ai-assistant/research/one-pager.png", "/img/ai-assistant/research/one-pager-w-highlight.png"], alt: "Research one-pager" }] },

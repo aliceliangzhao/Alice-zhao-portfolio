@@ -286,6 +286,35 @@ function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt, flush
   );
 }
 
+// Hero-band media: a looping, muted showcase video. It plays via JS only when
+// reduced motion is NOT requested, so under prefers-reduced-motion it stays a
+// static poster (satisfies the "reduced motion kills animation" rule). Poster
+// paints instantly; the video streams in (preload=metadata).
+function HeroMedia({ video, poster, alt }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      v.play().catch(() => {});
+    }
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className="pd-hero-img"
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-label={alt}
+    >
+      <source src={video} type="video/mp4" />
+    </video>
+  );
+}
+
 export default function ProjectDetailClient({ project }) {
   const comingSoon = !!project.comingSoon;
   const sections = comingSoon ? [] : (project.sections || []);
@@ -353,14 +382,22 @@ export default function ProjectDetailClient({ project }) {
 
         {/* Hero band. Uses `detailImage` if the project sets one, otherwise
             falls back to `heroImage` (the same image as the homepage card). */}
-        {(project.detailImage || project.heroImage) && (
+        {(project.heroVideo || project.detailImage || project.heroImage) && (
           <section className="pd-hero" aria-label="Product overview">
             <div className="pd-hero-inner pd-grid">
-              <img
-                className="pd-hero-img"
-                src={project.detailImage || project.heroImage}
-                alt={project.impact || project.navTitle || ""}
-              />
+              {project.heroVideo ? (
+                <HeroMedia
+                  video={project.heroVideo}
+                  poster={project.detailImage || project.heroImage}
+                  alt={project.impact || project.navTitle || ""}
+                />
+              ) : (
+                <img
+                  className="pd-hero-img"
+                  src={project.detailImage || project.heroImage}
+                  alt={project.impact || project.navTitle || ""}
+                />
+              )}
             </div>
           </section>
         )}
