@@ -22,6 +22,7 @@
   --color-bg: #fff;            /* page background */
   --color-link: var(--color-fg);
   --color-divider: #e0e0e0;    /* light-grey hairline (e.g. under the section label) */
+  --color-image-border: #ececec; /* very light grey hairline around images */
   --color-accent: #2936CF;     /* the one accent — saturated indigo */
   --space-divider-height: clamp(8rem, 15vw, 11rem);  /* decorative shapes-strip section divider */
 
@@ -115,11 +116,9 @@
   --color-card-surface: #efefef;     /* light-grey fill behind a secondary-work card */
   --color-dot-grid: #b4b0a6;         /* warm grey hero dot-grid; subtle so it sits behind text */
   --project-image-aspect: 1 / 0.82;  /* image card placeholder ratio */
-  --radius-image: 10px;              /* rounded corners on images, site-wide (matches the project pages) */
-  --radius-card: 20px;               /* rounded corners on a card container */
-  --radius-tag: 6px;                 /* rounded corners on a capability tag pill */
-  --radius-image-nested: 10px;       /* image inside a padded card: smaller so its
-                                        curve stays concentric with the container's */
+  /* corner-radius scale. Two steps only, used everywhere. */
+  --radius-s: 6px;                   /* small: capability tag pills */
+  --radius-m: 10px;                  /* medium: images (site-wide and in projects) and the metrics card */
   --space-card-inset: clamp(1rem, 1.8vw, 1.5rem); /* padding inside a filled card container */
 
   /* --- Tags -------------------------------------------------------------- */

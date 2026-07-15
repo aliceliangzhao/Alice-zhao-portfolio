@@ -250,7 +250,7 @@
   width: 100%;
   aspect-ratio: 4 / 3;
   background: var(--color-card-placeholder);
-  border-radius: var(--radius-image);
+  border-radius: var(--radius-m);
   overflow: hidden;   /* clips the hover zoom so nothing around it shifts */
 }
 /* Hover A: the image slowly zooms inside its fixed frame (see :hover below) */
@@ -304,7 +304,7 @@
   padding: var(--space-tag-py) var(--space-tag-px);
   background: var(--color-tag-bg);
   color: var(--color-tag-fg);
-  border-radius: var(--radius-tag);
+  border-radius: var(--radius-s);
   font-family: var(--font-mono);
   font-size: var(--font-size-p-2xs);
   line-height: 1;
@@ -351,7 +351,7 @@
   height: clamp(180px, 22vw, 300px);
   aspect-ratio: var(--ar, 3 / 2);
   background: var(--color-card-placeholder);
-  border-radius: var(--radius-image);
+  border-radius: var(--radius-m);
   overflow: hidden;   /* clip the photo to the rounded corners */
 }
 .marqueePhoto {
@@ -429,6 +429,7 @@
 @media (max-width: 900px) {
   .intro p { grid-column: 1 / 11; }
   .workMeta { grid-column: 1 / 13; margin-bottom: 1.25rem; }
+  .prevMeta { margin-bottom: 0.5rem; }
   .workMeta p { max-width: 48ch; }
   .workProjectsSingle { grid-column: 1 / 13; }
   .prevProjects { grid-column: 1 / 13; }

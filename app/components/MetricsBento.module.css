@@ -25,7 +25,7 @@
 
 .card {
   aspect-ratio: 1;
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-m);
   overflow: hidden;
 }
 

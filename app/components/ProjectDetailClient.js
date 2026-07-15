@@ -65,16 +65,16 @@ function SectionHeading({ heading }) {
 // A subsection image with `srcs: [a, b]` crossfades: the first image sits in
 // flow (sets the box), the second overlays and loops its opacity 0->1->0, so it
 // reads as a -> b -> a. The loop is CSS-only and pauses under reduced motion.
-function CrossfadeImage({ srcs, alt, noBorder }) {
+function CrossfadeImage({ srcs, alt, className }) {
   const [active, setActive] = useState(0);
   useEffect(() => {
     if (srcs.length < 2) return;
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id = setInterval(() => setActive((a) => (a + 1) % srcs.length), 1600);
+    const id = setInterval(() => setActive((a) => (a + 1) % srcs.length), 1200);
     return () => clearInterval(id);
   }, [srcs.length]);
   return (
-    <div className={`pd-media pd-crossfade${noBorder ? " pd-media--no-border" : ""}`}>
+    <div className={`pd-crossfade${className ? ` ${className}` : ""}`}>
       {srcs.map((src, i) => (
         <img
           key={i}
@@ -112,7 +112,12 @@ function Subsection({ sub }) {
             // 2+ srcs -> crossfade animation; 1 image (src or single-element
             // srcs) -> a plain static image.
             return img.srcs?.length > 1 ? (
-              <CrossfadeImage key={j} srcs={img.srcs} alt={img.alt} noBorder={noBorder} />
+              <CrossfadeImage
+                key={j}
+                srcs={img.srcs}
+                alt={img.alt}
+                className={`pd-media${noBorder ? " pd-media--no-border" : ""}`}
+              />
             ) : (
               <img
                 key={j}
@@ -148,10 +153,47 @@ function Section({ section, flush }) {
   );
 }
 
+// A zigzag video: a looping, muted walkthrough. It plays only while scrolled
+// into view (IntersectionObserver) and pauses when it leaves, so the file isn't
+// fetched until someone reaches it and doesn't run offscreen. Under reduced
+// motion it never plays and stays a static poster frame. Used for outcome
+// images that carry a `video` path instead of a src.
+function ZigzagVideo({ video, poster, alt }) {
+  const ref = useRef(null);
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) v.play().catch(() => {});
+        else v.pause();
+      },
+      { threshold: 0.25 }
+    );
+    io.observe(v);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      className="zigzag-video"
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-label={alt}
+    >
+      <source src={video} type="video/mp4" />
+    </video>
+  );
+}
+
 /* Outcome keeps the style-card cinematic treatment: a zigzag of text + images
    where the final image is pinned and expands to fill the viewport as you
    scroll past it. The scroll math is unchanged from style-card. */
-function OutcomeZigzag({ content }) {
+function OutcomeZigzag({ content, cinematicReveal = true }) {
   const revealRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -228,8 +270,12 @@ function OutcomeZigzag({ content }) {
         const isLeft = i % 2 === 0;
         const isLastBlock = i === lastBlockIdx;
         const images = block.images || [];
-        const regularImages = isLastBlock ? images.slice(0, -1) : images;
-        const expandImage = isLastBlock && images.length > 0 ? images[images.length - 1] : null;
+        // The last block's final image pins and expands to fill the viewport,
+        // unless the section opts out (cinematicReveal: false), in which case
+        // every image renders normally.
+        const useReveal = isLastBlock && cinematicReveal;
+        const regularImages = useReveal ? images.slice(0, -1) : images;
+        const expandImage = useReveal && images.length > 0 ? images[images.length - 1] : null;
 
         return (
           <div key={i} className={`zigzag-row ${isLeft ? "zigzag-left" : "zigzag-right"}`}>
@@ -238,9 +284,15 @@ function OutcomeZigzag({ content }) {
               <p className="subsection-text">{block.text}</p>
             </div>
             <div className="zigzag-images">
-              {regularImages.map((image, j) => (
-                <img key={j} src={image.src} alt={image.alt} className="zigzag-img" />
-              ))}
+              {regularImages.map((image, j) =>
+                image.video ? (
+                  <ZigzagVideo key={j} video={image.video} poster={image.poster} alt={image.alt} />
+                ) : image.srcs?.length > 1 ? (
+                  <CrossfadeImage key={j} srcs={image.srcs} alt={image.alt} className="zigzag-crossfade" />
+                ) : (
+                  <img key={j} src={image.src || image.srcs?.[0]} alt={image.alt} className="zigzag-img" />
+                )
+              )}
               {expandImage && (
                 <div ref={revealRef} className="zigzag-reveal-stage">
                   <div className="zigzag-reveal-pin">
@@ -278,7 +330,7 @@ function OutcomeSection({ section, metrics, metricsImage, metricsImageAlt, flush
       )}
 
       {blocks ? (
-        <OutcomeZigzag content={blocks} />
+        <OutcomeZigzag content={blocks} cinematicReveal={section.cinematicReveal} />
       ) : content?.summary ? (
         <div className="pd-grid"><p className="pd-outcome-summary">{content.summary}</p></div>
       ) : null}

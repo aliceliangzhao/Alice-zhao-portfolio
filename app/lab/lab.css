@@ -37,7 +37,7 @@
   width: 100%;
   display: block;
   object-fit: cover;
-  border-radius: var(--radius-image);
+  border-radius: var(--radius-m);
 }
 
 .lab-card-link {

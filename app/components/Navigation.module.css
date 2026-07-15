@@ -192,7 +192,10 @@
   display: flex;
   flex-direction: column;
 }
-.mSectionsMenu { align-items: flex-start; gap: 0.9rem; }
+/* center the list under the centered toggle in the compact (tablet) bar; at
+   <=640px the brand drops and the toggle sits at the left gutter, so the list
+   re-aligns to flex-start there (see the mobile query). */
+.mSectionsMenu { align-items: center; text-align: center; gap: 0.9rem; }
 .mMenuPanel { align-items: flex-end; text-align: right; }
 .mMenuNav { display: flex; flex-direction: column; align-items: flex-end; gap: 0.9rem; }
 .mMenuContact {
@@ -283,6 +286,8 @@
   /* project pages drop the brand on mobile: section jumper + Menu only.
      Scoped under .compact to outrank the .compact .mBrand reveal above. */
   .header:global(.compact) .mBrandProject { display: none; }
+  /* toggle now sits at the left gutter (no brand), so left-align the list too */
+  .mSectionsMenu { align-items: flex-start; text-align: left; }
 }
 
 @media (prefers-reduced-motion: reduce) {

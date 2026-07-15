@@ -21,7 +21,7 @@ export default function PreviousWork() {
     <section id="previous-work" className={`${s.work} ${s.sectionFlush}`}>
       {previousWork.map((company) => (
         <article key={company.company} className={`${s.workRow} ${s.grid12}`}>
-          <div className={s.workMeta}>
+          <div className={`${s.workMeta} ${s.prevMeta}`}>
             <h3>{company.company}</h3>
             <span className={s.year}>{company.time}</span>
           </div>

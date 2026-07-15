@@ -264,20 +264,40 @@ export const projects = {
         heading: "04 Outcome",
         headingAlign: "center",
         summary: "An intuitive agentic app that lives on top of the existing console, making AWS purpose-driven for newcomers and more efficient for power users.",
+        cinematicReveal: false,
         content: [
           {
-            subheading: "Purpose-driven, not service-driven",
-            text: "New and casual customers can experiment with different AWS services simply by stating their purpose. The experience is organized around intent instead of services, so customers no longer need to know which service to use before they begin.",
+            subheading: "A flexible layout that matches how customers think",
+            text: "The layout maps to the customer's mental model and journey, reading left to right. Power users stay in the CLI and SDK panel on the left. New and casual customers work in the chat panel in the middle, stating a purpose in natural language. Both meet in the review panel on the right to check status, output, and next steps before anything runs. Every panel expands, collapses, and rearranges, so customers can shape the workspace around the way they work.",
             images: [
-              { src: "/img/ai-assistant/AWS Assistant-start-noCLI.png", alt: "Purpose-driven chat and review experience" },
-              { src: "/img/ai-assistant/AWS Assistant-finish.jpg", alt: "Completed purpose-driven workflow" },
+              {
+                srcs: [
+                  "/img/ai-assistant/visual/clean-structure/clean-structure.png",
+                  "/img/ai-assistant/visual/clean-structure/clean-structure-sidebar.png",
+                  "/img/ai-assistant/visual/clean-structure/clean-structure-cli.png",
+                  "/img/ai-assistant/visual/clean-structure/clean-structure-chat.png",
+                  "/img/ai-assistant/visual/clean-structure/clean-structure-review.png",
+                ],
+                alt: "Three-panel layout mapped to the user journey, left to right",
+              },
+              { src: "/img/ai-assistant/visual/default-no-panel.jpg", alt: "Layout with panels collapsed" },
+              { src: "/img/ai-assistant/visual/default-all-panels-l.png", alt: "Layout with all panels expanded" },
             ],
           },
           {
-            subheading: "A conversational layer for power users",
-            text: "Power users keep the native terminal experience they rely on, now with an added conversational layer. They perform actions in the terminal and use chat for additional requests, completing their tasks more efficiently.",
+            subheading: "Designed for light and dark",
+            text: "The full experience ships in both light and dark mode, built on the AWS design system so it stays consistent with the rest of the console.",
             images: [
-              { src: "/img/ai-assistant/AWS Assistant-wCLI.png", alt: "Terminal and chat hybrid for power users" },
+              { video: "/img/ai-assistant/visual/light-dark.mp4", poster: "/img/ai-assistant/visual/light-dark-poster.jpg", alt: "The transition between light mode and dark mode" },
+              { src: "/img/ai-assistant/visual/default-all-panel-d.jpg", alt: "The full experience in dark mode" },
+              { src: "/img/ai-assistant/visual/default-all-panels-l.png", alt: "The full experience in light mode" },
+            ],
+          },
+          {
+            subheading: "Purpose-driven, not service-driven",
+            text: "Customers complete tasks by stating what they want to do, not by knowing which service to open first. The chat experience reads their intent, proposes the steps, and carries the work through to completion.",
+            images: [
+              { video: "/img/ai-assistant/visual/full-flow.mp4", poster: "/img/ai-assistant/visual/full-flow-poster.jpg", alt: "Full experience walkthrough of a purpose-driven task, end to end" },
             ],
           },
         ],

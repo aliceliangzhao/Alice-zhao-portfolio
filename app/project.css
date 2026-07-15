@@ -67,7 +67,7 @@
   padding: var(--space-tag-py) var(--space-tag-px);
   background: var(--color-tag-bg);
   color: var(--color-tag-fg);
-  border-radius: var(--radius-tag);
+  border-radius: var(--radius-s);
   font-family: var(--font-mono);
   font-size: var(--font-size-p-2xs);
   line-height: 1;
@@ -98,7 +98,7 @@
   display: block;   /* also covers the <video> variant (no inline baseline gap) */
   width: 100%;
   height: auto;
-  border-radius: var(--radius-image-nested);   /* 10px — matches the in-section images */
+  border-radius: var(--radius-m);   /* 10px — matches the in-section images */
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
 }
 
@@ -192,8 +192,8 @@
   max-width: 100%;
   height: auto;
   align-self: flex-start;
-  border-radius: var(--radius-image-nested);   /* 10px */
-  border: 1px solid #ececec;
+  border-radius: var(--radius-m);   /* 10px */
+  border: 1px solid var(--color-image-border);
 }
 /* images flagged noBorder in the data are already framed in the source artwork,
    so we neither add a border nor round them — our radius would clip the frame's
@@ -306,7 +306,13 @@
 }
 .zigzag-right .zigzag-images { grid-column: 1 / 9; grid-row: 1; }
 .zigzag-images { display: flex; flex-direction: column; gap: var(--grid-gap); }
-.zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-image-nested); }
+/* Static images carry the light hairline; animated media (crossfade "gifs" and
+   videos) stay borderless. */
+.zigzag-img { width: 100%; display: block; object-fit: cover; border-radius: var(--radius-m); border: 1px solid var(--color-image-border); }
+/* Crossfade slideshow inside a zigzag column: full width, rounded like a
+   zigzag-img; overflow:hidden (from .pd-crossfade) clips the rounded corners. */
+.zigzag-crossfade { width: 100%; border-radius: var(--radius-m); }
+.zigzag-video { width: 100%; height: auto; display: block; border-radius: var(--radius-m); }
 
 .zigzag-reveal-stage {
   --reveal-extra: 115vh;
