@@ -10,20 +10,20 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: "Alice Zhao | UX Designer",
-  description: "UX Designer that reimagines digital experiences. Currently building AI products for AWS.",
+  title: "Alice Zhao | Product Designer",
+  description: "UX Lead @ AWS. Shaping AI-native experience for AWS storage services.",
   icons: {
     icon: "/img/favcon.png",
   },
   openGraph: {
-    title: "Alice Zhao | UX Designer",
-    description: "UX Designer that reimagines digital experiences. Currently building AI products for AWS.",
+    title: "Alice Zhao | Product Designer",
+    description: "UX Lead @ AWS. Shaping AI-native experience for AWS storage services.",
     images: [{ url: "/img/alicezhao-productdesigner.jpg", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
     title: "Alice Zhao | UX Designer",
-    description: "UX Designer that reimagines digital experiences. Currently building AI products for AWS.",
+    description: "UX Lead @ AWS. Shaping AI-native experience for AWS storage services.",
     images: ["/img/alicezhao-productdesigner.jpg"],
   },
 };

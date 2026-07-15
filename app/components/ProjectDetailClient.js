@@ -397,11 +397,24 @@ export default function ProjectDetailClient({ project }) {
   // inherited offset.
   useLayoutEffect(() => {
     if (window.location.hash) return;
+    if ("scrollRestoration" in window.history) window.history.scrollRestoration = "manual";
     const html = document.documentElement;
     const prev = html.style.scrollBehavior;
-    html.style.scrollBehavior = "auto";
-    window.scrollTo(0, 0);
-    html.style.scrollBehavior = prev;
+    html.style.scrollBehavior = "auto";   // snap, don't animate the jump
+    const toTop = () => window.scrollTo(0, 0);
+    toTop();   // during commit, before first paint
+    // Next's router re-scrolls after this commit and can land mid-page (below
+    // the title). Re-assert top on the next frame and macrotask so we win.
+    const raf = requestAnimationFrame(toTop);
+    const timer = setTimeout(() => {
+      toTop();
+      html.style.scrollBehavior = prev;
+    }, 0);
+    return () => {
+      cancelAnimationFrame(raf);
+      clearTimeout(timer);
+      html.style.scrollBehavior = prev;
+    };
   }, [project.slug]);
 
   return (

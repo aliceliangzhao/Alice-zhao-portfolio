@@ -21,7 +21,7 @@ function projectToCard(project, href) {
 
 function CaseStudyCard({ card, natural }) {
   return (
-    <Link className={s.workCard} href={card.href}>
+    <Link className={s.workCard} href={card.href} scroll={false}>
       <span className={`${s.thumb}${natural ? ` ${s.thumbNatural}` : ""}`}>
         {natural ? (
           // homepage: show the whole thumbnail at its natural height (no crop)
